@@ -24,7 +24,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.topbar_bg
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
+import tm.com.balary.features.auth.presentation.ui.AuthScreen
 import tm.com.balary.state.LocalDarkMode
 
 @Composable
@@ -32,7 +35,7 @@ fun HomeToolbar(
     modifier: Modifier = Modifier
 ) {
     val shape = RoundedCornerShape(0.dp, 0.dp, 20.dp, 20.dp)
-    val darkMode = LocalDarkMode.current
+    val navigator = LocalNavigator.currentOrThrow
 
 
 
@@ -61,7 +64,7 @@ fun HomeToolbar(
                 BlackButton(
                     text = "Ulgama gir",
                     onClick = {
-                        darkMode.value = darkMode.value.not()
+                        navigator.push(AuthScreen())
                     }
                 )
             }

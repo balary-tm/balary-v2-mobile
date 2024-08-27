@@ -1,6 +1,7 @@
 package tm.com.balary.features.product.presentation.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,7 +47,11 @@ fun ProductCard(
 ) {
     val navigator = LocalNavigator.currentOrThrow
     val shape = RoundedCornerShape(4.dp)
-    Column(modifier = modifier.clickable {
+    Column(modifier = modifier.border(
+        width = 1.dp,
+        color = MaterialTheme.colorScheme.primary,
+        shape = RoundedCornerShape(4.dp)
+    ).clip(RoundedCornerShape(4.dp)).clickable {
         navigator.push(ProductDetailScreen())
     }) {
         Box(
@@ -55,7 +60,7 @@ fun ProductCard(
                 .background(
                     color = MaterialTheme.colorScheme.surface,
                     shape
-                ).padding(4.dp)
+                )
         ) {
             ImageLoader(
                 modifier = Modifier.fillMaxSize(),
@@ -82,44 +87,49 @@ fun ProductCard(
 
 
 
-        Spacer(Modifier.height(10.dp))
-        ProductPrice(
-            modifier = Modifier.fillMaxWidth(),
-            price = 170.0,
-            oldPrice = 190.0,
-            discount = 5.0
-        )
-        Spacer(Modifier.height(10.dp))
+        Column(Modifier.fillMaxWidth().padding(4.dp).background(
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+            shape = RoundedCornerShape(4.dp)
+        ).padding(2.dp)) {
+            Spacer(Modifier.height(10.dp))
+            ProductPrice(
+                modifier = Modifier.fillMaxWidth(),
+                price = 170.0,
+                oldPrice = 190.0,
+                discount = 5.0
+            )
+            Spacer(Modifier.height(10.dp))
 
-        Text(
-            title,
-            style = MaterialTheme.typography.bodyMedium.copy(
-                fontWeight = FontWeight.W900
-            ),
-            color = MaterialTheme.colorScheme.onSurface,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+            Text(
+                title,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontWeight = FontWeight.W900
+                ),
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
 
-        Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(8.dp))
 
-        Text(
-            loremIpsum,
-            style = MaterialTheme.typography.bodySmall.copy(
-                fontWeight = FontWeight.W700,
-                fontSize = 10.sp
-            ),
-            color = MaterialTheme.colorScheme.onSurface,
-            maxLines = 3,
-            overflow = TextOverflow.Ellipsis
-        )
-        Spacer(Modifier.height(6.dp))
-        ProductCount(
-            modifier = Modifier.fillMaxWidth(),
-            star = 4.3,
-            commentCount = 123
-        )
-        Spacer(Modifier.height(6.dp))
-        ProductBasketButton(modifier = Modifier.fillMaxWidth())
+            Text(
+                loremIpsum,
+                style = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.W700,
+                    fontSize = 10.sp
+                ),
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis
+            )
+            Spacer(Modifier.height(6.dp))
+            ProductCount(
+                modifier = Modifier.fillMaxWidth(),
+                star = 4.3,
+                commentCount = 123
+            )
+            Spacer(Modifier.height(6.dp))
+            ProductBasketButton(modifier = Modifier.fillMaxWidth())
+        }
     }
 }

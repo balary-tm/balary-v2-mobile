@@ -31,6 +31,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import cafe.adriel.voyager.core.screen.Screen
+import tm.com.balary.features.ads.presentation.ui.PopupAds
+import tm.com.balary.features.ads.presentation.ui.SheetAds
 import tm.com.balary.features.home.presentation.ui.banner.Banner
 import tm.com.balary.features.home.presentation.ui.banner.HomeToolbar
 import tm.com.balary.features.home.presentation.ui.banner.SearchInput
@@ -50,6 +52,29 @@ class HomeScreen : Screen {
 fun Home() {
 
     val lazyScroll = rememberLazyListState()
+
+    val showPopup = rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    val showSheetAds = rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    PopupAds(
+        show = showPopup.value,
+        onClose = {
+            showSheetAds.value = true
+            showPopup.value = false
+        }
+    )
+
+    SheetAds(
+        show = showSheetAds.value,
+        onClose = {
+            showSheetAds.value = false
+        }
+    )
 
 
 

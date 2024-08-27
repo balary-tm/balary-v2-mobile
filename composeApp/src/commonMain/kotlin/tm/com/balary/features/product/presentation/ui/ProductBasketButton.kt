@@ -62,7 +62,7 @@ fun ProductBasketButton(
                     Icon(
                         Icons.Filled.IndeterminateCheckBox,
                         contentDescription = "minus",
-                        modifier = Modifier.clickable {
+                        modifier = Modifier.size(20.dp).clickable {
                             count.value = count.value.minus(1)
                         }
                     )
@@ -78,7 +78,7 @@ fun ProductBasketButton(
                     Icon(
                         Icons.Filled.AddBox,
                         contentDescription = "add",
-                        modifier = Modifier.clickable {
+                        modifier = Modifier.size(20.dp).clickable {
                             count.value = count.value.plus(1)
                         }
                     )

@@ -35,6 +35,8 @@ bouquet = "1.1.2"
 coil3 = "3.0.0-alpha06"
 kotlinx = "0.6.0"
 jetbrainsKotlinJvm = "2.0.0"
+maplibre = "10.0.2"
+moko-permission = "0.17.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -94,6 +96,9 @@ coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil3" }
 coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "coil3" }
 kotlinx = {module="org.jetbrains.kotlinx:kotlinx-datetime", version.ref="kotlinx"}
+maplibre = { module = "org.maplibre.gl:android-sdk", version.ref = "maplibre" }
+moko-permission = {module="dev.icerock.moko:permissions", version.ref="moko-permission"}
+moko-permission-compose = {module="dev.icerock.moko:permissions-compose", version.ref="moko-permission"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -5,6 +5,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
 import org.koin.compose.KoinContext
 import tm.com.balary.features.basket.presentation.ui.BasketTab
@@ -18,6 +19,8 @@ import tm.com.balary.router.AppTab
 import tm.com.balary.state.Composition
 import tm.com.balary.state.LocalDarkMode
 
+
+@Preview()
 @Composable
 fun App(modifier: Modifier = Modifier) {
     KoinApplication(

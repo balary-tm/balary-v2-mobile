@@ -1,0 +1,1019 @@
+
+‚?
+	cocoapods
+MapLibre
+
+MLNMapView
+kotlin
+Boolean
+
+commonizer
+ObjCCallable
+kotlinx
+cinterop
+
+ObjCMethod
+encoding
+B16@0:8
+selector
+allowsTilting
+isStret
+ExperimentalForeignApi
+CValue
+MLNCoordinateBounds
+bounds
+MLNCoordinateSpan
+$MLNCoordinateBoundsGetCoordinateSpan
+platform
+
+Foundation
+NSValueMeta
+MLNOfflinePackProgress
+progress
+NSValue
+(@64@0:8{MLNOfflinePackProgress=QQQQQQ}16
+ valueWithMLNOfflinePackProgress:
+valueWithMLNOfflinePackProgress
+showsHeading
+Unit
+
+v20@0:8B16
+setShowsHeading:
+setShowsHeading
+MLNCoordinateQuad
+%MLNCoordinateQuadFromCoordinateBounds
+Double
+CoreLocation
+CLLocationDegrees
+degrees
+CoreGraphics
+CGFloat
+MLNRadiansFromDegrees
+span
+@32@0:8{MLNCoordinateSpan=dd}16
+valueWithMLNCoordinateSpan:
+valueWithMLNCoordinateSpan
+MLNTextPitchAlignment
+Q16@0:8
+MLNTextPitchAlignmentValue
+
+showsScale
+setShowsScale:
+setShowsScale
+MLNIconAnchor
+MLNIconAnchorValue
+d16@0:8
+	longitude
+!MLNFillExtrusionTranslationAnchor
+&MLNFillExtrusionTranslationAnchorValue
+MLNFillTranslationAnchor
+MLNFillTranslationAnchorValue
+MLNHillshadeIlluminationAnchor
+#MLNHillshadeIlluminationAnchorValue
+NSExpressionMeta
+NSExpression
+@16@0:8
+ heatmapDensityVariableExpression
+CLLocationCoordinate2D
+topLeft
+
+bottomLeft
+bottomRight
+topRight
+MLNCoordinateQuadMake
+inputExpression
+String
+MLNExpressionInterpolationMode
+withCurveType
+
+parameters
+stops
+@48@0:8@16@24@32@40
+Hmgl_expressionForInterpolatingExpression:withCurveType:parameters:stops:
+(mgl_expressionForInterpolatingExpression
+MLNCircleScaleAlignment
+MLNCircleScaleAlignmentValue
+bounds1
+bounds2
+-MLNCoordinateBoundsIntersectsCoordinateBounds
+MLNTextJustification
+MLNTextJustificationValue
+$featureAccumulatedVariableExpression
+
+coordinate
+$@32@0:8{CLLocationCoordinate2D=dd}16
+valueWithMLNCoordinate:
+valueWithMLNCoordinate
+latitude
+%{MLNOfflinePackProgress=QQQQQQ}16@0:8
+MLNOfflinePackProgressValue
+NSPredicate
+conditionPredicate
+trueExpression
+falseExpresssion
+@40@0:8@16@24@32
+=mgl_expressionForConditional:trueExpression:falseExpresssion:
+mgl_expressionForConditional
+MLNMapPoint
+point
+@40@0:8{MLNMapPoint=ddd}16
+valueWithMLNMapPoint:
+valueWithMLNMapPoint
+MLNCircleTranslationAnchor
+circleTranslationAnchor
+
+@24@0:8Q16
+$valueWithMLNCircleTranslationAnchor:
+#valueWithMLNCircleTranslationAnchor
+MLNTextRotationAlignment
+textRotationAlignment
+"valueWithMLNTextRotationAlignment:
+!valueWithMLNTextRotationAlignment
+allowsScrolling
+setAllowsScrolling:
+setAllowsScrolling
+MLNIconRotationAlignment
+MLNIconRotationAlignmentValue
+#featureIdentifierVariableExpression
+showsUserLocation
+allowsRotating
+MLNIconPitchAlignment
+iconPitchAlignment
+valueWithMLNIconPitchAlignment:
+valueWithMLNIconPitchAlignment
+MLNLightAnchor
+lightAnchor
+valueWithMLNLightAnchor:
+valueWithMLNLightAnchor
+NSTimeInterval
+duration
+delay
+MLNTransition
+MLNTransitionMake
+lineProgressVariableExpression
+MLNSphericalPosition
+lightPosition
+#@40@0:8{MLNSphericalPosition=ddd}16
+valueWithMLNSphericalPosition:
+valueWithMLNSphericalPosition
+	zoomLevel
+
+v24@0:8d16
+setZoomLevel:
+setZoomLevel
+quad
+â@80@0:8{MLNCoordinateQuad={CLLocationCoordinate2D=dd}{CLLocationCoordinate2D=dd}{CLLocationCoordinate2D=dd}{CLLocationCoordinate2D=dd}}16
+valueWithMLNCoordinateQuad:
+valueWithMLNCoordinateQuad
+MLNSymbolPlacement
+symbolPlacement
+valueWithMLNSymbolPlacement:
+valueWithMLNSymbolPlacement
+Any
+mgl_jsonExpressionObject
+
+transition
+@32@0:8{MLNTransition=dd}16
+valueWithMLNTransition:
+valueWithMLNTransition
+MLNLineTranslationAnchor
+lineTranslationAnchor
+"valueWithMLNLineTranslationAnchor:
+!valueWithMLNLineTranslationAnchor
+sw
+ne
+MLNCoordinateBoundsMake
+MLNSymbolPlacementValue
+MLNSymbolZOrder
+MLNSymbolZOrderValue
+MLNCoordinateInCoordinateBounds
+allowsZooming
+setAllowsZooming:
+setAllowsZooming
+MLNIconTextFit
+MLNIconTextFitValue
+{MLNMapPoint=ddd}16@0:8
+MLNMapPointValue
+radial
+CLLocationDirection
+	azimuthal
+polar
+MLNSphericalPositionMake
+CLLocationDistance
+altitude
+pitch
+CGSize
+size
+MLNZoomLevelForAltitude
+MLNLineJoin
+MLNLineJoinValue
+#featurePropertiesVariableExpression
+fillTranslationAnchor
+"valueWithMLNFillTranslationAnchor:
+!valueWithMLNFillTranslationAnchor
+steppingExpression
+fromExpression
+9mgl_expressionForSteppingExpression:fromExpression:stops:
+#mgl_expressionForSteppingExpression
+radians
+MLNDegreesFromRadians
+setLongitude:
+setLongitude
+MLNTextTransform
+textTransform
+valueWithMLNTextTransform:
+valueWithMLNTextTransform
+span1
+span2
+&MLNCoordinateSpanEqualToCoordinateSpan
+MLNTextTranslationAnchor
+MLNTextTranslationAnchorValue
+setLatitude:
+setLatitude
+MLNTextTransformValue
+symbolZOrder
+valueWithMLNSymbolZOrder:
+valueWithMLNSymbolZOrder
+minimumZoomLevel
+setMinimumZoomLevel:
+setMinimumZoomLevel
+iconTextFit
+valueWithMLNIconTextFit:
+valueWithMLNIconTextFit
+Ü{MLNCoordinateQuad={CLLocationCoordinate2D=dd}{CLLocationCoordinate2D=dd}{CLLocationCoordinate2D=dd}{CLLocationCoordinate2D=dd}}16@0:8
+MLNCoordinateQuadValue
+latitudeDelta
+longitudeDelta
+MLNCoordinateSpanMake
+MLNTextWritingMode
+MLNTextWritingModeValue
+collections
+Map
+inDictionary
+defaultExpression
+Cmgl_expressionForMatchingExpression:inDictionary:defaultExpression:
+#mgl_expressionForMatchingExpression
+geometryTypeVariableExpression
+#featureAttributesVariableExpression
+MLNMapPointForCoordinate
+MLNRasterResamplingMode
+MLNRasterResamplingModeValue
+textWritingModes
+valueWithMLNTextWritingMode:
+valueWithMLNTextWritingMode
+hillshadeIlluminationAnchor
+(valueWithMLNHillshadeIlluminationAnchor:
+'valueWithMLNHillshadeIlluminationAnchor
+MLNTextAnchor
+
+textAnchor
+valueWithMLNTextAnchor:
+valueWithMLNTextAnchor
+fillExtrusionTranslationAnchor
++valueWithMLNFillExtrusionTranslationAnchor:
+*valueWithMLNFillExtrusionTranslationAnchor
+MLNCircleTranslationAnchorValue
+MLNIconPitchAlignmentValue
+lineJoin
+valueWithMLNLineJoin:
+valueWithMLNLineJoin
+MLNTextAnchorValue
+MLNIconTranslationAnchor
+MLNIconTranslationAnchorValue
+ {MLNSphericalPosition=ddd}16@0:8
+MLNSphericalPositionValue
+U@48@0:8{MLNCoordinateBounds={CLLocationCoordinate2D=dd}{CLLocationCoordinate2D=dd}}16
+valueWithMLNCoordinateBounds:
+valueWithMLNCoordinateBounds
+
+MLNLineCap
+lineCap
+valueWithMLNLineCap:
+valueWithMLNLineCap
+{MLNTransition=dd}16@0:8
+MLNTransitionValue
+setAllowsTilting:
+setAllowsTilting
+textTranslationAnchor
+"valueWithMLNTextTranslationAnchor:
+!valueWithMLNTextTranslationAnchor
+MLNCirclePitchAlignment
+MLNCirclePitchAlignmentValue
+MLNLineCapValue
+offset
+MLNCoordinateBoundsOffset
+iconRotationAlignment
+"valueWithMLNIconRotationAlignment:
+!valueWithMLNIconRotationAlignment
+R{MLNCoordinateBounds={CLLocationCoordinate2D=dd}{CLLocationCoordinate2D=dd}}16@0:8
+MLNCoordinateBoundsValue
+!{CLLocationCoordinate2D=dd}16@0:8
+MLNCoordinateValue
+MLNStringFromMLNTransition
+textPitchAlignment
+valueWithMLNTextPitchAlignment:
+valueWithMLNTextPitchAlignment
+setAllowsRotating:
+setAllowsRotating
+MLNTextRotationAlignmentValue
+MLNLightAnchorValue
+zoomLevelVariableExpression
+maximumZoomLevel
+object
+
+@24@0:8@16
+expressionWithMLNJSONObject:
+expressionWithMLNJSONObject
+{MLNCoordinateSpan=dd}16@0:8
+MLNCoordinateSpanValue
+x
+y
+MLNMapPointMake
+iconTranslationAnchor
+"valueWithMLNIconTranslationAnchor:
+!valueWithMLNIconTranslationAnchor
+setShowsUserLocation:
+setShowsUserLocation
+
+expression
+$mgl_expressionByAppendingExpression:
+#mgl_expressionByAppendingExpression
+MLNAltitudeForZoomLevel
+textJustification
+valueWithMLNTextJustification:
+valueWithMLNTextJustification
+rasterResamplingMode
+!valueWithMLNRasterResamplingMode:
+ valueWithMLNRasterResamplingMode
+
+iconAnchor
+valueWithMLNIconAnchor:
+valueWithMLNIconAnchor
+MLNStringFromCoordinateQuad
+NSLocale
+locale
+"mgl_expressionLocalizedIntoLocale:
+!mgl_expressionLocalizedIntoLocale
+MLNStringFromCoordinateBounds
+MLNCoordinateBoundsIsEmpty
+setMaximumZoomLevel:
+setMaximumZoomLevel
+*MLNCoordinateBoundsEqualToCoordinateBounds
+List
+attributedExpressions
+'mgl_expressionForAttributedExpressions:
+&mgl_expressionForAttributedExpressions
+NSPredicateMeta
+predicateWithMLNJSONObject:
+predicateWithMLNJSONObject¨
+ 
+ 
+ 
+
+ 
+
+ 
+
+
+	 
+ 
+ 
+ 
+ 
+
+
+ 
+ 
+ 
+ 
+# 
+% 
+&
+' 
+)
+* 
+0 
+6 
+: 
+< 
+> 
+@ 
+A 
+D 
+K 
+L 
+S 
+X 
+b 
+i 
+n 
+s 
+z 
+ 
+É 
+á 
+ä 
+ç 
+ö 
+û 
+§ 
+¨ 
+≤ 
+∑ 
+ª 
+æ 
+¡ 
+œ 
+÷ 
+È 
+Î
+<Ï 
+Ù 
+¸ 
+â 
+ê 
+õ 
+Õ 
+<÷ 
+⁄ È@;0*0HáÄ“
+“
+ 	
+(( “
+
+#00200HáÄ“
+
+I0*0200HáÄ“
+“
+ 	
+(( “
+
+C"0*020HáÄ“
+“
+ 	
+( (! “
+
+#$00200HáÄ“
+
++0j`2
+(0j`HáÄ“
+
+I/0*02,00HáÄ“
+“
+ 	
+(-(. “
+
+;20*0HáÄ“
+“
+ 	
+(1(2 “
+
+C50*0230HáÄ“
+“
+ 	
+( (4 “
+
+;70*0HáÄ“
+“
+ 	
+(1(7 “
+
+;90*0HáÄ“
+“
+ 	
+(8(9 “
+
+;;0*0HáÄ“
+“
+ 	
+(1(; “
+
+;30*0HáÄ“
+“
+ 	
+((3 “
+
+;=0*0HáÄ“
+“
+ 	
+(1(= “
+
+;?0*0HáÄ“
+“
+ 	
+(1(? “
+
+;C0 *0HáÄ“
+“
+ 	
+(B(C “
+
+MI002E0!02F0!02G0!02H0!0HáÄ“
+
+eR0 *02J0 2M
+0"j`#2N0 2O0 HáÄ“
+“
+ 	
+(P(Q “
+
+;T0$*0HáÄ“
+“
+ 	
+(1(T “
+
++W02U002V00HáÄ“
+
+;Y0%*0HáÄ“
+“
+ 	
+(1(Y “
+
+;Z0 *0HáÄ“
+“
+ 	
+(B(Z “
+
+I^0*02[0!0HáÄ“
+“
+ 	
+(\(] “
+
+;_0*0HáÄ“
+“
+ 	
+(8(_ “
+
+7a00*0HáÄ“
+“
+	
+(`(a“
+
+Sh0 *02c0&2d0 2e0 HáÄ“
+“
+ 	
+(f(g “
+
+Im0*02j0'0HáÄ“
+“
+ 	
+(k(l “
+
+Cr0*02o0(HáÄ“
+“
+ 	
+(p(q “
+
+Cv0*02t0)HáÄ“
+“
+ 	
+(p(u “
+
+Cy0*02w0HáÄ“
+“
+ 	
+( (x “
+
+;{0**0HáÄ“
+“
+ 	
+(1({ “
+
+;|0 *0HáÄ“
+“
+ 	
+(B(| “
+
+;}0*0HáÄ“
+“
+ 	
+((} “
+
+;~0*0HáÄ“
+“
+ 	
+((~ “
+
+FÇ0*02Ä0+HáÄ“
+“
+!	
+(p	(Å “
+
+;w0*0HáÄ“
+“
+ 	
+((w “
+
+FÜ0*02Ñ0,HáÄ“
+“
+!	
+(p	(Ö “
+
+0ã0.02à0j`-2â0j`-HáÄ“
+
+=å0 *0HáÄ“
+“
+!	
+(B	(å “
+
+Më0*02é0/0HáÄ“
+“
+"		
+(è	(ê “
+
+Gï0*02í0HáÄ“
+“
+"		
+(ì	(î “
+
+Mô0*02ñ00HáÄ“
+“
+"		
+(ó	(ò “
+
+Fù0*02õ00HáÄ“
+“
+!	
+(p	(ú “
+
+=ü01*0 HáÄ“
+“
+!	
+(B	(ü “
+
+M£0*02†0.0HáÄ“
+“
+"		
+(°	(¢ “
+
+Fß0*02•02HáÄ“
+“
+!	
+(p	(¶ “
+
+4™002®0!02©0!0HáÄ“
+
+=´00*0HáÄ“
+“
+!	
+(1	(´ “
+
+=≠03*0HáÄ“
+“
+!	
+(1	(≠ “
+
+,Æ02[0!0200HáÄ“
+
+F±0*02Ø0HáÄ“
+“
+!	
+( 	(∞ “
+
+=≥04*0HáÄ“
+“
+!	
+(1	(≥ “
+
+:µ0'0*0HáÄ“
+“
+		
+(¥	(µ“
+
+=∫0/02∂0j`2∏0j`52π0j`5HáÄ“
+
+E¿02º0j`62Ω0j`2
+_0j`2ø070HáÄ“
+
+=¬08*0HáÄ“
+“
+!	
+(1	(¬ “
+
+=√0 *0HáÄ“
+“
+!	
+(B	(√ “
+
+F∆0*02ƒ0HáÄ“
+“
+!	
+(p	(≈ “
+
+W 0 *02«0 2»0 2O0 HáÄ“
+“
+!	
+(f	(… “
+
+!Ã0j`2À0j`HáÄ“
+
+FŒ0*0290HáÄ“
+“
+"		
+(ì	(Õ “
+
+F“0*02–09HáÄ“
+“
+!	
+(p	(— “
+
+.’02”002‘00HáÄ“
+
+=◊0:*0HáÄ“
+“
+!	
+(1	(◊ “
+
+FŸ0*02_0HáÄ“
+“
+"		
+(ì	(ÿ “
+
+=⁄09*0HáÄ“
+“
+!	
+(1	(⁄ “
+
+F›0*02€03HáÄ“
+“
+!	
+(p	(‹ “
+
+=Ø0*0HáÄ“
+“
+!	
+(	(Ø “
+
+=í0*0HáÄ“
+“
+!	
+(8	(í “
+
+;0*0HáÄ“
+“
+ 	
+(( “
+
+G‡0*02ﬁ0HáÄ“
+“
+"		
+(ì	(ﬂ “
+
+F„0*02·04HáÄ“
+“
+!	
+(p	(‚ “
+
+:Â00*0HáÄ“
+“
+		
+(‰	(Â“
+
+0Ë002Ê0j`2Á0j`HáÄ“
+
+=Í0;*0HáÄ“
+“
+!	
+(1	(Í “
+
+c0 *02J0 2Ì010=2Ó0 HáÄ“
+“
+!	
+(f	(Ô “
+
+=Ò0 *0HáÄ“
+“
+!	
+(B	(Ò “
+
+=Ú0 *0HáÄ“
+“
+!	
+(B	(Ú “
+
+-Û0'02[0!02í0HáÄ“
+
+=ı0>*0HáÄ“
+“
+!	
+(1	(ı “
+
+F¯0*02ˆ0;HáÄ“
+“
+!	
+(p	(˜ “
+
+F˚0*02˘0HáÄ“
+“
+!	
+(p	(˙ “
+
+Fˇ0*02˝0?HáÄ“
+“
+!	
+(p	(˛ “
+
+FÇ0*02Ä0HáÄ“
+“
+!	
+(p	(Å “
+
+=É0(*0HáÄ“
+“
+!	
+(1	(É “
+
+=Ñ0+*0HáÄ“
+“
+!	
+(1	(Ñ “
+
+Fá0*02Ö08HáÄ“
+“
+!	
+(p	(Ü “
+
+=à0?*0HáÄ“
+“
+!	
+(1	(à “
+
+=ä0@*0HáÄ“
+“
+!	
+(1	(ä “
+
+:å0/0*0HáÄ“
+“
+		
+(ã	(å“
+
+Lè0*0200HáÄ“
+“
+"		
+(ç	(é “
+
+Fì0*02ë0AHáÄ“
+“
+!	
+(p	(í “
+
+Dï0.0*0HáÄ“
+“
+"		
+(î	(ï “
+
+Eó0*020HáÄ“
+“
+!	
+( 	(ñ “
+
+Fö0*02ò0:HáÄ“
+“
+!	
+(p	(ô “
+
+=ú0B*0HáÄ“
+“
+!	
+(1	(ú “
+
+=ù0A*0HáÄ“
+“
+!	
+(1	(ù “
+
+3ü002002û00HáÄ“
+
+F¢0*02†0*HáÄ“
+“
+!	
+(p	(° “
+
+:§00*0HáÄ“
+“
+		
+(£	(§“
+
+=ﬁ0*0HáÄ“
+“
+!	
+(8	(ﬁ “
+
+D¶0!0*0HáÄ“
+“
+"		
+(•	(¶ “
+
+ß0"2†0.0HáÄ“
+
+F™0*02®0HáÄ“
+“
+!	
+(p	(© “
+
+E¨0*02~0HáÄ“
+“
+!	
+( 	(´ “
+
+=≠0)*0HáÄ“
+“
+!	
+(1	(≠ “
+
+=Æ0,*0HáÄ“
+“
+!	
+(1	(Æ “
+
+=Ø0 *0HáÄ“
+“
+!	
+(B	(Ø “
+
+=∞0*0HáÄ“
+“
+!	
+(8	(∞ “
+
+G¥0 *02±01HáÄ“
+“
+"		
+(≤	(≥ “
+
+D∂00*0HáÄ“
+“
+"		
+(µ	(∂ “
+
+=π0'02∑0j`2∏0j`2í0j`HáÄ“
+
+Fº0*02∫0@HáÄ“
+“
+!	
+(p	(ª “
+
+Eæ0*02}0HáÄ“
+“
+!	
+( 	(Ω “
+
+G¡0 *0 2ø0 HáÄ“
+“
+"		
+(≤	(¿ “
+
+E¬0j`62í02Ω0j`2
+_0j`2ø070HáÄ“
+
+F≈0*02√0%HáÄ“
+“
+!	
+(p	(ƒ “
+
+F»0*02∆0>HáÄ“
+“
+!	
+(p	(« “
+
+FÀ0*02…0HáÄ“
+“
+!	
+(p	(  “
+
+Ã0"2ñ00HáÄ“
+
+I–0 *0 2	Œ0CHáÄ“
+“
+"		
+(≤	(œ “
+
+—0"200HáÄ“
+
+“0200HáÄ“
+
+G‘0*02∞0HáÄ“
+“
+"		
+(ì	(” “
+
+,’02U002V00HáÄ“
+
+KŸ0 *02◊0DHáÄ“
+“
+"		
+(≤	(ÿ “
+
+=ü01*0&HáÄ“
+“
+!	
+(B	(ü “
+
+G‹0&*0E2±01HáÄ“
+“
+"		
+(≤	(€ “
+
+ÿ
+‡
+ Í
+cocoapods.MapLibre

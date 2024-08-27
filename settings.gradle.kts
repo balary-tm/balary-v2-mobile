@@ -4,6 +4,7 @@ pluginManagement {
         google()
         gradlePluginPortal()
         mavenCentral()
+        maven("https://jogamp.org/deployment/maven")
     }
 }
 
@@ -11,6 +12,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://jogamp.org/deployment/maven")
     }
 }
 

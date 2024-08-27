@@ -1,15 +1,22 @@
 PODS:
-  - composeApp (1.0)
+  - composeApp (1.0):
+    - MapLibre (= 6.4.2)
+  - MapLibre (6.4.2)
 
 DEPENDENCIES:
   - composeApp (from `../composeApp`)
+
+SPEC REPOS:
+  trunk:
+    - MapLibre
 
 EXTERNAL SOURCES:
   composeApp:
     :path: "../composeApp"
 
 SPEC CHECKSUMS:
-  composeApp: 069d8e762dada3340fa180bba7c70881cdfb6b6c
+  composeApp: 2320d7a5c2acf074552b6d92074fb7ddb1e6583b
+  MapLibre: 4f0d474084b9c73ee5f4066e2e3bf03f0e2efad4
 
 PODFILE CHECKSUM: 501c9565884acd2f13287e4df5f64b146b918298
 

@@ -28,7 +28,10 @@ kotlin {
         podfile = project.file("../iosApp/Podfile")
         framework {
             baseName = "composeApp"
-            isStatic = false
+            isStatic = true
+        }
+        pod("MapLibre") {
+            version = "6.4.2"
         }
     }
     
@@ -100,6 +103,9 @@ kotlin {
 
             // PDF
             implementation(libs.bouquet)
+
+            // maplibre
+            implementation(libs.maplibre)
         }
     }
 }

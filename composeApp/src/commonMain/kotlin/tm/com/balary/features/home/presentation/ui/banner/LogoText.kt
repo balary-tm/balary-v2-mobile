@@ -13,13 +13,14 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun LogoText(
     modifier: Modifier = Modifier,
-    url: String? = null
+    url: String? = null,
+    contentScale: ContentScale = ContentScale.FillBounds
 ) {
     AsyncImage(
         modifier = modifier.height(50.dp),
         model = url,
         contentDescription = "Logo",
-        contentScale = ContentScale.FillBounds,
+        contentScale = contentScale,
         placeholder = painterResource(Res.drawable.logo_text),
         error = painterResource(Res.drawable.logo_text)
     )

@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -27,6 +28,7 @@ import org.jetbrains.compose.resources.painterResource
 fun FilterBar(
     modifier: Modifier = Modifier,
     title: String,
+    actionIcon: Painter = painterResource(Res.drawable.filter),
     onFilter: () -> Unit,
     onBack: () -> Unit,
 ) {
@@ -63,7 +65,7 @@ fun FilterBar(
             onClick = onFilter
         ) {
             Icon(
-                painter = painterResource(Res.drawable.filter),
+                painter = actionIcon,
                 contentDescription = "filter",
                 tint = MaterialTheme.colorScheme.onSurface
             )
