@@ -121,7 +121,7 @@ fun SubCategory(modifier: Modifier = Modifier) {
                             repeat(10) {
                                 CategoryItem(
                                     modifier = Modifier.fillMaxWidth(0.3f),
-                                    containerColor = Color(0xFFC6FFC6),
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
                                     image = "",
                                     title = "Işdäaçar, duzlanan önümler",
                                     onClick = {
@@ -130,53 +130,6 @@ fun SubCategory(modifier: Modifier = Modifier) {
                                 )
                             }
                         }
-                    }
-                }
-                items(200) { index ->
-                    val sectionModifier = Modifier.fillMaxWidth()
-                        .apply {
-                            if (index == 0) {
-                                Modifier.padding(top = 8.dp).background(
-                                    color = MaterialTheme.colorScheme.surface,
-                                    shape = RoundedCornerShape(
-                                        topStart = 20.dp,
-                                        topEnd = 20.dp
-                                    )
-                                )
-                            } else {
-                                Modifier.background(
-                                    color = MaterialTheme.colorScheme.surface
-                                )
-                            }
-                        }
-                    Column(sectionModifier.padding(vertical = 12.dp, horizontal = 16.dp)) {
-                        HomeProductSection(
-                            modifier = Modifier.fillMaxWidth().clickable {
-                                navigator.push(ProductListScreen())
-                            },
-                            title = "Miweler"
-                        )
-                        Spacer(Modifier.height(12.dp))
-                        VerticalGrid(
-                            modifier = Modifier.fillMaxWidth(),
-                            gridCount = 2,
-                            items = listOf("Salam", "Gowmy", "Menem", "Gowy"),
-                            content = { value->
-                                ProductCard(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    title = value
-                                )
-                            }
-                        )
-//                        LazyVerticalGrid(
-//                            columns = GridCells.Fixed(2)
-//                        ) {
-//                            items(4) {
-//                                ProductCard(
-//                                    modifier = Modifier.fillMaxWidth(0.4f)
-//                                )
-//                            }
-//                        }
                     }
                 }
             }

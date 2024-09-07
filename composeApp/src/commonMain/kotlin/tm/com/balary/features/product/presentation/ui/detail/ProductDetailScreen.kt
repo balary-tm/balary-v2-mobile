@@ -60,6 +60,7 @@ import tm.com.balary.features.product.presentation.ui.ProductBasketButton
 import tm.com.balary.features.product.presentation.ui.photo.PhotoViewDialog
 import tm.com.balary.features.product.presentation.ui.photo.PhotoViewScreen
 import tm.com.balary.features.product.presentation.ui.review.MiniReview
+import tm.com.balary.features.product.presentation.ui.review.ProductReviewScreen
 import tm.com.balary.ui.ImageLoader
 
 class ProductDetailScreen : Screen {
@@ -298,7 +299,10 @@ fun ProductDetail(modifier: Modifier = Modifier) {
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W900
                             ),
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.clickable {
+                                navigator.push(ProductReviewScreen())
+                            }
                         )
 
                         Row(
@@ -360,7 +364,7 @@ fun ProductDetail(modifier: Modifier = Modifier) {
                     ) {
                         items(20) {
                             MiniReview(
-                                Modifier.width(265.dp),
+                                Modifier.width(300.dp),
                                 username = "Jahan",
                                 stars = 3.0,
                                 image = "",

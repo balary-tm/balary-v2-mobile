@@ -6,11 +6,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -26,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import tm.com.balary.features.category.presentation.ui.subcategory.ProductMiniCategory
 import tm.com.balary.features.home.presentation.ui.banner.SearchInput
 import tm.com.balary.features.product.presentation.ui.FilterBar
 import tm.com.balary.features.product.presentation.ui.ProductCard
@@ -73,16 +79,19 @@ fun ProductList(modifier: Modifier = Modifier) {
                 ) {
                     CenterAlignedTopAppBar(
                         title = {
-                            FilterBar(
-                                modifier = Modifier.fillMaxWidth(),
-                                title = "Miweler",
-                                onFilter = {
-                                    navigator.push(FilterScreen())
-                                },
-                                onBack = {
+                            Column(Modifier.fillMaxWidth()) {
+                                FilterBar(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    title = "Miweler",
+                                    onFilter = {
+                                        navigator.push(FilterScreen())
+                                    },
+                                    onBack = {
+                                        navigator.pop()
+                                    }
+                                )
 
-                                }
-                            )
+                            }
                         },
                         scrollBehavior = scrollBehavior,
                         colors = TopAppBarDefaults.topAppBarColors(
@@ -95,16 +104,22 @@ fun ProductList(modifier: Modifier = Modifier) {
         ) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
-                modifier = Modifier.fillMaxWidth().padding(
-                    top = 12.dp
-                ).background(
-                    MaterialTheme.colorScheme.surface,
-                    RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp)
-                ),
-                contentPadding = PaddingValues(horizontal = 16.dp),
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                item(span = {
+                    GridItemSpan(maxLineSpan)
+                }) {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(30) {
+                            ProductMiniCategory()
+                        }
+                    }
+                }
                 items(100) {
                     ProductCard(
                         modifier = Modifier.fillMaxWidth()

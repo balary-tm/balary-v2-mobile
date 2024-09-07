@@ -60,7 +60,7 @@ fun Category() {
                 CategoryItem(
                     modifier = Modifier.fillMaxWidth(),
                     title = "Miweler, gök önümler, işdäaçarlar",
-                    containerColor = Color(0xFFD3E3FF),
+                    containerColor = MaterialTheme.colorScheme.surfaceBright,
                     image = "",
                     onClick = {
                         navigator.push(SubCategoryScreen())

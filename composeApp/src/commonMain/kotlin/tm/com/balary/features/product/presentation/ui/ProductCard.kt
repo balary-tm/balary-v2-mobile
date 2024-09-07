@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
@@ -27,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,8 +36,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.placeholder
+import balary.composeapp.generated.resources.timer
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.core.loremIpsum
 import tm.com.balary.features.product.presentation.ui.detail.ProductDetailScreen
 import tm.com.balary.ui.ImageLoader
@@ -47,11 +51,10 @@ fun ProductCard(
 ) {
     val navigator = LocalNavigator.currentOrThrow
     val shape = RoundedCornerShape(4.dp)
-    Column(modifier = modifier.border(
-        width = 1.dp,
-        color = MaterialTheme.colorScheme.primary,
-        shape = RoundedCornerShape(4.dp)
-    ).clip(RoundedCornerShape(4.dp)).clickable {
+    Column(modifier = modifier.clip(RoundedCornerShape(4.dp)).background(
+        color = MaterialTheme.colorScheme.surface,
+        RoundedCornerShape(4.dp)
+    ).clickable {
         navigator.push(ProductDetailScreen())
     }) {
         Box(
@@ -67,6 +70,31 @@ fun ProductCard(
                 url = "",
                 contentScale = ContentScale.Inside
             )
+
+            Row(Modifier.align(Alignment.BottomEnd).background(
+                color = Color(0xFF614FE0),
+                shape = RoundedCornerShape(
+                    topStart = 20.dp,
+                    bottomStart = 20.dp
+                )
+            ).padding(horizontal = 7.dp, vertical = 2.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                Icon(
+                    painter = painterResource(Res.drawable.timer),
+                    contentDescription = "timer",
+                    tint = Color.White,
+                    modifier = Modifier.size(16.dp)
+                )
+
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("3 gün", style = MaterialTheme.typography.bodySmall.copy(
+                        fontWeight = FontWeight.W700
+                    ), color = Color.White)
+                    Spacer(Modifier.height(2.dp))
+                    Text("09:55:59", style = MaterialTheme.typography.bodySmall.copy(
+                        fontSize = 10.sp
+                    ), color = Color.White)
+                }
+            }
 
             Row(
                 Modifier.fillMaxWidth(),
@@ -87,10 +115,7 @@ fun ProductCard(
 
 
 
-        Column(Modifier.fillMaxWidth().padding(4.dp).background(
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-            shape = RoundedCornerShape(4.dp)
-        ).padding(2.dp)) {
+        Column(Modifier.fillMaxWidth().padding(4.dp)) {
             Spacer(Modifier.height(10.dp))
             ProductPrice(
                 modifier = Modifier.fillMaxWidth(),

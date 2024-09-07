@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -31,6 +32,8 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 fun BackScreen(
     modifier: Modifier = Modifier,
     title: String,
+    spacing: Dp = 8.dp,
+    actions: @Composable () -> Unit = {},
     content: @Composable () -> Unit
 ) {
     val navigator = LocalNavigator.currentOrThrow
@@ -50,25 +53,33 @@ fun BackScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Icon(
-                Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                contentDescription = "back",
-                tint = MaterialTheme.colorScheme.outline,
-                modifier = Modifier.size(24.dp).clip(CircleShape).clickable {
-                    navigator.pop()
-                }
-            )
+            Row(
+                modifier = Modifier.weight(1f),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                    contentDescription = "back",
+                    tint = MaterialTheme.colorScheme.outline,
+                    modifier = Modifier.size(24.dp).clip(CircleShape).clickable {
+                        navigator.pop()
+                    }
+                )
 
-            Text(
-                title,
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.W700
-                ),
-                color = MaterialTheme.colorScheme.onSurface
-            )
+                Text(
+                    title,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.W700
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
+            actions()
         }
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(spacing))
         content()
     }
 }

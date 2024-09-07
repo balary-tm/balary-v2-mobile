@@ -4,7 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.interop.UIKitView
+import androidx.compose.ui.viewinterop.UIKitInteropProperties
+import androidx.compose.ui.viewinterop.UIKitView
 import cocoapods.MapLibre.MLNMapView
 import cocoapods.MapLibre.MLNUserTrackingModeFollowWithHeading
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -28,14 +29,17 @@ actual fun BalaryMaps(
     }
 
     UIKitView(
-        interactive = true,
-        modifier = modifier,
         factory = {
             mapView.apply {
                 setDelegate(delegate)
             }
         },
+        modifier = modifier,
         update = { map->
-        }
+        },
+        properties = UIKitInteropProperties(
+            isInteractive = true,
+            isNativeAccessibilityEnabled = true
+        )
     )
 }

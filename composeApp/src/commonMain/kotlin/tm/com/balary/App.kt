@@ -10,32 +10,43 @@ import org.koin.compose.KoinApplication
 import org.koin.compose.KoinContext
 import tm.com.balary.features.basket.presentation.ui.BasketTab
 import tm.com.balary.features.category.presentation.ui.CategoryTab
+import tm.com.balary.features.contact.di.chatModule
 import tm.com.balary.features.favorite.presentation.ui.FavoriteTab
 import tm.com.balary.features.home.di.homeModule
 import tm.com.balary.features.home.presentation.ui.HomeScreen
 import tm.com.balary.features.home.presentation.ui.HomeTab
 import tm.com.balary.features.profile.presentation.ui.ProfileTab
+import tm.com.balary.features.splash.presentation.ui.SplashScreen
 import tm.com.balary.router.AppTab
 import tm.com.balary.state.Composition
 import tm.com.balary.state.LocalDarkMode
 
 
-@Preview()
+@Preview
 @Composable
 fun App(modifier: Modifier = Modifier) {
     KoinApplication(
         application = {
             modules(
-                homeModule
+                homeModule,
+                chatModule
             )
         }
     ) {
         Box(modifier = modifier) {
             Composition {
                 AppTheme(darkTheme = LocalDarkMode.current.value) {
-                    AppTab(modifier = Modifier.fillMaxSize())
+                    SplashScreen {
+                        AppTab(modifier = Modifier.fillMaxSize())
+                    }
                 }
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun AppPreview() {
+    App()
 }

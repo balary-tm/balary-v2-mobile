@@ -77,6 +77,9 @@ kotlin {
             implementation(libs.coil.network.ktor)
 
             implementation(libs.kotlinx)
+
+            // player
+            implementation(libs.mediaplayer)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

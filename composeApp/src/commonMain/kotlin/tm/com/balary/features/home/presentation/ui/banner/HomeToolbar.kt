@@ -43,7 +43,7 @@ fun HomeToolbar(
         modifier = modifier.background(Color.Transparent).background(
             color = MaterialTheme.colorScheme.tertiary,
             shape = shape
-        ).clip(shape).height(220.dp)
+        ).clip(shape).height(260.dp)
     ) {
         Image(
             painter = painterResource(Res.drawable.topbar_bg),

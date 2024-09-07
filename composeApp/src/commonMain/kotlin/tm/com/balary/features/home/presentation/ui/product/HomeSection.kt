@@ -33,10 +33,7 @@ fun HomeSection(
 ) {
     val navigator = LocalNavigator.currentOrThrow
     Column(
-        modifier = modifier.background(
-            color = MaterialTheme.colorScheme.surface,
-            shape = RoundedCornerShape(20.dp)
-        ).padding(vertical = 16.dp)
+        modifier = modifier.padding(vertical = 16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(
