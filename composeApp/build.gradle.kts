@@ -80,6 +80,10 @@ kotlin {
 
             // player
             implementation(libs.mediaplayer)
+
+            // file picker
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

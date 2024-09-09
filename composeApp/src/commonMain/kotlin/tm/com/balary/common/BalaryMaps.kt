@@ -9,4 +9,7 @@ data class LatLng(
 )
 
 @Composable
-expect fun BalaryMaps(modifier: Modifier, initialPoint: LatLng)
+expect fun BalaryMaps(
+    modifier: Modifier, initialPoint: LatLng,
+    onMapClick: () -> Unit = {}
+)

@@ -4,8 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.viewinterop.UIKitInteropProperties
-import androidx.compose.ui.viewinterop.UIKitView
+import androidx.compose.ui.interop.UIKitView
 import cocoapods.MapLibre.MLNMapView
 import cocoapods.MapLibre.MLNUserTrackingModeFollowWithHeading
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -15,7 +14,8 @@ import platform.Foundation.NSURL
 @Composable
 actual fun BalaryMaps(
     modifier: Modifier,
-    initialPoint: LatLng
+    initialPoint: LatLng,
+    onMapClick: () -> Unit
 ) {
     val coroutine = rememberCoroutineScope()
     val mapView = remember {
@@ -36,10 +36,6 @@ actual fun BalaryMaps(
         },
         modifier = modifier,
         update = { map->
-        },
-        properties = UIKitInteropProperties(
-            isInteractive = true,
-            isNativeAccessibilityEnabled = true
-        )
+        }
     )
 }

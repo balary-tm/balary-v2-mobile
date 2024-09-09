@@ -3,7 +3,8 @@ package tm.com.balary.common
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.viewinterop.UIKitView
+import androidx.compose.ui.interop.UIKitView
+import kotlinx.cinterop.ExperimentalForeignApi
 import platform.AVFoundation.AVPlayer
 import platform.AVFoundation.play
 import platform.AVKit.AVPlayerViewController
@@ -15,6 +16,7 @@ import platform.UIKit.UIInterfaceOrientation
 
 
 
+@OptIn(ExperimentalForeignApi::class)
 @Composable
 actual fun BalaryVideoPlayer(modifier: Modifier, url: String) {
     val playerView = remember {
@@ -27,6 +29,7 @@ actual fun BalaryVideoPlayer(modifier: Modifier, url: String) {
     playerView.play()
 
     UIKitView(
+        modifier = modifier,
         factory = {
             playerController.view
         },

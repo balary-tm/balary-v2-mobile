@@ -78,7 +78,7 @@ class ProductReviewScreen : Screen {
                     ),
                     shape = RoundedCornerShape(4.dp)
                 ).clip(RoundedCornerShape(4.dp)).clickable {
-                    navigator.push(OrderedProducts())
+                    navigator.push(MyComment())
                 }.padding(vertical = 10.dp, horizontal = 4.dp)
             ) {
                 Text(

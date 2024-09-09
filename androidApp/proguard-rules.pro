@@ -21,3 +21,6 @@
 #-renamesourcefileattribute SourceFile
 -dontwarn com.ryanharter.auto.value.gson.GsonTypeAdapterFactory
 -dontwarn org.slf4j.impl.StaticLoggerBinder
+
+-keep class com.sun.jna.** { *; }
+-keep class * implements com.sun.jna.** { *; }

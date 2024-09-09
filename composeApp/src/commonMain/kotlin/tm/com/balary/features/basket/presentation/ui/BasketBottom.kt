@@ -15,6 +15,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +27,7 @@ import balary.composeapp.generated.resources.Res
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
+import tm.com.balary.features.basket.presentation.ui.basket_changes.ChangesDialog
 import tm.com.balary.features.basket.presentation.ui.order.OrderScreen
 
 @Composable
@@ -32,7 +35,20 @@ fun BasketBottom(
     modifier: Modifier = Modifier,
     total: Double = 0.0
 ) {
+    val show = remember {
+        mutableStateOf(false)
+    }
+
     val navigator = LocalNavigator.currentOrThrow
+
+    ChangesDialog(
+        show = show.value,
+        onDismiss = {
+            show.value = false
+            navigator.push(OrderScreen())
+        }
+    )
+
     Column(
         modifier.fillMaxWidth().background(
             color = MaterialTheme.colorScheme.surface,
@@ -93,7 +109,7 @@ fun BasketBottom(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
             onClick = {
-                navigator.push(OrderScreen())
+                show.value = true
             }
         ) {
             Text(

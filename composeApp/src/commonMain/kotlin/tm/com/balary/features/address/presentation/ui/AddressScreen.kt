@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import tm.com.balary.features.auth.presentation.ui.BackScreen
 
 class AddressScreen : Screen {
@@ -32,6 +34,7 @@ class AddressScreen : Screen {
 
 @Composable
 fun Address(modifier: Modifier = Modifier) {
+    val navigator = LocalNavigator.currentOrThrow
     BackScreen(modifier, title = "Salgylarym") {
         LazyColumn(
             modifier = Modifier.fillMaxSize().background(
@@ -49,7 +52,7 @@ fun Address(modifier: Modifier = Modifier) {
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(10.dp),
                     onClick = {
-
+                        navigator.push(AddAddress())
                     }
                 ) {
                     Icon(

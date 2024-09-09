@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,7 +33,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
+import balary.composeapp.generated.resources.call
+import balary.composeapp.generated.resources.comment
 import balary.composeapp.generated.resources.home
+import balary.composeapp.generated.resources.info_fill
+import balary.composeapp.generated.resources.message
 import balary.composeapp.generated.resources.paper
 import cafe.adriel.voyager.core.screen.Screen
 import org.jetbrains.compose.resources.painterResource
@@ -121,6 +126,90 @@ class OrderDetails : Screen {
 
                 repeat(20) {
                     OrderDetailItem(Modifier.fillMaxWidth().padding(horizontal = 16.dp))
+                }
+
+                Row(
+                    Modifier.fillMaxWidth().padding(
+                        horizontal = 16.dp
+                    ),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painter = painterResource(Res.drawable.info_fill),
+                        contentDescription = "info",
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(20.dp)
+                    )
+
+                    Text(
+                        "Eger siz harydy goşdurmak ýa-da aýyrmak isleseňiz onda biziň bilen habarlaşyň",
+                        modifier = Modifier.weight(1f),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.W700
+                        )
+                    )
+                }
+
+                Row(
+                    Modifier.fillMaxWidth().padding(
+                        horizontal = 16.dp
+                    ),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(10.dp),
+                        onClick = {
+
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.comment),
+                            contentDescription = "chat",
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            "Habarlaşmak",
+                            modifier = Modifier.weight(1f),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontWeight = FontWeight.W700
+                            ),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+
+                    Button(
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(10.dp),
+                        onClick = {
+
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.call),
+                            contentDescription = "call",
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            "Jan etmek",
+                            modifier = Modifier.weight(1f),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontWeight = FontWeight.W700
+                            ),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
 
                 Text(

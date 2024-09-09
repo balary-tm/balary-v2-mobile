@@ -59,6 +59,7 @@ import tm.com.balary.features.product.presentation.ui.FavoriteButton
 import tm.com.balary.features.product.presentation.ui.ProductBasketButton
 import tm.com.balary.features.product.presentation.ui.photo.PhotoViewDialog
 import tm.com.balary.features.product.presentation.ui.photo.PhotoViewScreen
+import tm.com.balary.features.product.presentation.ui.review.CommentForm
 import tm.com.balary.features.product.presentation.ui.review.MiniReview
 import tm.com.balary.features.product.presentation.ui.review.ProductReviewScreen
 import tm.com.balary.ui.ImageLoader
@@ -82,6 +83,16 @@ fun ProductDetail(modifier: Modifier = Modifier) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+    val addComment = remember {
+        mutableStateOf(false)
+    }
+
+    CommentForm(
+        show = addComment.value,
+        onDismiss = {
+            addComment.value = false
+        }
+    )
 
 
     PhotoViewDialog(
@@ -332,7 +343,7 @@ fun ProductDetail(modifier: Modifier = Modifier) {
 
                             Button(
                                 onClick = {
-
+                                    addComment.value = true
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = Color(0xFF614FE0)

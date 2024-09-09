@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,10 +31,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.banner
 import balary.composeapp.generated.resources.dislike
+import balary.composeapp.generated.resources.edit
 import balary.composeapp.generated.resources.like
 import balary.composeapp.generated.resources.play
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -47,12 +52,26 @@ fun MiniReview(
     username: String,
     stars: Double,
     date: String,
-    review: String
+    review: String,
+    isOwn: Boolean = false
 ) {
     val show = remember {
         mutableStateOf(false)
     }
+    val editShow = remember {
+        mutableStateOf(false)
+    }
+
+
     val navigator = LocalNavigator.currentOrThrow
+
+    CommentForm(
+        show = editShow.value,
+        onDismiss = {
+            editShow.value = false
+        }
+    )
+
     PreviewMediaScreen(
         show = show.value,
         onDismiss = {
@@ -115,17 +134,48 @@ fun MiniReview(
                 horizontalAlignment = Alignment.End
             ) {
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    repeat(2) {
-                        ReviewImage(
-                            isVideo = it % 2 == 0,
-                            onClick = {
-                                show.value = true
-                            }
+                if (isOwn) {
+                    Button(
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        ),
+                        shape = RoundedCornerShape(4.dp),
+                        onClick = {
+                            editShow.value = true
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.edit),
+                            contentDescription = "edit",
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(24.dp)
                         )
+
+                        Spacer(Modifier.width(4.dp))
+
+                        Text(
+                            "Düzetmek",
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontWeight = FontWeight.W700
+                            ),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
+                        )
+                    }
+                } else {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        repeat(2) {
+                            ReviewImage(
+                                isVideo = it % 2 == 0,
+                                onClick = {
+                                    show.value = true
+                                }
+                            )
+                        }
                     }
                 }
 
@@ -153,42 +203,57 @@ fun MiniReview(
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.like),
-                contentDescription = "like",
-                tint = Color(0xFF614FE0),
-                modifier = Modifier.size(26.dp).clip(CircleShape).clickable {
+        if (isOwn) {
+            LazyRow(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(8) {
+                    ReviewImage(
+                        modifier = Modifier,
+                        imageSize = 100.dp
+                    )
+                }
+            }
+        } else {
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.like),
+                    contentDescription = "like",
+                    tint = Color(0xFF614FE0),
+                    modifier = Modifier.size(26.dp).clip(CircleShape).clickable {
 
-                }.padding(2.dp)
-            )
-            Spacer(Modifier.width(2.dp))
-            Text(
-                "1",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Spacer(Modifier.width(2.dp))
-            Icon(
-                painter = painterResource(Res.drawable.dislike),
-                contentDescription = "dislike",
-                tint = Color(0xFF614FE0),
-                modifier = Modifier.size(26.dp).clip(CircleShape).clickable {
+                    }.padding(2.dp)
+                )
+                Spacer(Modifier.width(2.dp))
+                Text(
+                    "1",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(Modifier.width(2.dp))
+                Icon(
+                    painter = painterResource(Res.drawable.dislike),
+                    contentDescription = "dislike",
+                    tint = Color(0xFF614FE0),
+                    modifier = Modifier.size(26.dp).clip(CircleShape).clickable {
 
-                }.padding(2.dp)
-            )
-            Spacer(Modifier.width(2.dp))
-            Text(
-                "0",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+                    }.padding(2.dp)
+                )
+                Spacer(Modifier.width(2.dp))
+                Text(
+                    "0",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
         }
-
 
     }
 }
@@ -197,6 +262,7 @@ fun MiniReview(
 fun ReviewImage(
     modifier: Modifier = Modifier,
     isVideo: Boolean = false,
+    imageSize: Dp = 36.dp,
     onClick: () -> Unit = {}
 ) {
     val shape = RoundedCornerShape(4.dp)
@@ -210,7 +276,7 @@ fun ReviewImage(
         }, contentAlignment = Alignment.Center
     ) {
         ImageLoader(
-            modifier = Modifier.size(36.dp).clip(shape),
+            modifier = Modifier.size(imageSize).clip(shape),
             url = "",
             contentScale = ContentScale.Fit
         )

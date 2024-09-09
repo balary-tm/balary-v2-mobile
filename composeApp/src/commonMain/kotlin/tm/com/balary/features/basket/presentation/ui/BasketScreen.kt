@@ -24,9 +24,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.basket
@@ -37,6 +40,8 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.features.product.presentation.ui.FilterBar
 import tm.com.balary.features.product.presentation.ui.filter.FilterScreen
+import tm.com.balary.ui.AppAlert
+import tm.com.balary.ui.AppAlertType
 
 class BasketScreen : Screen {
     @Composable
@@ -48,6 +53,23 @@ class BasketScreen : Screen {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Basket(modifier: Modifier = Modifier) {
+
+    val show = remember {
+        mutableStateOf(false)
+    }
+
+    AppAlert(
+        show = show.value,
+        onDismiss = {
+            show.value = false
+        },
+        title = "Tassyklamak",
+        message = buildAnnotatedString {
+            append("Siz hakykatdanam sebedi boşatmak isleýärsiňizmi?")
+        },
+        type = AppAlertType.DANGER
+    )
+
     val navigator = LocalNavigator.currentOrThrow
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     Scaffold(modifier,
@@ -59,7 +81,7 @@ fun Basket(modifier: Modifier = Modifier) {
                         title = "Sebet",
                         actionIcon = painterResource(Res.drawable.delete),
                         onFilter = {
-
+                            show.value = true
                         },
                         onBack = {
 
