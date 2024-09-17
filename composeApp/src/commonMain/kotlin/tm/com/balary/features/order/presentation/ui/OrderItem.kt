@@ -25,8 +25,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import tm.com.balary.router.OrderDetailsScreen
 import tm.com.balary.ui.ImageLoader
 
 enum class OrderStatus {
@@ -40,9 +43,9 @@ enum class OrderStatus {
 @Composable
 fun OrderItem(
     modifier: Modifier = Modifier,
-    status: OrderStatus = OrderStatus.NONE
+    status: OrderStatus = OrderStatus.NONE,
+    navHostController: NavHostController
 ) {
-    val navigator = LocalNavigator.currentOrThrow
     val color = when (status) {
         OrderStatus.NONE -> MaterialTheme.colorScheme.secondary
         OrderStatus.DELIVERED -> MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
@@ -51,13 +54,15 @@ fun OrderItem(
         OrderStatus.ON_THE_WAY -> MaterialTheme.colorScheme.tertiary
     }
 
+    val strings = LocalStrings.current
+
     Column(
         modifier.border(
             color = MaterialTheme.colorScheme.outline,
             width = 1.dp,
             shape = RoundedCornerShape(10.dp)
         ).clip(RoundedCornerShape(10.dp)).clickable {
-            navigator.push(OrderDetails())
+            navHostController.navigate(OrderDetailsScreen)
         },
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -76,12 +81,12 @@ fun OrderItem(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    "Sargyt №: #26491",
+                    "${strings.orderNumber}: #26491",
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.W700),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    "Salgy: Mir 7/4 42-jaý, 12 öý",
+                    "${strings.address2}: Mir 7/4 42-jaý, 12 öý",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -94,7 +99,7 @@ fun OrderItem(
                 ).clip(RoundedCornerShape(4.dp)).padding(vertical = 4.dp, horizontal = 15.dp)
             ) {
                 androidx.compose.material.Text(
-                    "Eltip berildi",
+                    strings.delivered,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.W700
                     ),

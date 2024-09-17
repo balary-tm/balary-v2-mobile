@@ -39,6 +39,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -50,7 +52,10 @@ class ConfirmationScreen : Screen {
         val otp = rememberSaveable {
             mutableStateOf("")
         }
-        BackScreen(Modifier.fillMaxSize(), "Tassyklamak") {
+        val strings = LocalStrings.current
+        BackScreen(Modifier.fillMaxSize(), strings.confirmation, navHostController = rememberNavController(), onBack = {
+            navigator.pop()
+        }) {
             Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
                 Column(
                     Modifier.fillMaxWidth().background(
@@ -60,7 +65,7 @@ class ConfirmationScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        "+99365636363 belgä iberilen kody giriziň ",
+                        strings.sentCode.replace("{phone_number}","+99362737222"),
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.W700,
                         ),
@@ -85,7 +90,7 @@ class ConfirmationScreen : Screen {
                     ) {
 
                         Text(
-                            "Täzeden ugrat",
+                            strings.sentAgain,
                             color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.W700
@@ -114,7 +119,7 @@ class ConfirmationScreen : Screen {
                         }
                     ) {
                         Text(
-                            "Tassykla",
+                            strings.accept,
                             color = MaterialTheme.colorScheme.onPrimary,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W700

@@ -3,7 +3,6 @@ package tm.com.balary.features.home.presentation.ui.category
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,9 +18,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
-import balary.composeapp.generated.resources.bag
 import balary.composeapp.generated.resources.banner
-import balary.composeapp.generated.resources.placeholder
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.ui.ImageLoader
 

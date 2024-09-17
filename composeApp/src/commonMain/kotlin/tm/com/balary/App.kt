@@ -1,50 +1,62 @@
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Scaffold
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import cafe.adriel.lyricist.ProvideStrings
+import cafe.adriel.lyricist.rememberStrings
+import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
 import org.koin.compose.KoinContext
-import tm.com.balary.features.basket.presentation.ui.BasketTab
-import tm.com.balary.features.category.presentation.ui.CategoryTab
+import org.koin.core.context.startKoin
+import org.koin.dsl.KoinAppDeclaration
+import org.koin.dsl.koinApplication
+import tm.com.balary.core.provideAppSettings
+import tm.com.balary.core.provideHttpClient
 import tm.com.balary.features.contact.di.chatModule
-import tm.com.balary.features.favorite.presentation.ui.FavoriteTab
 import tm.com.balary.features.home.di.homeModule
-import tm.com.balary.features.home.presentation.ui.HomeScreen
-import tm.com.balary.features.home.presentation.ui.HomeTab
 import tm.com.balary.features.onboarding.presentation.ui.OnBoardingScreen
-import tm.com.balary.features.profile.presentation.ui.ProfileTab
+import tm.com.balary.features.profile.di.profileModule
 import tm.com.balary.features.splash.presentation.ui.SplashScreen
-import tm.com.balary.router.AppTab
 import tm.com.balary.router.AppTabScreen
 import tm.com.balary.state.Composition
+import tm.com.balary.state.LocalAppState
 import tm.com.balary.state.LocalDarkMode
+
+
+fun koinConfiguration() = koinApplication {
+    modules(
+        provideAppSettings,
+        provideHttpClient,
+        homeModule,
+        chatModule,
+        profileModule
+    )
+}
 
 
 @Preview
 @Composable
 fun App(modifier: Modifier = Modifier) {
-    KoinApplication(
-        application = {
-            modules(
-                homeModule,
-                chatModule
-            )
-        }
-    ) {
-        val isFirst = true
-        Box(modifier = modifier) {
-            Composition {
-                AppTheme(darkTheme = LocalDarkMode.current.value) {
-                    SplashScreen {
-                        if(isFirst){
-                            Navigator(OnBoardingScreen())
-                        } else {
-                            Navigator(AppTabScreen())
+    KoinApplication(::koinConfiguration) {
+        val lyricist = rememberStrings()
+        ProvideStrings(lyricist) {
+            Box(modifier = modifier) {
+                Composition {
+                    val appState = LocalAppState.current
+                    val isDark = LocalDarkMode.current
+                    AppTheme(darkTheme = isDark.value) {
+                        SplashScreen {
+                            if(appState.value.isFirst){
+                                Navigator(OnBoardingScreen())
+                            } else {
+                                Navigator(AppTabScreen())
+                            }
                         }
                     }
                 }

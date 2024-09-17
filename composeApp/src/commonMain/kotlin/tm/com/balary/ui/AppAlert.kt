@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import kotlinx.datetime.Month
+import cafe.adriel.lyricist.LocalStrings
 
 enum class AppAlertType {
     INFO,
@@ -37,6 +37,7 @@ fun AppAlert(
     message: AnnotatedString,
     type: AppAlertType = AppAlertType.INFO
 ) {
+    val strings = LocalStrings.current
     if (show) {
         Dialog(
             onDismissRequest = onDismiss,
@@ -86,7 +87,7 @@ fun AppAlert(
                         )
                     ) {
                         Text(
-                            "Ýok",
+                            strings.no,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W700
                             ),
@@ -107,7 +108,7 @@ fun AppAlert(
                         )
                     ) {
                         Text(
-                            "Hawa",
+                            strings.yes,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W700
                             ),

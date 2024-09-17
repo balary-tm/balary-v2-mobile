@@ -20,22 +20,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import tm.com.balary.features.auth.presentation.ui.BackScreen
+import tm.com.balary.router.AddAddressScreen
 
 class AddressScreen : Screen {
     @Composable
     override fun Content() {
-        Address(Modifier.fillMaxSize())
     }
 }
 
 @Composable
-fun Address(modifier: Modifier = Modifier) {
-    val navigator = LocalNavigator.currentOrThrow
-    BackScreen(modifier, title = "Salgylarym") {
+fun Address(modifier: Modifier = Modifier, navHostController: NavHostController) {
+    val strings = LocalStrings.current
+    BackScreen(modifier, title = strings.myAddresses, navHostController = navHostController) {
         LazyColumn(
             modifier = Modifier.fillMaxSize().background(
                 color = MaterialTheme.colorScheme.surface,
@@ -52,7 +54,7 @@ fun Address(modifier: Modifier = Modifier) {
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(10.dp),
                     onClick = {
-                        navigator.push(AddAddress())
+                        navHostController.navigate(AddAddressScreen)
                     }
                 ) {
                     Icon(
@@ -62,7 +64,7 @@ fun Address(modifier: Modifier = Modifier) {
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(Modifier.width(8.dp))
-                    Text("Salgy goşmak", style = MaterialTheme.typography.bodyLarge.copy(
+                    Text(strings.addAddress, style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.W700
                     ), color = MaterialTheme.colorScheme.onPrimary)
                 }

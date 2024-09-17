@@ -7,7 +7,6 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,12 +33,12 @@ fun SelectLocation(
             Text(
                 "Aşgabat",
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             )
             Icon(
                 Icons.Default.ArrowDropDown,
                 contentDescription = "arrow",
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
 

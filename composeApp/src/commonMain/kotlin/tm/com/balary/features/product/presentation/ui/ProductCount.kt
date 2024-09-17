@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.comment
 import balary.composeapp.generated.resources.star
+import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -47,7 +48,7 @@ fun ProductCount(
             modifier = Modifier.size(16.dp)
         )
         Text(
-            "$commentCount teswir", style = MaterialTheme.typography.bodySmall.copy(
+            "$commentCount ${LocalStrings.current.comment}", style = MaterialTheme.typography.bodySmall.copy(
                 fontWeight = FontWeight.W700,
                 fontSize = 10.sp
             ),

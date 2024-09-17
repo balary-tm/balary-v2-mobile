@@ -23,29 +23,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import balary.composeapp.generated.resources.Res
+import androidx.navigation.NavHostController
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.features.basket.presentation.ui.basket_changes.ChangesDialog
 import tm.com.balary.features.basket.presentation.ui.order.OrderScreen
+import tm.com.balary.router.BasketDetailScreen
 
 @Composable
 fun BasketBottom(
     modifier: Modifier = Modifier,
-    total: Double = 0.0
+    total: Double = 0.0,
+    navHostController: NavHostController
 ) {
     val show = remember {
         mutableStateOf(false)
     }
 
-    val navigator = LocalNavigator.currentOrThrow
+    val strings = LocalStrings.current
+
 
     ChangesDialog(
         show = show.value,
         onDismiss = {
             show.value = false
-            navigator.push(OrderScreen())
+            navHostController.navigate(BasketDetailScreen)
         }
     )
 
@@ -70,7 +73,7 @@ fun BasketBottom(
                 contentDescription = "delivery status"
             )
             Text(
-                "Iň pes söwda 100 manatdan geçmeli! 200 manat söwda eden müşderä eltip bermek hyzmaty mugt. ",
+                strings.minimumPriceMessage,
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.W700
                 ),
@@ -87,7 +90,7 @@ fun BasketBottom(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                "Jemi:",
+                strings.total,
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.W900,
                     fontSize = 18.sp
@@ -113,7 +116,7 @@ fun BasketBottom(
             }
         ) {
             Text(
-                "Sargydy tassykla",
+                strings.confirmOrder,
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.W700
                 ),

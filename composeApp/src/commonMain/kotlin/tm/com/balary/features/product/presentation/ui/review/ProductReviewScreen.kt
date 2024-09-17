@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LinearProgressIndicator
@@ -42,136 +41,141 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.comment
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.features.auth.presentation.ui.BackScreen
-import tm.com.balary.features.order.presentation.ui.OrderedProducts
 import tm.com.balary.features.product.presentation.ui.detail.RatingBar
+import tm.com.balary.router.MyCommentScreen
 import tm.com.balary.ui.AlsFontFamily
-import kotlin.random.Random
 
 class ProductReviewScreen : Screen {
     @Composable
-    override fun Content() {
-        val showWarning = remember {
-            mutableStateOf(false)
+    override fun Content() {}
+}
+
+@Composable
+fun ProductReview(modifier: Modifier = Modifier, navHostController: NavHostController) {
+    val showWarning = remember {
+        mutableStateOf(false)
+    }
+
+    val strings = LocalStrings.current
+
+
+    PreviewWarning(
+        show = showWarning.value,
+        onDismiss = {
+            showWarning.value = false
         }
+    )
 
-        val navigator = LocalNavigator.currentOrThrow
+    BackScreen(Modifier.fillMaxSize(), title = strings.comments, navHostController = navHostController, actions = {
+        Box(
+            Modifier.background(
+                color = MaterialTheme.colorScheme.primary.copy(
+                    alpha = 0.6f
+                ),
+                shape = RoundedCornerShape(4.dp)
+            ).clip(RoundedCornerShape(4.dp)).clickable {
+                navHostController.navigate(MyCommentScreen)
+            }.padding(vertical = 10.dp, horizontal = 4.dp)
+        ) {
+            Text(
+                strings.myComments,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontWeight = FontWeight.W700
+                ),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }) {
+        Box(Modifier.fillMaxSize()) {
+            LazyColumn(
+                Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(
+                    bottom = 12.dp
+                )
+            ) {
+                item {
+                    ReviewChart(
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
 
-        PreviewWarning(
-            show = showWarning.value,
-            onDismiss = {
-                showWarning.value = false
+                item {
+                    Text(
+                        "8 ${strings.comment}",
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.W700
+                        ),
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                }
+
+                items(86) {
+                    MiniReview(
+                        modifier = Modifier.fillMaxWidth().padding(
+                            horizontal = 16.dp
+                        ),
+                        username = "Jahan",
+                        stars = 3.0,
+                        image = "",
+                        date = "08.06.2024",
+                        review = "Öran gowy haryt."
+                    )
+                }
             }
-        )
 
-        BackScreen(Modifier.fillMaxSize(), title = "Teswirler", actions = {
-            Box(
-                Modifier.background(
-                    color = MaterialTheme.colorScheme.primary.copy(
-                        alpha = 0.6f
+            Column(
+                Modifier.align(Alignment.BottomEnd).padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                Icon(
+                    Icons.Default.KeyboardArrowUp,
+                    contentDescription = "up",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(40.dp).clip(CircleShape).shadow(2.dp).background(
+                        color = MaterialTheme.colorScheme.surface,
+                        shape = CircleShape
+                    ).clickable {
+
+                    }.padding(2.dp)
+                )
+
+                Button(
+                    onClick = {
+                        showWarning.value = true
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF614FE0)
                     ),
                     shape = RoundedCornerShape(4.dp)
-                ).clip(RoundedCornerShape(4.dp)).clickable {
-                    navigator.push(MyComment())
-                }.padding(vertical = 10.dp, horizontal = 4.dp)
-            ) {
-                Text(
-                    "Meniň teswirlerim",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.W700
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-        }) {
-            Box(Modifier.fillMaxSize()) {
-                LazyColumn(
-                    Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(
-                        bottom = 12.dp
-                    )
-                ) {
-                    item {
-                        ReviewChart(
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-
-                    item {
-                        Text(
-                            "8 Teswir",
-                            color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.W700
-                            ),
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-                    }
-
-                    items(86) {
-                        MiniReview(
-                            modifier = Modifier.fillMaxWidth().padding(
-                                horizontal = 16.dp
-                            ),
-                            username = "Jahan",
-                            stars = 3.0,
-                            image = "",
-                            date = "08.06.2024",
-                            review = "Öran gowy haryt."
-                        )
-                    }
-                }
-
-                Column(
-                    Modifier.align(Alignment.BottomEnd).padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.End
                 ) {
                     Icon(
-                        Icons.Default.KeyboardArrowUp,
-                        contentDescription = "up",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.size(40.dp).clip(CircleShape).shadow(2.dp).background(
-                            color = MaterialTheme.colorScheme.surface,
-                            shape = CircleShape
-                        ).clickable {
-
-                        }.padding(2.dp)
+                        painter = painterResource(Res.drawable.comment),
+                        contentDescription = "comment",
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
-
-                    Button(
-                        onClick = {
-                            showWarning.value = true
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF614FE0)
-                        ),
-                        shape = RoundedCornerShape(4.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(Res.drawable.comment),
-                            contentDescription = "comment",
-                            tint = MaterialTheme.colorScheme.onPrimary
+                    Spacer(Modifier.width(2.dp))
+                    androidx.compose.material3.Text(
+                        strings.putComment,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.W900
                         )
-                        Spacer(Modifier.width(2.dp))
-                        androidx.compose.material3.Text(
-                            "Teswir goýmak",
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                fontWeight = FontWeight.W900
-                            )
-                        )
-                    }
-
+                    )
                 }
+
             }
         }
     }
@@ -215,7 +219,7 @@ fun ReviewChart(modifier: Modifier = Modifier) {
             )
             Spacer(Modifier.height(9.dp))
             Text(
-                "86 Teswir",
+                "86 ${LocalStrings.current.comment}",
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyMedium
             )

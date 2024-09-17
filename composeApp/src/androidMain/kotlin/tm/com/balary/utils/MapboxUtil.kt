@@ -23,7 +23,7 @@ fun rememberMapViewLifecycle(): MapView {
         }
     }
 
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
 
     DisposableEffect(lifecycle, mapView) {
         val lifecycleObserver = getMapLifecycleObserver(mapView)

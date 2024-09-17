@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import balary.composeapp.generated.resources.Res
-import balary.composeapp.generated.resources.banner
 import balary.composeapp.generated.resources.close_filled
+import balary.composeapp.generated.resources.popup
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.ui.ImageLoader
 
@@ -62,7 +62,7 @@ fun PopupAds(
 
                         },
                     url = "",
-                    placeholder = painterResource(Res.drawable.banner),
+                    placeholder = painterResource(Res.drawable.popup),
                     contentScale = ContentScale.FillBounds
                 )
             }

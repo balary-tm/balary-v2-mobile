@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
@@ -47,11 +46,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.edit
 import balary.composeapp.generated.resources.eye
 import balary.composeapp.generated.resources.female
 import balary.composeapp.generated.resources.male
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.features.auth.presentation.ui.BackScreen
@@ -60,13 +61,12 @@ import tm.com.balary.features.profile.presentation.ui.profile.ProfileAvatar
 class EditProfileScreen : Screen {
     @Composable
     override fun Content() {
-        EditProfile(Modifier.fillMaxSize())
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditProfile(modifier: Modifier = Modifier) {
+fun EditProfile(modifier: Modifier = Modifier, navHostController: NavHostController) {
     val show = rememberSaveable {
         mutableStateOf(false)
     }
@@ -74,6 +74,8 @@ fun EditProfile(modifier: Modifier = Modifier) {
     val open = remember {
         mutableStateOf(false)
     }
+
+    val strings = LocalStrings.current
 
     val dateState = rememberDatePickerState()
 
@@ -97,7 +99,7 @@ fun EditProfile(modifier: Modifier = Modifier) {
             )
         }
     }
-    BackScreen(modifier, title = "Profile maglumatlary") {
+    BackScreen(modifier, title = strings.profileInfo, navHostController = navHostController) {
         Column(
             Modifier.fillMaxWidth().background(
                 color = MaterialTheme.colorScheme.surface,
@@ -134,7 +136,7 @@ fun EditProfile(modifier: Modifier = Modifier) {
                     fontWeight = FontWeight.W700
                 ),
                 label = {
-                    Text("Doly adyňyz")
+                    Text(strings.fullName)
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
@@ -169,7 +171,7 @@ fun EditProfile(modifier: Modifier = Modifier) {
                     fontWeight = FontWeight.W700
                 ),
                 label = {
-                    Text("Telefon belgiňiz")
+                    Text(strings.phoneNumber)
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone,
@@ -205,7 +207,7 @@ fun EditProfile(modifier: Modifier = Modifier) {
                     fontWeight = FontWeight.W700
                 ),
                 label = {
-                    Text("E-mail salgyňyz")
+                    Text(strings.email2)
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone,
@@ -243,7 +245,7 @@ fun EditProfile(modifier: Modifier = Modifier) {
                     fontWeight = FontWeight.W700
                 ),
                 label = {
-                    Text("Doglan senesi")
+                    Text(strings.dateOfBirth)
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone,
@@ -282,7 +284,7 @@ fun EditProfile(modifier: Modifier = Modifier) {
                 },
                 visualTransformation = if (show.value) VisualTransformation.None else PasswordVisualTransformation(),
                 label = {
-                    Text("Açar sözüňiz*")
+                    Text(strings.password)
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = if (show.value) KeyboardType.Text else KeyboardType.Password,
@@ -316,7 +318,7 @@ fun EditProfile(modifier: Modifier = Modifier) {
                             contentDescription = "male",
                             tint = MaterialTheme.colorScheme.onSurface
                         )
-                        Text("Erkek", style = MaterialTheme.typography.bodyLarge.copy(
+                        Text(strings.male, style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700
                         ), color = MaterialTheme.colorScheme.onSurface)
                     }
@@ -347,7 +349,7 @@ fun EditProfile(modifier: Modifier = Modifier) {
                             contentDescription = "female",
                             tint = MaterialTheme.colorScheme.onSurface
                         )
-                        Text("Aýal", style = MaterialTheme.typography.bodyLarge.copy(
+                        Text(strings.female, style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700
                         ), color = MaterialTheme.colorScheme.onSurface)
                     }
@@ -368,7 +370,7 @@ fun EditProfile(modifier: Modifier = Modifier) {
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(Modifier.width(8.dp))
-                Text("Yatda sakla", style = MaterialTheme.typography.bodyLarge.copy(
+                Text(strings.save, style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.W700
                 ), color = MaterialTheme.colorScheme.onPrimary)
             }

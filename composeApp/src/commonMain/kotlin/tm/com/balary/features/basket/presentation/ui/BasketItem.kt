@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -26,8 +25,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.close_filled
+import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.features.product.presentation.ui.ProductBasketButton
 import tm.com.balary.ui.AppAlert
@@ -35,19 +36,21 @@ import tm.com.balary.ui.AppAlertType
 import tm.com.balary.ui.ImageLoader
 
 @Composable
-fun BasketItem(modifier: Modifier = Modifier) {
+fun BasketItem(modifier: Modifier = Modifier, navHostController: NavHostController) {
     val show = remember {
         mutableStateOf(false)
     }
+
+    val strings = LocalStrings.current
 
     AppAlert(
         show = show.value,
         onDismiss = {
             show.value = false
         },
-        title = "Tassyklamak",
+        title = strings.confirmation,
         message = buildAnnotatedString {
-            append("Bu harydy sebetden aýyrmakçymy?")
+            append(strings.removeFromBasket)
         },
         type = AppAlertType.DANGER
     )

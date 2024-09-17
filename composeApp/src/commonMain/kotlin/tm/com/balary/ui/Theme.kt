@@ -1,13 +1,15 @@
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.Typography
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import tm.com.balary.core.Test
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import tm.com.balary.state.LocalDarkMode
 import tm.com.balary.ui.AlsTypography
 
 private val lightScheme = lightColorScheme(
@@ -92,16 +94,39 @@ fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    Test()
-    val colorScheme = when {
-        darkTheme -> darkScheme
-        else -> lightScheme
-    }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = AlsTypography(),
-        content = content
-    )
+
+
+//    CompositionLocalProvider(
+//        LocalDarkMode provides rememberSaveable {
+//            mutableStateOf(false)
+//        },
+//    ) {
+//        val isDark = LocalDarkMode.current
+        val colorScheme = remember {
+            mutableStateOf(
+                when {
+                    darkTheme -> darkScheme
+                    else -> lightScheme
+                }
+            )
+        }
+
+        LaunchedEffect(darkTheme) {
+            println(darkTheme)
+            colorScheme.value = when {
+                darkTheme -> darkScheme
+                else -> lightScheme
+            }
+        }
+        MaterialTheme(
+            colorScheme = when {
+                darkTheme -> darkScheme
+                else -> lightScheme
+            },
+            typography = AlsTypography(),
+            content = content
+        )
+//    }
 }
 

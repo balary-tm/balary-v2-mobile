@@ -1,7 +1,6 @@
 package tm.com.balary.features.product.presentation.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,32 +10,27 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import balary.composeapp.generated.resources.Res
-import balary.composeapp.generated.resources.placeholder
 import balary.composeapp.generated.resources.timer
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
@@ -47,15 +41,16 @@ import tm.com.balary.ui.ImageLoader
 @Composable
 fun ProductCard(
     modifier: Modifier = Modifier,
-    title: String = "Product Name"
+    title: String = "Product Name",
+    navHostController: NavHostController = rememberNavController()
 ) {
-    val navigator = LocalNavigator.currentOrThrow
     val shape = RoundedCornerShape(4.dp)
+    val strings = LocalStrings.current
     Column(modifier = modifier.clip(RoundedCornerShape(4.dp)).background(
         color = MaterialTheme.colorScheme.surface,
         RoundedCornerShape(4.dp)
     ).clickable {
-        navigator.push(ProductDetailScreen())
+        navHostController.navigate(tm.com.balary.router.ProductDetailScreen)
     }) {
         Box(
             Modifier
@@ -86,7 +81,7 @@ fun ProductCard(
                 )
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("3 gün", style = MaterialTheme.typography.bodySmall.copy(
+                    Text("3 ${strings.day}", style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.W700
                     ), color = Color.White)
                     Spacer(Modifier.height(2.dp))
@@ -108,7 +103,7 @@ fun ProductCard(
 
                 ProductTag(
                     modifier = Modifier,
-                    text = "Arzanladyş"
+                    text = strings.discount
                 )
             }
         }

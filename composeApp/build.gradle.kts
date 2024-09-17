@@ -12,7 +12,7 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "11"
             }
         }
     }
@@ -28,7 +28,7 @@ kotlin {
         podfile = project.file("../iosApp/Podfile")
         framework {
             baseName = "composeApp"
-            isStatic = true
+            isStatic = false
         }
         pod("MapLibre") {
             version = "6.4.2"
@@ -54,6 +54,8 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose.viewmodel.navigation)
             implementation(libs.koin.coroutines)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.negotiation)
@@ -84,6 +86,13 @@ kotlin {
             // file picker
             implementation(libs.filekit.core)
             implementation(libs.filekit.compose)
+
+            // viewmodel
+            implementation(libs.viewmodel)
+
+            // markdown
+            implementation(libs.markdown)
+            implementation(libs.markdown.m3)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -148,7 +157,7 @@ android {
         minSdk = 21
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }

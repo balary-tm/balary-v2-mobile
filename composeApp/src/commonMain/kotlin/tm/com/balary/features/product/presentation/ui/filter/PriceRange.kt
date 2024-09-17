@@ -10,17 +10,15 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import cafe.adriel.lyricist.LocalStrings
 
 @Composable
 fun PriceRange(
@@ -33,6 +31,7 @@ fun PriceRange(
     val max = rememberSaveable {
         mutableStateOf("0")
     }
+    val strings = LocalStrings.current
     Row(
         modifier = modifier.border(
             width = 1.dp,
@@ -48,7 +47,7 @@ fun PriceRange(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                "Iň pesi",
+                strings.minPrice,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.outline
             )
@@ -78,7 +77,7 @@ fun PriceRange(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                "Iň yokary",
+                strings.maxPrice,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.outline
             )

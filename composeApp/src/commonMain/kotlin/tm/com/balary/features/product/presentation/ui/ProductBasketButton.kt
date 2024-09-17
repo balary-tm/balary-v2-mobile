@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddBox
 import androidx.compose.material.icons.filled.IndeterminateCheckBox
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -28,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.add_basket
-import balary.composeapp.generated.resources.bag
+import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -96,7 +95,7 @@ fun ProductBasketButton(
 
                     if(bigButton) {
                         Text(
-                            "Sebede goş",
+                            LocalStrings.current.addToBasket,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W700
                             ),

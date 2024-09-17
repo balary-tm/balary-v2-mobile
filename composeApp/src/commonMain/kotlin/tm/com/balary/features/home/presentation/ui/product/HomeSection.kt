@@ -1,6 +1,5 @@
 package tm.com.balary.features.home.presentation.ui.product
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,27 +10,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import tm.com.balary.features.ads.presentation.ui.AdsComponent
-import tm.com.balary.features.category.presentation.ui.subcategory.SubCategory
-import tm.com.balary.features.category.presentation.ui.subcategory.SubCategoryScreen
 import tm.com.balary.features.product.presentation.ui.ProductCard
+import tm.com.balary.router.SubCategoryScreen
+import tm.com.balary.state.LocalAppNavigator
+import tm.com.balary.state.LocalHomeNavigator
 
 @Composable
 fun HomeSection(
     modifier: Modifier = Modifier,
     title: String,
     showBanner: Boolean = false,
-    adsCount: Int = 0
+    adsCount: Int = 0,
+    navHostController: NavHostController
 ) {
-    val navigator = LocalNavigator.currentOrThrow
     Column(
         modifier = modifier.padding(vertical = 16.dp)
     ) {
@@ -52,7 +51,7 @@ fun HomeSection(
         Spacer(Modifier.height(12.dp))
         HomeProductSection(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), title, onClick = {
-                navigator.push(SubCategoryScreen())
+                navHostController.navigate(SubCategoryScreen)
             })
         Spacer(Modifier.height(16.dp))
         LazyRow(
@@ -60,7 +59,7 @@ fun HomeSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(20) {
-                ProductCard(Modifier.width(176.dp))
+                ProductCard(Modifier.width(176.dp), navHostController = navHostController)
             }
         }
 

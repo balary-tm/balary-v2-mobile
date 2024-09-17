@@ -15,10 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.lyricist.LocalStrings
 import tm.com.balary.features.home.presentation.ui.product.HomeProductSection
 
 @Composable
 fun Brands(modifier: Modifier = Modifier) {
+    val strings = LocalStrings.current
     Column(
         modifier = modifier.background(
             color = MaterialTheme.colorScheme.surface,
@@ -26,7 +28,7 @@ fun Brands(modifier: Modifier = Modifier) {
         ).padding(vertical = 16.dp)
     ) {
         Spacer(Modifier.height(12.dp))
-        HomeProductSection(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), "Brendlar")
+        HomeProductSection(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), strings.brands)
         Spacer(Modifier.height(12.dp))
         LazyRow(
             contentPadding = PaddingValues(

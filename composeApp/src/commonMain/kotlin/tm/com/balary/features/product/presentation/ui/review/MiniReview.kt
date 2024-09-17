@@ -39,6 +39,7 @@ import balary.composeapp.generated.resources.dislike
 import balary.composeapp.generated.resources.edit
 import balary.composeapp.generated.resources.like
 import balary.composeapp.generated.resources.play
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
@@ -61,6 +62,8 @@ fun MiniReview(
     val editShow = remember {
         mutableStateOf(false)
     }
+
+    val strings = LocalStrings.current
 
 
     val navigator = LocalNavigator.currentOrThrow
@@ -154,7 +157,7 @@ fun MiniReview(
                         Spacer(Modifier.width(4.dp))
 
                         Text(
-                            "Düzetmek",
+                            strings.edit2,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W700
                             ),

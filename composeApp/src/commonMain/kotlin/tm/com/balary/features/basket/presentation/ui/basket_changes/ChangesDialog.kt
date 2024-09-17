@@ -2,7 +2,6 @@ package tm.com.balary.features.basket.presentation.ui.basket_changes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,12 +19,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import cafe.adriel.lyricist.LocalStrings
 
 @Composable
 fun ChangesDialog(
     show: Boolean,
     onDismiss: () -> Unit
 ) {
+    val strings = LocalStrings.current
     if(show) {
         Dialog(
             onDismissRequest = {
@@ -43,7 +44,7 @@ fun ChangesDialog(
             ), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 item {
                     Text(
-                        "Hormatly müşderi ammardaky stok yagdaýyna üytgeşmeler girizildi",
+                        strings.basketChangedMessage,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.W700
@@ -65,7 +66,7 @@ fun ChangesDialog(
                         ) {
                             Spacer(Modifier.width(22.dp))
                             Text(
-                                "Ýap",
+                                strings.close,
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     fontWeight = FontWeight.W700
                                 ),

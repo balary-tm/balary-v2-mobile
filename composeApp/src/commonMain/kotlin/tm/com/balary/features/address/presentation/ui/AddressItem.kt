@@ -26,14 +26,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.delete
-import balary.composeapp.generated.resources.home
 import balary.composeapp.generated.resources.home_address
+import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import tm.com.balary.ui.AppAlert
 import tm.com.balary.ui.AppAlertType
 
@@ -42,14 +40,15 @@ fun AddressItem(modifier: Modifier = Modifier) {
     val showDelete = remember {
         mutableStateOf(false)
     }
+    val strings = LocalStrings.current
     AppAlert(
         show = showDelete.value,
         onDismiss = {
             showDelete.value = false
         },
-        title = "Salgyny pozmak",
+        title = strings.deleteAddress,
         message = buildAnnotatedString {
-            append("Hakykatdan hem pozmak isleýärsiňizmi?")
+            append(strings.doYouWantDelete)
         },
         type = AppAlertType.DANGER
     )
@@ -68,7 +67,7 @@ fun AddressItem(modifier: Modifier = Modifier) {
             ).padding(8.dp)
         ) {
             Text(
-                "Öz salgym", style = MaterialTheme.typography.bodyLarge.copy(
+                strings.myAddress, style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.W700
                 ), color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f),
@@ -113,7 +112,7 @@ fun AddressItem(modifier: Modifier = Modifier) {
                 )
             ) {
                 Text(
-                    "Kartadan görkezmek",
+                    strings.showOnMap,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.W700
                     ), color = MaterialTheme.colorScheme.onPrimary
@@ -131,7 +130,7 @@ fun AddressItem(modifier: Modifier = Modifier) {
                     tint = MaterialTheme.colorScheme.outline
                 )
                 Text(
-                    "Öý salgym",
+                    strings.homeAddress,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.W700
                     ), color = MaterialTheme.colorScheme.outline
@@ -139,10 +138,4 @@ fun AddressItem(modifier: Modifier = Modifier) {
             }
         }
     }
-}
-
-@Composable
-@Preview
-fun AddressPreie() {
-    AddressItem()
 }

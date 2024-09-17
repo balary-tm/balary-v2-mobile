@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -26,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.third_image
 import balary.composeapp.generated.resources.watch
+import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.features.home.presentation.ui.banner.LogoText
 
@@ -33,6 +33,7 @@ import tm.com.balary.features.home.presentation.ui.banner.LogoText
 fun SecondScreen(
     onNext: ()-> Unit
 ) {
+    val strings = LocalStrings.current
     Box(Modifier.fillMaxSize()) {
         GradientBackground(Modifier.fillMaxSize()) {
             Box(Modifier.fillMaxSize()) {
@@ -53,7 +54,7 @@ fun SecondScreen(
                     ) {
                         LogoText(modifier = Modifier.width(170.dp).height(50.dp))
                         Text(
-                            "Biziň  hyzmatymyzyň Size berýän peýdalary",
+                            strings.secondTitle,
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W900,
@@ -63,11 +64,7 @@ fun SecondScreen(
                             modifier = Modifier.fillMaxWidth(0.6f)
                         )
                         Text(
-                            "1. Islendik ýerden sargyt etmek\n" +
-                                    "2. Wagtynyzy tygşytlamak\n" +
-                                    "3. Agyr harytlary götermezlik\n" +
-                                    "4. Dykynlarda wagt sarp edip durmazlyk\n" +
-                                    "5. Ýokary hilli harytlary Size eltip bermek",
+                            strings.secondDesc,
                             color = MaterialTheme.colorScheme.outline,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W700,
@@ -82,8 +79,7 @@ fun SecondScreen(
                             modifier = Modifier.size(56.dp)
                         )
                         Text(
-                            "Gymmatly wagtyňyzy özüňize we ýakynlaryňyza sarp edin!\n" +
-                                    "Goý Balary marketpleýs her bir öýe şatlyk getirsin!",
+                            strings.secondShortDesc,
                             color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.W700
@@ -102,7 +98,7 @@ fun SecondScreen(
                         }
                     ) {
                         Text(
-                            "Dowam etmek",
+                            strings.continuation,
                             color = MaterialTheme.colorScheme.onPrimary,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W700

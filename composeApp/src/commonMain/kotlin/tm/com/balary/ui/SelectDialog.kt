@@ -10,27 +10,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import kotlinx.datetime.Month
 
 
 @Composable
 fun SelectDialog(
     show: Boolean = false,
+    selectedIndex: Int = 0,
     onDismiss: () -> Unit,
     onSelect: (Int) -> Unit,
     items: List<String>,
@@ -61,7 +56,7 @@ fun SelectDialog(
                 repeat(items.count()) { index ->
                     Row(
                         Modifier.fillMaxWidth().clickable {
-
+                            onSelect(index)
                         }.padding(horizontal = 16.dp, vertical = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -74,7 +69,7 @@ fun SelectDialog(
                         )
 
                         AppCheckBox(
-                            checked = index == 0,
+                            checked = selectedIndex == index,
                             onChange = {
 
                             }

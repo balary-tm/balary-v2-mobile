@@ -20,7 +20,6 @@ import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.topbar_bg
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.features.home.presentation.ui.banner.LogoText
-import tm.com.balary.state.LocalDarkMode
 
 @Composable
 fun AppToolbar(

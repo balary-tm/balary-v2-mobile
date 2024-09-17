@@ -1,5 +1,7 @@
 package tm.com.balary.features.contact.presentation.viewmodel
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,12 +15,12 @@ import tm.com.balary.features.contact.presentation.state.ChatState
 
 class ChatViewModel(
     private val useCase: ChatUseCase
-) : ScreenModel {
+) : ViewModel() {
     private val _chat = MutableStateFlow(ChatState())
     val chat = _chat.asStateFlow()
 
     fun getChats() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             useCase.getChats().onEach {
                 when(it) {
                     is Resource.Error -> {

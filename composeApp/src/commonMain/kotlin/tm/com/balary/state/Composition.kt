@@ -1,23 +1,54 @@
 package tm.com.balary.state
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Modifier
-import tm.com.balary.router.Router
+import androidx.navigation.compose.rememberNavController
+import cafe.adriel.voyager.navigator.tab.Tab
+import org.koin.compose.koinInject
+import tm.com.balary.features.home.presentation.ui.HomeTab
+import tm.com.balary.features.profile.data.setting.AppSettings
+import tm.com.balary.features.profile.domain.model.AppState
+import tm.com.balary.features.profile.domain.model.AppTheme
 
 @Composable
 fun Composition(
     content: @Composable () -> Unit
 ) {
+    val appNavHostController = rememberNavController()
+    val homeNavHostController = rememberNavController()
+    val categoryNavHostController = rememberNavController()
+    val appSettings: AppSettings = koinInject()
+    val isSystemDark = isSystemInDarkTheme()
+    val isDark = when(appSettings.getTheme()) {
+        AppTheme.SYSTEM -> isSystemDark
+        AppTheme.DARK -> true
+        AppTheme.LIGHT -> false
+    }
     CompositionLocalProvider(
+        LocalAppNavigator provides remember {
+            mutableStateOf(appNavHostController)
+        },
+        LocalHomeNavigator provides remember {
+            mutableStateOf(homeNavHostController)
+        },
+        LocalCategoryNavigator provides remember {
+          mutableStateOf(categoryNavHostController)
+        },
         LocalDarkMode provides rememberSaveable {
-            mutableStateOf(false)
+            mutableStateOf(isDark)
         },
         LocalAuth provides remember {
             mutableStateOf(AuthState())
+        },
+        LocalTABNavigator provides remember {
+            mutableStateOf(HomeTab)
+        },
+        LocalAppState provides remember {
+            mutableStateOf(appSettings.getAppSettings())
         }
     ) {
         content()

@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.filter
-import balary.composeapp.generated.resources.profile
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.lyricist.LocalStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,6 +31,7 @@ fun SelectAddressDialog(
     open: Boolean = false,
     onClose: () -> Unit
 ) {
+    val strings = LocalStrings.current
     if (open) {
         val state = rememberModalBottomSheetState()
         val corner = animateDpAsState(if(state.currentValue == SheetValue.PartiallyExpanded) 20.dp else 0.dp)
@@ -54,7 +56,7 @@ fun SelectAddressDialog(
             ) {
                 item {
                     Text(
-                        "Salgylarym",
+                        strings.myAddresses,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700,
                             fontSize = 18.sp

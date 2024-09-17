@@ -22,6 +22,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -30,7 +32,10 @@ class ForgotPassword : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        BackScreen(Modifier.fillMaxSize(), "Açar sözüňi çalyş") {
+        val strings = LocalStrings.current
+        BackScreen(Modifier.fillMaxSize(), strings.editPassword, navHostController = rememberNavController(), onBack = {
+            navigator.pop()
+        }) {
             Column(
                 Modifier.fillMaxWidth().background(
                     color = MaterialTheme.colorScheme.surface,
@@ -39,7 +44,7 @@ class ForgotPassword : Screen {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    "Açar sözüňi çalyşmak",
+                    strings.editPassword2,
                     style = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.W900,
                         fontSize = 24.sp
@@ -75,7 +80,7 @@ class ForgotPassword : Screen {
                         fontWeight = FontWeight.W700
                     ),
                     label = {
-                        Text("Telefon belgiňiz")
+                        Text(strings.phoneNumber)
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Phone,
@@ -91,7 +96,7 @@ class ForgotPassword : Screen {
                     }
                 ) {
                     Text(
-                        "Kody ugrat",
+                        strings.sendCode,
                         color = MaterialTheme.colorScheme.onPrimary,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700

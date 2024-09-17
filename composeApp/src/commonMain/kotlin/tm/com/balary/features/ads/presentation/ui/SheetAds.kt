@@ -5,21 +5,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -31,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.banner
+import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.ui.ImageLoader
 
@@ -40,6 +36,7 @@ fun SheetAds(
     show: Boolean = false,
     onClose: () -> Unit
 ) {
+    val strings = LocalStrings.current
     if (show) {
         val state = rememberModalBottomSheetState()
         val corner =
@@ -90,7 +87,7 @@ fun SheetAds(
                     )
                 }
                 item {
-                    Spacer(Modifier.height(66.dp))
+                    Spacer(Modifier.height(22.dp))
                 }
                 item {
                     Button(
@@ -101,7 +98,7 @@ fun SheetAds(
                         }
                     ) {
                         Text(
-                            "Giňişleýin maglumat",
+                            strings.moreInfo,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W700
                             ),

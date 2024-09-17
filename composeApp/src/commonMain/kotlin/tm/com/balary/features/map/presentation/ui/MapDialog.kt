@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.location_fill
-import balary.composeapp.generated.resources.wallet
+import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.common.BalaryMaps
 import tm.com.balary.common.LatLng
@@ -43,6 +43,7 @@ fun MapDialog(
     open: Boolean = false,
     onClose: () -> Unit
 ) {
+    val strings = LocalStrings.current
     if (open) {
         val state = rememberModalBottomSheetState()
         val corner =
@@ -100,7 +101,7 @@ fun MapDialog(
 
                     }
                 ) {
-                    Text("Kabul etmek", style = MaterialTheme.typography.bodyLarge.copy(
+                    Text(strings.accept2, style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.W700
                     ), color = MaterialTheme.colorScheme.onPrimary)
                 }

@@ -1,21 +1,17 @@
 package tm.com.balary.features.product.presentation.ui.products
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -28,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -40,14 +37,12 @@ import tm.com.balary.features.product.presentation.ui.filter.FilterScreen
 class ProductListScreen : Screen {
     @Composable
     override fun Content() {
-        ProductList()
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductList(modifier: Modifier = Modifier) {
-    val navigator = LocalNavigator.currentOrThrow
+fun ProductList(modifier: Modifier = Modifier, navHostController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     Column(
         Modifier.fillMaxWidth().background(
@@ -84,10 +79,10 @@ fun ProductList(modifier: Modifier = Modifier) {
                                     modifier = Modifier.fillMaxWidth(),
                                     title = "Miweler",
                                     onFilter = {
-                                        navigator.push(FilterScreen())
+                                        navHostController.navigate(tm.com.balary.router.FilterScreen)
                                     },
                                     onBack = {
-                                        navigator.pop()
+                                        navHostController.navigateUp()
                                     }
                                 )
 
@@ -122,7 +117,8 @@ fun ProductList(modifier: Modifier = Modifier) {
                 }
                 items(100) {
                     ProductCard(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        navHostController = navHostController
                     )
                 }
             }

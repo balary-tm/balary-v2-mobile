@@ -19,12 +19,9 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,12 +44,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.banner
 import balary.composeapp.generated.resources.baseline_camera_alt_24
 import balary.composeapp.generated.resources.close_filled
+import cafe.adriel.lyricist.LocalStrings
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
@@ -79,6 +76,7 @@ fun CommentForm(
     ) { files ->
         println(files?.path)
     }
+    val strings = LocalStrings.current
 
     ConstantSheet(
         show = showTerms.value,
@@ -93,7 +91,6 @@ fun CommentForm(
             onDismissRequest = {
                 onDismiss()
             },
-            windowInsets = WindowInsets.statusBars
         ) {
             LazyColumn(
                 Modifier.fillMaxSize(),
@@ -105,7 +102,7 @@ fun CommentForm(
             ) {
                 stickyHeader {
                     Text(
-                        "Bahalandyrmak",
+                        strings.rating,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700,
                             fontSize = 18.sp
@@ -132,7 +129,7 @@ fun CommentForm(
 
                 item {
                     Text(
-                        "Önüm hakda pikiriňizi paýlaşmagyňyzy haýyş edýäris",
+                        strings.shareOpinion,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700,
                             fontSize = 18.sp
@@ -161,7 +158,7 @@ fun CommentForm(
                         ),
                         placeholder = {
                             Text(
-                                "Siziň teswiriňiz",
+                                strings.yourComment,
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.outline
                             )
@@ -218,7 +215,7 @@ fun CommentForm(
                                         .padding(13.dp)
                                 )
                                 Text(
-                                    "Surat ýa-da wideoňyzy goşuň",
+                                    strings.addVideoOrImage,
                                     style = MaterialTheme.typography.bodySmall.copy(
                                         fontWeight = FontWeight.W700,
                                     ),
@@ -247,7 +244,7 @@ fun CommentForm(
                             modifier = Modifier.size(24.dp)
                         )
                         Text(
-                            "Teswir ýazmagyň şertleri bilen tanyşmak",
+                            strings.commentTerms,
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.W700,
                             ),
@@ -270,7 +267,7 @@ fun CommentForm(
                         }
                     ) {
                         Text(
-                            "Tassyklamak",
+                            strings.accept,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W700
                             ),
@@ -291,7 +288,7 @@ fun CommentForm(
                         )
                     ) {
                         Text(
-                            "Goý bolsun",
+                            strings.cancel,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W700
                             ),

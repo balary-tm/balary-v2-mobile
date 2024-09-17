@@ -12,8 +12,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -24,14 +24,12 @@ import tm.com.balary.features.home.presentation.ui.banner.SearchInput
 class CategoryScreen : Screen {
     @Composable
     override fun Content() {
-        Category()
     }
 
 }
 
 @Composable
-fun Category() {
-    val navigator = LocalNavigator.currentOrThrow
+fun Category(navHostController: NavHostController) {
     Scaffold(
         backgroundColor = MaterialTheme.colorScheme.surface,
         modifier = Modifier.fillMaxSize(),
@@ -63,7 +61,7 @@ fun Category() {
                     containerColor = MaterialTheme.colorScheme.surfaceBright,
                     image = "",
                     onClick = {
-                        navigator.push(SubCategoryScreen())
+                        navHostController.navigate(tm.com.balary.router.SubCategoryScreen)
                     }
                 )
             }

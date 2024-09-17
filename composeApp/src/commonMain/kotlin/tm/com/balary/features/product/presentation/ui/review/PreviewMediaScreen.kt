@@ -1,7 +1,6 @@
 package tm.com.balary.features.product.presentation.ui.review
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,11 +14,8 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
@@ -30,17 +26,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.PauseCircle
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -52,29 +44,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.add_basket
 import balary.composeapp.generated.resources.banner
-import balary.composeapp.generated.resources.close_filled
-import balary.composeapp.generated.resources.fullscreen
 import balary.composeapp.generated.resources.like
 import balary.composeapp.generated.resources.message
-import balary.composeapp.generated.resources.mute
-import chaintech.videoplayer.model.PlayerConfig
+import cafe.adriel.lyricist.LocalStrings
 import chaintech.videoplayer.ui.video.VideoPlayerView
-import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
-import io.github.vinceglb.filekit.core.PickerMode
-import io.github.vinceglb.filekit.core.PickerType
 import org.jetbrains.compose.resources.painterResource
+import tm.com.balary.common.BalaryVideoPlayer
 import tm.com.balary.features.product.presentation.ui.photo.rememberZoomState
 import tm.com.balary.features.product.presentation.ui.photo.zoomable
 import tm.com.balary.ui.ImageLoader
@@ -95,7 +79,6 @@ fun PreviewMediaScreen(
                 onDismiss()
             },
             shape = RoundedCornerShape(0.dp),
-            windowInsets = WindowInsets.statusBars
         ) {
             MediaContainer(Modifier.fillMaxSize().navigationBarsPadding(), onDismiss)
         }
@@ -400,17 +383,14 @@ fun MediaPreview(
     isVideo: Boolean = true
 ) {
     if (isVideo) {
-        VideoPlayerView(
-            modifier = Modifier.fillMaxSize(),
-            url = "https://www.w3schools.com/tags/mov_bbb.mp4",
-            playerConfig = PlayerConfig(
-                isFullScreenEnabled = false
-            )
-        )
-//        BalaryPlayer(
+//        VideoPlayerView(
 //            modifier = Modifier.fillMaxSize(),
 //            url = "https://www.w3schools.com/tags/mov_bbb.mp4"
 //        )
+        BalaryVideoPlayer(
+            modifier = Modifier.fillMaxSize(),
+            url = "https://www.w3schools.com/tags/mov_bbb.mp4"
+        )
     } else {
         ImageLoader(
             modifier = modifier.fillMaxSize().zoomable(rememberZoomState()),
@@ -426,6 +406,7 @@ fun MediaComments(
     show: Boolean,
     onDismiss: () -> Unit
 ) {
+    val strings = LocalStrings.current
     if (show) {
         ModalBottomSheet(
             onDismissRequest = {
@@ -445,7 +426,7 @@ fun MediaComments(
             ) {
                 stickyHeader {
                     Text(
-                        "Teswirler 1",
+                        "${strings.comments} 1",
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700,
                             fontSize = 18.sp

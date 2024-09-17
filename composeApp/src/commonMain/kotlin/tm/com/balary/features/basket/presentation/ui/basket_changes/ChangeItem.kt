@@ -8,31 +8,25 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import balary.composeapp.generated.resources.Res
-import balary.composeapp.generated.resources.close_filled
-import org.jetbrains.compose.resources.painterResource
-import tm.com.balary.features.product.presentation.ui.ProductBasketButton
+import cafe.adriel.lyricist.LocalStrings
 import tm.com.balary.ui.ImageLoader
 
 @Composable
 fun ChangeItem(modifier: Modifier = Modifier) {
+    val strings = LocalStrings.current
     Row(
         modifier = modifier.border(
             width = 1.dp,
@@ -82,7 +76,7 @@ fun ChangeItem(modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
-                    "Öňki baha",
+                    strings.oldPrice,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error,
                     overflow = TextOverflow.Ellipsis,
@@ -106,7 +100,7 @@ fun ChangeItem(modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
-                    "Täze baha",
+                    strings.newPrice,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error,
                     overflow = TextOverflow.Ellipsis,

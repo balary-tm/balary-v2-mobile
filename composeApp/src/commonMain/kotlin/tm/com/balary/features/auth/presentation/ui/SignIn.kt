@@ -31,20 +31,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.eye
-import balary.composeapp.generated.resources.personfilled
-import balary.composeapp.generated.resources.wallet
+import cafe.adriel.lyricist.LocalStrings
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
-import tm.com.balary.ui.AppCheckBox
-import tm.com.balary.ui.ImageLoader
+import tm.com.balary.router.AppTabScreen
+import tm.com.balary.state.LocalAppState
 
 @Composable
 fun SignIn(
     modifier: Modifier = Modifier,
+    isStart: Boolean = false,
     onSignUp: () -> Unit,
     onForgotPassword: () -> Unit,
 ) {
@@ -54,6 +55,8 @@ fun SignIn(
     val show = rememberSaveable {
         mutableStateOf(false)
     }
+    val appState = LocalAppState.current
+    val strings = LocalStrings.current
     Column(
         modifier.fillMaxWidth().background(
             color = MaterialTheme.colorScheme.surface,
@@ -62,7 +65,7 @@ fun SignIn(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            "Ulgama girmek",
+            strings.signIn,
             style = MaterialTheme.typography.headlineSmall.copy(
                 fontWeight = FontWeight.W900,
                 fontSize = 24.sp
@@ -92,7 +95,7 @@ fun SignIn(
                 fontWeight = FontWeight.W700
             ),
             label = {
-                Text("Doly adyňyz")
+                Text(strings.fullName)
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -127,7 +130,7 @@ fun SignIn(
                 fontWeight = FontWeight.W700
             ),
             label = {
-                Text("Telefon belgiňiz")
+                Text(strings.phoneNumber)
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Phone,
@@ -167,7 +170,7 @@ fun SignIn(
             },
             visualTransformation = if (show.value) VisualTransformation.None else PasswordVisualTransformation(),
             label = {
-                Text("Açar sözüňiz*")
+                Text(strings.password)
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = if (show.value) KeyboardType.Text else KeyboardType.Password,
@@ -182,7 +185,7 @@ fun SignIn(
         ) {
 
             Text(
-                "Açar sözümi unutdum!",
+                strings.forgotPassword,
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.W700
@@ -199,11 +202,15 @@ fun SignIn(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
             onClick = {
-
+                if(isStart) {
+                    appState.value = appState.value.copy(
+                        isFirst = false
+                    )
+                }
             }
         ) {
             Text(
-                "Agza bol",
+                strings.signIn,
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.W700
@@ -217,7 +224,7 @@ fun SignIn(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                "Siziň hasabyňyz yokmy?",
+                strings.notHaveAccount,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.W700
@@ -226,7 +233,7 @@ fun SignIn(
             Spacer(Modifier.width(8.dp))
 
             Text(
-                "Agza bolmak",
+                strings.signUp2,
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.W700

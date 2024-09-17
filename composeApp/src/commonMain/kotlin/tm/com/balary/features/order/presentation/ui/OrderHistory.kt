@@ -17,24 +17,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import tm.com.balary.features.auth.presentation.ui.BackScreen
+import tm.com.balary.router.OrderedProductScreen
 
 class OrderHistoryScreen : Screen {
     @Composable
     override fun Content() {
-        OrderHistory(Modifier.fillMaxSize())
     }
 }
 
 @Composable
-fun OrderHistory(modifier: Modifier = Modifier) {
-    val navigator = LocalNavigator.currentOrThrow
+fun OrderHistory(modifier: Modifier = Modifier, navHostController: NavHostController) {
+    val strings = LocalStrings.current
     BackScreen(
         modifier,
-        title = "Sargytlarym",
+        title = strings.myOrders,
         actions = {
             Box(
                 Modifier.background(
@@ -43,18 +45,19 @@ fun OrderHistory(modifier: Modifier = Modifier) {
                     ),
                     shape = RoundedCornerShape(4.dp)
                 ).clip(RoundedCornerShape(4.dp)).clickable {
-                    navigator.push(OrderedProducts())
+                    navHostController.navigate(OrderedProductScreen)
                 }.padding(vertical = 10.dp, horizontal = 4.dp)
             ) {
                 Text(
-                    "Alynan harytlarym",
+                    strings.boughtProducts,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.W700
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
-        }
+        },
+        navHostController = navHostController
     ) {
 
         LazyColumn(
@@ -65,7 +68,7 @@ fun OrderHistory(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(15) {
-                OrderItem(Modifier.fillMaxWidth(), status = OrderStatus.DELIVERED)
+                OrderItem(Modifier.fillMaxWidth(), status = OrderStatus.DELIVERED, navHostController = navHostController)
             }
         }
 

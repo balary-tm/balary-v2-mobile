@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -47,8 +46,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.banner
+import cafe.adriel.lyricist.strings
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -58,7 +59,6 @@ import tm.com.balary.features.home.presentation.ui.product.HomeSection
 import tm.com.balary.features.product.presentation.ui.FavoriteButton
 import tm.com.balary.features.product.presentation.ui.ProductBasketButton
 import tm.com.balary.features.product.presentation.ui.photo.PhotoViewDialog
-import tm.com.balary.features.product.presentation.ui.photo.PhotoViewScreen
 import tm.com.balary.features.product.presentation.ui.review.CommentForm
 import tm.com.balary.features.product.presentation.ui.review.MiniReview
 import tm.com.balary.features.product.presentation.ui.review.ProductReviewScreen
@@ -67,14 +67,12 @@ import tm.com.balary.ui.ImageLoader
 class ProductDetailScreen : Screen {
     @Composable
     override fun Content() {
-        ProductDetail(Modifier.fillMaxSize())
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ProductDetail(modifier: Modifier = Modifier) {
-    val navigator = LocalNavigator.currentOrThrow
+fun ProductDetail(modifier: Modifier = Modifier, navHostController: NavHostController) {
     val imageCount = 10
     val showPhotoView = remember {
         mutableStateOf(false)
@@ -124,7 +122,7 @@ fun ProductDetail(modifier: Modifier = Modifier) {
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            navigator.pop()
+                            navHostController.navigateUp()
                         }
                     ) {
                         Icon(
@@ -197,7 +195,7 @@ fun ProductDetail(modifier: Modifier = Modifier) {
                         )
 
                         Text(
-                            "Täze haryt",
+                            strings.newProduct,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W700,
                                 fontSize = 18.sp
@@ -216,7 +214,7 @@ fun ProductDetail(modifier: Modifier = Modifier) {
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.W700
                             ),
-                            color = MaterialTheme.colorScheme.onError,
+                            color = Color.White,
                             modifier = Modifier.padding(bottom = 30.dp).background(
                                 color = MaterialTheme.colorScheme.error,
                                 shape = RoundedCornerShape(20.dp)
@@ -264,55 +262,55 @@ fun ProductDetail(modifier: Modifier = Modifier) {
 
                         ProductInfo(
                             modifier = Modifier.fillMaxWidth(),
-                            title = "Bar kody:",
+                            title = strings.barcode,
                             value = "ABC-abc-1234"
                         )
 
                         ProductInfo(
                             modifier = Modifier.fillMaxWidth(),
-                            title = "Harydyň kody:",
+                            title = strings.productNumber,
                             value = "34"
                         )
 
                         ProductInfo(
                             modifier = Modifier.fillMaxWidth(),
                             titleSize = 16.sp,
-                            title = "Giňişleýin maglumat we peýdasy:",
+                            title = strings.productBenefit,
                             value = "Içi dykyz, suwly, çala turşuja, ýakymly tagamly. Gyzyl almalar kiçiräk sowuga çydamly, güýzki sorta deişli. Olar galyňlygy ýeterlikli goýy gyzyl owüsgünli gabyga eýe bolýarlar."
                         )
 
                         ProductInfo(
                             modifier = Modifier.fillMaxWidth(),
-                            title = "Peýdasy:",
+                            title = strings.benefit,
                             value = "Almalar günüň dowamynda ýeňil hem-de peýdaly naharlanmak üçin laýyk gelýärler. "
                         )
 
                         ProductInfo(
                             modifier = Modifier.fillMaxWidth(),
-                            title = "Möhleti:",
-                            value = "30 gün "
+                            title = strings.expire,
+                            value = "30 ${strings.day}"
                         )
 
                         ProductInfo(
                             modifier = Modifier.fillMaxWidth(),
-                            title = "Saklanyş şerti:",
+                            title = strings.saveTemperature,
                             value = "+2°C...+8°C"
                         )
 
                         ProductInfo(
                             modifier = Modifier.fillMaxWidth(),
-                            title = "Öndürilen ýurdy:",
+                            title = strings.madeIn,
                             value = "Türkiýe"
                         )
 
                         Text(
-                            "Rating & Reviews",
+                            strings.ratingsAndReviews,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W900
                             ),
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.clickable {
-                                navigator.push(ProductReviewScreen())
+                                navHostController.navigate(tm.com.balary.router.ProductReviewScreen)
                             }
                         )
 
@@ -351,7 +349,7 @@ fun ProductDetail(modifier: Modifier = Modifier) {
                                 shape = RoundedCornerShape(4.dp)
                             ) {
                                 Text(
-                                    "Teswir goýmak",
+                                    strings.putComment,
                                     color = MaterialTheme.colorScheme.onPrimary,
                                     style = MaterialTheme.typography.bodySmall.copy(
                                         fontWeight = FontWeight.W900
@@ -392,9 +390,10 @@ fun ProductDetail(modifier: Modifier = Modifier) {
 
                 HomeSection(
                     modifier = Modifier.fillMaxWidth(),
-                    title = "Meňzeş harytlar",
+                    title = strings.similarProducts,
                     adsCount = 0,
-                    showBanner = false
+                    showBanner = false,
+                    navHostController = navHostController
                 )
                 Spacer(Modifier.height(8.dp))
             }

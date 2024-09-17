@@ -11,16 +11,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.lyricist.LocalStrings
 
 @Composable
 fun ProductDetailPrice(modifier: Modifier = Modifier) {
+    val strings = LocalStrings.current
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Text(
-            "18.00 man",
+            "18.00 ${strings.money}",
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontWeight = FontWeight.W900,
                 fontSize = 18.sp
@@ -29,7 +31,7 @@ fun ProductDetailPrice(modifier: Modifier = Modifier) {
         )
 
         Text(
-            "22.00 man",
+            "22.00 ${strings.money}",
             style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.W700
             ),

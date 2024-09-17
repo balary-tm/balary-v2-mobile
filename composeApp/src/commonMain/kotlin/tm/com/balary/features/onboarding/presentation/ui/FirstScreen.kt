@@ -25,8 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
-import balary.composeapp.generated.resources.banner
+import balary.composeapp.generated.resources.cert
 import balary.composeapp.generated.resources.first_bg
+import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.features.home.presentation.ui.banner.LogoText
 
@@ -34,6 +35,7 @@ import tm.com.balary.features.home.presentation.ui.banner.LogoText
 fun FirstScreen(
     onNext: () -> Unit
 ) {
+    val strings = LocalStrings.current
     Box(Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(Res.drawable.first_bg),
@@ -53,7 +55,7 @@ fun FirstScreen(
             ) {
                 LogoText(modifier = Modifier.width(170.dp).height(50.dp))
                 Text(
-                    "HOŞ GELDIŇIZ",
+                    strings.welcome,
                     style = MaterialTheme.typography.headlineLarge.copy(
                         fontWeight = FontWeight.W900,
                         fontSize = 36.sp
@@ -61,7 +63,7 @@ fun FirstScreen(
                     color = MaterialTheme.colorScheme.error
                 )
                 Image(
-                    painter = painterResource(Res.drawable.banner),
+                    painter = painterResource(Res.drawable.cert),
                     contentDescription = "certificate",
                     modifier = Modifier.width(105.dp).height(162.dp),
                     contentScale = ContentScale.FillBounds
@@ -74,7 +76,7 @@ fun FirstScreen(
                 modifier = Modifier.padding(horizontal = 16.dp)
             ) {
                 Text(
-                    "Balary Marketpleýs iň öňde barýan ýokary hilli platforma bolup Döwrabap hyzmatlaryň iň naýbaşy görnüşini Size hödürleýar!",
+                    strings.firstDesc,
                     color = Color(0xFF614FE0),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.W700
@@ -84,7 +86,7 @@ fun FirstScreen(
                 )
 
                 Text(
-                    "Döwlet tarapyndan tassyklanan",
+                    strings.certificated,
                     color = Color.Black,
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.W700
@@ -100,7 +102,7 @@ fun FirstScreen(
                     }
                 ) {
                     Text(
-                        "Dowam etmek",
+                        strings.continuation,
                         color = MaterialTheme.colorScheme.onPrimary,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700

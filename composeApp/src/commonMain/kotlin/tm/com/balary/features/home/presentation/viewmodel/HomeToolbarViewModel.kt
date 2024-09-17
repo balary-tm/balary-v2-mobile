@@ -2,12 +2,12 @@ package tm.com.balary.features.home.presentation.viewmodel
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.model.ScreenModel
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class HomeToolbarViewModel: ScreenModel {
+class HomeToolbarViewModel: ViewModel() {
     private val _toolbarHeight = MutableStateFlow(200.dp)
     val toolbarHeight = _toolbarHeight.asStateFlow()
 

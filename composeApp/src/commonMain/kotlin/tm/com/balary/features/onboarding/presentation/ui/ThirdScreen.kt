@@ -24,15 +24,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.second_image
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.features.auth.presentation.ui.AuthScreen
 import tm.com.balary.features.home.presentation.ui.banner.LogoText
 import tm.com.balary.router.AppTabScreen
+import tm.com.balary.state.LocalAppState
 
 @Composable
 fun ThirdScreen() {
+    val appState = LocalAppState.current
+    val strings = LocalStrings.current
     val navigator = LocalNavigator.currentOrThrow
     Box(Modifier.fillMaxSize()) {
         GradientBackground(Modifier.fillMaxSize()) {
@@ -56,7 +60,7 @@ fun ThirdScreen() {
                 ) {
                     LogoText(modifier = Modifier.width(170.dp).height(50.dp))
                     Text(
-                        "Balary bilen islän harydyňyzy dükanlardan sargap bilersiňiz",
+                        strings.thirdTitle,
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W900,
@@ -66,7 +70,7 @@ fun ThirdScreen() {
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     Text(
-                        "Biz bilen galyň we gündelik aksiýalarymyza we yaryşlarymyza gatnaşyp bal gazanyň!",
+                        strings.thirdDesc,
                         color = MaterialTheme.colorScheme.outline,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700,
@@ -80,11 +84,13 @@ fun ThirdScreen() {
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
                         onClick = {
-                            navigator.replaceAll(AppTabScreen())
+                            appState.value = appState.value.copy(
+                                isFirst = false
+                            )
                         }
                     ) {
                         Text(
-                            "Dowam etmek",
+                            strings.continuation,
                             color = MaterialTheme.colorScheme.onPrimary,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W700
@@ -96,11 +102,11 @@ fun ThirdScreen() {
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
                         onClick = {
-                            navigator.replaceAll(AuthScreen())
+                            navigator.push(AuthScreen(isStart = true))
                         }
                     ) {
                         Text(
-                            "Ulgama girmek",
+                            strings.signIn,
                             color = MaterialTheme.colorScheme.onPrimary,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W700

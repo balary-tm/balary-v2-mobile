@@ -2,13 +2,11 @@ package tm.com.balary.features.product.presentation.ui.review
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.lyricist.LocalStrings
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewStateWithHTMLData
 
@@ -30,6 +29,7 @@ fun ConstantSheet(
     show: Boolean,
     onDismiss: () -> Unit
 ) {
+    val strings = LocalStrings.current
     if (show) {
         ModalBottomSheet(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -43,7 +43,7 @@ fun ConstantSheet(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    "Teswir ýazmagyň şertleri",
+                    strings.termsOfCommentWrite,
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.W700,
                         fontSize = 18.sp
@@ -76,7 +76,7 @@ Plastik kart üsti bilen. Edilen sargytlary plasik kart üsti bilen töleg edip 
                     }
                 ) {
                     Text(
-                        "Tanyşdym",
+                        strings.readIt,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700
                         ),

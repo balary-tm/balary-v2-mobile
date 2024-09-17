@@ -42,6 +42,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.archive
 import balary.composeapp.generated.resources.calendar
@@ -50,6 +51,7 @@ import balary.composeapp.generated.resources.info_fill
 import balary.composeapp.generated.resources.location_filled
 import balary.composeapp.generated.resources.save_fill
 import balary.composeapp.generated.resources.wallet
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -61,13 +63,12 @@ import tm.com.balary.ui.AlsFontFamily
 class OrderScreen : Screen {
     @Composable
     override fun Content() {
-        Order(Modifier.fillMaxSize())
     }
 }
 
 
 @Composable
-fun Order(modifier: Modifier = Modifier) {
+fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
     val navigator = LocalNavigator.currentOrThrow
     val fullName = rememberSaveable {
         mutableStateOf("")
@@ -81,6 +82,7 @@ fun Order(modifier: Modifier = Modifier) {
     val openSuccess = remember {
         mutableStateOf(false)
     }
+    val strings = LocalStrings.current
     OrderSuccess(
         open = openSuccess.value,
         onClose = {
@@ -122,7 +124,7 @@ fun Order(modifier: Modifier = Modifier) {
             )
 
             Text(
-                "Sargyt et",
+                strings.makeOrder,
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.W700
@@ -145,19 +147,19 @@ fun Order(modifier: Modifier = Modifier) {
             ) {
                 IconTitle(
                     icon = painterResource(Res.drawable.wallet),
-                    title = "Töleg şekili"
+                    title = strings.paymentType
                 )
                 CheckTextDesc(
                     Modifier.fillMaxWidth(),
-                    text = "Nagt",
-                    subTitle = "Sargydy alan wagtyňyz nagt hasaplaşmak",
+                    text = strings.cash,
+                    subTitle = strings.cashDescription,
                     checked = true
                 )
 
                 CheckTextDesc(
                     Modifier.fillMaxWidth(),
-                    text = "Bank karty",
-                    subTitle = "Sargydy alan wagtyňyz plastik kart hasaplaşmak",
+                    text = strings.bank,
+                    subTitle = strings.bankDescription,
                     checked = false
                 )
             }
@@ -177,7 +179,7 @@ fun Order(modifier: Modifier = Modifier) {
                     IconTitle(
                         modifier = Modifier.weight(1f),
                         icon = painterResource(Res.drawable.location_filled),
-                        title = "Salgyňyz"
+                        title = strings.yourAddress
                     )
 
                     IconButton(
@@ -225,7 +227,7 @@ fun Order(modifier: Modifier = Modifier) {
                         fontWeight = FontWeight.W700
                     ),
                     label = {
-                        Text("Doly adyňyz")
+                        Text(strings.fullName)
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
@@ -260,7 +262,7 @@ fun Order(modifier: Modifier = Modifier) {
                         fontWeight = FontWeight.W700
                     ),
                     label = {
-                        Text("Telefon belgiňiz")
+                        Text(strings.phoneNumber)
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Phone,
@@ -269,7 +271,7 @@ fun Order(modifier: Modifier = Modifier) {
                 )
 
                 Text(
-                    "Etrapça / Köçe",
+                    strings.districtAndStreet,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.W700
                     ),
@@ -296,7 +298,7 @@ fun Order(modifier: Modifier = Modifier) {
                         fontWeight = FontWeight.W700
                     ),
                     label = {
-                        Text("Etrap")
+                        Text(strings.district)
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
@@ -324,7 +326,7 @@ fun Order(modifier: Modifier = Modifier) {
                         fontWeight = FontWeight.W700
                     ),
                     label = {
-                        Text("Köçe")
+                        Text(strings.street)
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
@@ -352,7 +354,7 @@ fun Order(modifier: Modifier = Modifier) {
                         fontWeight = FontWeight.W700
                     ),
                     label = {
-                        Text("Jaý nomeri")
+                        Text(strings.buildingNumber)
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
@@ -379,7 +381,7 @@ fun Order(modifier: Modifier = Modifier) {
                         fontWeight = FontWeight.W700
                     ),
                     label = {
-                        Text("Kwartira nomery")
+                        Text(strings.apartmentNumber)
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
@@ -406,7 +408,7 @@ fun Order(modifier: Modifier = Modifier) {
                         fontWeight = FontWeight.W700
                     ),
                     label = {
-                        Text("Etaž / Plan jaý nomeri")
+                        Text(strings.floorNumber)
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
@@ -422,7 +424,7 @@ fun Order(modifier: Modifier = Modifier) {
                     }
                 ) {
                     Text(
-                        "Kartadan görkezmek", style = MaterialTheme.typography.bodyLarge.copy(
+                        strings.showOnMap, style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700
                         ), color = MaterialTheme.colorScheme.onPrimary
                     )
@@ -439,22 +441,22 @@ fun Order(modifier: Modifier = Modifier) {
             ) {
                 IconTitle(
                     icon = painterResource(Res.drawable.delivery_truck),
-                    title = "Eltip bermegiň görnüşi"
+                    title = strings.deliveryType
                 )
                 TimeCheck(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Standart eltip bermek",
+                    text = strings.standardDelivery,
                     checked = true
                 )
                 TimeCheck(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Express eltip bermek (20,00 m.)",
+                    text = strings.expressDelivery,
                     checked = false,
-                    subTitle = "Siziň sargydyňyz 1 sagadyň dowamynda eltip beriler"
+                    subTitle = strings.expressDeliveryDesc
                 )
                 TimeCheck(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Özüm baryp aljak",
+                    text = strings.manualDelivery,
                     checked = false,
                     subTitle = "Туркменистан, г. Ашхабад. , ул. 2028 (Ата Говшудова), \n" +
                             "дом 47 «A» 1-ый этаж"
@@ -536,7 +538,7 @@ fun Order(modifier: Modifier = Modifier) {
                     }
                 ) {
                     Text(
-                        "Salgyny kartadan görmek", style = MaterialTheme.typography.bodyLarge.copy(
+                        strings.showOurAddressFromMap, style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700
                         ), color = MaterialTheme.colorScheme.onPrimary
                     )
@@ -554,12 +556,12 @@ fun Order(modifier: Modifier = Modifier) {
             ) {
                 IconTitle(
                     icon = painterResource(Res.drawable.calendar),
-                    title = "Eltip bermeli wagty"
+                    title = strings.deliveryTime
                 )
 
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    OrderTime(Modifier.weight(1f), title = "Şu gün", selected = true)
-                    OrderTime(Modifier.weight(1f), title = "Ertir", selected = false)
+                    OrderTime(Modifier.weight(1f), title = strings.today, selected = true)
+                    OrderTime(Modifier.weight(1f), title = strings.tomorrow, selected = false)
                 }
                 Row(
                     Modifier.fillMaxWidth(),
@@ -625,7 +627,7 @@ fun Order(modifier: Modifier = Modifier) {
                         fontWeight = FontWeight.W700
                     ),
                     label = {
-                        Text("Bellik")
+                        Text(strings.notes)
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
@@ -644,7 +646,7 @@ fun Order(modifier: Modifier = Modifier) {
                 ).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    "Öýe eltip berme hyzmaty",
+                    strings.deliveryHome,
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.W700
                     ),
@@ -676,7 +678,7 @@ fun Order(modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        "Jemi:",
+                        strings.total,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W900,
                             fontSize = 18.sp
@@ -702,7 +704,7 @@ fun Order(modifier: Modifier = Modifier) {
                     }
                 ) {
                     Text(
-                        "Sargydy tassykla",
+                        strings.confirmOrder,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700
                         ),

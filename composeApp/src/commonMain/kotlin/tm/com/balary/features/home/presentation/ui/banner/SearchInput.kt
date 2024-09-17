@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.scan
 import balary.composeapp.generated.resources.search
+import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -26,6 +27,7 @@ fun SearchInput(
     showScan: Boolean = true,
     onSearch: (String) -> Unit,
 ) {
+    val strings = LocalStrings.current
     TextField(
         modifier = modifier.height(50.dp),
         value = "",
@@ -69,7 +71,7 @@ fun SearchInput(
         },
         placeholder = {
             Text(
-                "Gözleg", style = MaterialTheme.typography.bodySmall.copy(
+                strings.search, style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
                 color = MaterialTheme.colorScheme.outline

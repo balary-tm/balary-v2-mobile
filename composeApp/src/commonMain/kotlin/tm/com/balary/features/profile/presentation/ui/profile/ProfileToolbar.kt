@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -31,9 +30,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.edit
-import balary.composeapp.generated.resources.profile
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
@@ -43,11 +43,12 @@ import tm.com.balary.state.LocalAuth
 
 @Composable
 fun ProfileToolbar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navHostController: NavHostController
 ) {
-    val navigator = LocalNavigator.currentOrThrow
     val authState = LocalAuth.current
     val shape = RoundedCornerShape(0.dp, 0.dp, 20.dp, 20.dp)
+    val strings = LocalStrings.current
     Column(
         modifier = modifier.background(Color.Transparent).background(
             color = MaterialTheme.colorScheme.tertiary,
@@ -121,7 +122,7 @@ fun ProfileToolbar(
                         topEnd = 10.dp,
                         bottomEnd = 10.dp
                     )).clickable {
-                        navigator.push(EditProfileScreen())
+                        navHostController.navigate(tm.com.balary.router.EditProfileScreen)
                     }.padding(2.dp), contentAlignment = Alignment.Center) {
                         Icon(
                             painter = painterResource(Res.drawable.edit),
@@ -133,8 +134,7 @@ fun ProfileToolbar(
             }
         } else {
             Text(
-                "Ulgama giriň \n" +
-                        "ýa-da agza boluň",
+                strings.pleaseSignIn,
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontSize = 24.sp,
                     fontWeight = FontWeight.W900
@@ -143,7 +143,7 @@ fun ProfileToolbar(
             )
 
             Text(
-                "Söwda etmek üçin ýa-da eden söwdaňyzy yzarlamak üçin",
+                strings.whySignIn,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -158,7 +158,7 @@ fun ProfileToolbar(
                 }
             ) {
                 Text(
-                    "Ulgama girmek ýa-da agza bolmak",
+                    strings.signInAction,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.W700
                     ),

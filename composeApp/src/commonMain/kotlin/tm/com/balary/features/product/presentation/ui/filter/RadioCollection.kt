@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import cafe.adriel.lyricist.strings
 
 @Composable
 fun RadioCollection(
@@ -46,7 +47,7 @@ fun RadioCollection(
             )
 
             Text(
-                text = "Ählisini gör",
+                text = strings.seeAll,
                 color = MaterialTheme.colorScheme.primary,
                 maxLines = 1,
                 style = MaterialTheme.typography.bodySmall

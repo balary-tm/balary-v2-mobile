@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -22,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import cafe.adriel.lyricist.LocalStrings
 
 @Composable
 fun SelectThisLocation(
@@ -29,6 +29,7 @@ fun SelectThisLocation(
     onDismiss: () -> Unit,
     onSelect: () -> Unit
 ) {
+    val strings = LocalStrings.current
     if (show) {
         Dialog(
             onDismissRequest = {
@@ -59,7 +60,7 @@ fun SelectThisLocation(
                     }
                 ) {
                     Text(
-                        "Bu ýeri saýlaň",
+                        strings.selectThisPlace,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.W700

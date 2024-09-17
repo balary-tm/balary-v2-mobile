@@ -18,7 +18,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -30,20 +29,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
+import tm.com.balary.state.LocalHomeNavigator
 
 class FilterScreen : Screen {
     @Composable
     override fun Content() {
-        Filter(Modifier.fillMaxSize())
     }
 }
 
 @Composable
-fun Filter(modifier: Modifier = Modifier) {
-    val navigator = LocalNavigator.currentOrThrow
+fun Filter(modifier: Modifier = Modifier, navHostController: NavHostController) {
+    val strings = LocalStrings.current
     Column(
         modifier = modifier.background(
             color = MaterialTheme.colorScheme.background
@@ -65,12 +64,12 @@ fun Filter(modifier: Modifier = Modifier) {
                 contentDescription = "back",
                 tint = MaterialTheme.colorScheme.outline,
                 modifier = Modifier.clip(CircleShape).clickable {
-                    navigator.pop()
+                    navHostController.navigateUp()
                 }
             )
 
             Text(
-                text = "Filterler",
+                text = strings.filters,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 style = MaterialTheme.typography.bodyLarge.copy(
@@ -95,7 +94,7 @@ fun Filter(modifier: Modifier = Modifier) {
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 Text(
-                    text = "Tertiplemek",
+                    text = strings.sort,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     style = MaterialTheme.typography.bodyLarge.copy(
@@ -105,25 +104,25 @@ fun Filter(modifier: Modifier = Modifier) {
 
                 CheckText(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Meşhur önümler",
+                    text = strings.famousProducts,
                     checked = true
                 )
 
                 CheckText(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Täze önümler",
+                    text = strings.newProducts,
                     checked = false
                 )
 
                 CheckText(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Gymmatdan arzana",
+                    text = strings.expensiveFirst,
                     checked = false
                 )
 
                 CheckText(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Arzandan gymmada",
+                    text = strings.cheapFirst,
                     checked = false
                 )
 
@@ -137,7 +136,7 @@ fun Filter(modifier: Modifier = Modifier) {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = "Bahasy",
+                    text = strings.price,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     style = MaterialTheme.typography.bodyLarge.copy(
@@ -151,7 +150,7 @@ fun Filter(modifier: Modifier = Modifier) {
 
             RadioCollection(
                 modifier = Modifier.fillMaxWidth(),
-                title = "Kategorialar",
+                title = strings.category,
                 items = mapOf(
                     "Miweler" to 1,
                     "Gök önümler" to 2,
@@ -163,7 +162,7 @@ fun Filter(modifier: Modifier = Modifier) {
 
             RadioCollection(
                 modifier = Modifier.fillMaxWidth(),
-                title = "Ölçeg birlikler",
+                title = strings.measurement,
                 items = mapOf(
                     "100 gr" to 1,
                     "250 gr" to 2,
@@ -174,10 +173,10 @@ fun Filter(modifier: Modifier = Modifier) {
 
             RadioCollection(
                 modifier = Modifier.fillMaxWidth(),
-                title = "Brendler",
+                title = strings.brands,
                 items = mapOf(
-                    "Ýerli" to 1,
-                    "Daşary ýurt" to 2,
+                    strings.local to 1,
+                    strings.foreign to 2,
                 )
             )
 
@@ -207,7 +206,7 @@ fun Filter(modifier: Modifier = Modifier) {
                 )
             ) {
                 Text(
-                    "Arassala",
+                    strings.clear,
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.W700
@@ -223,7 +222,7 @@ fun Filter(modifier: Modifier = Modifier) {
                 }
             ) {
                 Text(
-                    "Ýatda sakla",
+                    strings.save,
                     color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.W700

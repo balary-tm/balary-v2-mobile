@@ -1,11 +1,9 @@
 package tm.com.balary.features.auth.presentation.ui
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.eye
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -61,6 +60,8 @@ fun ChangePassword(modifier: Modifier = Modifier) {
         mutableStateOf(0)
     }
 
+    val strings = LocalStrings.current
+
     BackHandler(index.value != 0) {
         index.value = 0
     }
@@ -82,7 +83,7 @@ fun ChangePassword(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "Açar sözüňi çalyşmak",
+                strings.changePassword,
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.W900,
                     fontSize = 24.sp
@@ -125,7 +126,7 @@ fun ChangePassword(modifier: Modifier = Modifier) {
                 },
                 visualTransformation = if (show.value) VisualTransformation.None else PasswordVisualTransformation(),
                 label = {
-                    Text("Açar sözüňi täzele*")
+                    Text(strings.enterNewPassword)
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = if (show.value) KeyboardType.Text else KeyboardType.Password,
@@ -163,7 +164,7 @@ fun ChangePassword(modifier: Modifier = Modifier) {
                 },
                 visualTransformation = if (show.value) VisualTransformation.None else PasswordVisualTransformation(),
                 label = {
-                    Text("Täze açar sözüňi gaýtala*")
+                    Text(strings.reWritePassword)
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = if (show.value) KeyboardType.Text else KeyboardType.Password,
@@ -179,7 +180,7 @@ fun ChangePassword(modifier: Modifier = Modifier) {
                 }
             ) {
                 Text(
-                    "Tassykla",
+                    strings.accept,
                     color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.W700

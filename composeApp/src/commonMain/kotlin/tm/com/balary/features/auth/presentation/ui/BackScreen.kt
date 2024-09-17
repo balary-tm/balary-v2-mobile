@@ -25,6 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 
@@ -33,10 +35,11 @@ fun BackScreen(
     modifier: Modifier = Modifier,
     title: String,
     spacing: Dp = 8.dp,
+    navHostController: NavHostController,
+    onBack: () -> Unit = {},
     actions: @Composable () -> Unit = {},
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
-    val navigator = LocalNavigator.currentOrThrow
     Column(
         modifier = modifier.background(
             color = MaterialTheme.colorScheme.background
@@ -63,7 +66,8 @@ fun BackScreen(
                     contentDescription = "back",
                     tint = MaterialTheme.colorScheme.outline,
                     modifier = Modifier.size(24.dp).clip(CircleShape).clickable {
-                        navigator.pop()
+                        onBack()
+                        navHostController.navigateUp()
                     }
                 )
 

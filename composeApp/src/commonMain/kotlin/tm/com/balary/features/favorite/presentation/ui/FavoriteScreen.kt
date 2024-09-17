@@ -2,7 +2,6 @@ package tm.com.balary.features.favorite.presentation.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,34 +17,29 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import balary.composeapp.generated.resources.Res
-import balary.composeapp.generated.resources.empty_favs
+import androidx.navigation.NavHostController
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.features.home.presentation.ui.banner.SearchInput
 import tm.com.balary.features.product.presentation.ui.FilterBar
 import tm.com.balary.features.product.presentation.ui.ProductCard
 import tm.com.balary.features.product.presentation.ui.filter.FilterScreen
-import tm.com.balary.ui.Empty
 
 class FavoriteScreen : Screen {
     @Composable
     override fun Content() {
-        Favorite(Modifier.fillMaxSize())
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Favorite(modifier: Modifier = Modifier) {
-    val navigator = LocalNavigator.currentOrThrow
+fun Favorite(modifier: Modifier = Modifier, navHostController: NavHostController) {
+    val strings = LocalStrings.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     Column(
         modifier.fillMaxSize().background(
@@ -72,9 +66,9 @@ fun Favorite(modifier: Modifier = Modifier) {
                     title = {
                         FilterBar(
                             modifier = Modifier.fillMaxWidth(),
-                            title = "Halanlarym",
+                            title = strings.favorites,
                             onFilter = {
-                                navigator.push(FilterScreen())
+                                navHostController.navigate(tm.com.balary.router.FilterScreen)
                             },
                             onBack = {
 
@@ -112,7 +106,8 @@ fun Favorite(modifier: Modifier = Modifier) {
             ) {
                 items(100) {
                     ProductCard(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        navHostController = navHostController
                     )
                 }
             }

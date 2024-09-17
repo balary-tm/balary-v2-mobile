@@ -30,6 +30,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.order_bee
+import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -37,6 +38,7 @@ fun OrderSuccess(
     open: Boolean = false,
     onClose: () -> Unit
 ) {
+    val strings = LocalStrings.current
     if(open) {
         Dialog(
             onDismissRequest = onClose,
@@ -62,7 +64,7 @@ fun OrderSuccess(
                     Spacer(Modifier.height(50.dp))
 
                     Text(
-                        "Sag boluň!",
+                        strings.thanks,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
@@ -73,7 +75,7 @@ fun OrderSuccess(
                     )
 
                     Text(
-                        "Sargydyňyz kabul edildi",
+                        strings.orderAccepted,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
@@ -84,7 +86,7 @@ fun OrderSuccess(
                     )
 
                     Text(
-                        "Sargyt №: #26491",
+                        "${strings.orderNumber}: #26491",
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
@@ -104,12 +106,12 @@ fun OrderSuccess(
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         SuccessText(
                             modifier = Modifier.weight(1f),
-                            text = "Güni",
+                            text = strings.day,
                             value = "15.08.2024"
                         )
                         SuccessText(
                             modifier = Modifier.weight(1f),
-                            text = "Eltip berjek wagty",
+                            text = strings.courierTime,
                             value = "10:00-12:00",
                             alignment = Alignment.End
                         )
@@ -119,42 +121,42 @@ fun OrderSuccess(
 
                     SuccessText(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Tölegiň görnüşi",
-                        value = "Nagt"
+                        text = strings.paymentType,
+                        value = strings.cash
                     )
                     Spacer(Modifier.height(16.dp))
 
                     SuccessText(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Salgysy",
+                        text = strings.address,
                         value = "Mir 7/4 13 nji ýaşaýyş jaý 2 nji kw"
                     )
                     Spacer(Modifier.height(16.dp))
 
                     SuccessText(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Telefon",
+                        text = strings.phone,
                         value = "+993 62 566987"
                     )
                     Spacer(Modifier.height(16.dp))
 
                     SuccessText(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Eltip bermek hyzmaty",
-                        value = "20.00 TMT"
+                        text = strings.deliveryService,
+                        value = "20.00 ${strings.money}"
                     )
                     Spacer(Modifier.height(16.dp))
 
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         SuccessText(
                             modifier = Modifier.weight(1f),
-                            text = "Jemi",
-                            value = "549.00 TMT"
+                            text = strings.total,
+                            value = "549.00 ${strings.money}"
                         )
                         SuccessText(
                             modifier = Modifier.weight(1f),
-                            text = "Status",
-                            value = "Barlanylýar",
+                            text = strings.status,
+                            value = strings.checking,
                             alignment = Alignment.End
                         )
                     }
@@ -169,7 +171,7 @@ fun OrderSuccess(
                             containerColor = MaterialTheme.colorScheme.primaryContainer
                         )
                     ) {
-                        Text("Tassyklamak", style = MaterialTheme.typography.bodyLarge.copy(
+                        Text(strings.accept, style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700
                         ), color = MaterialTheme.colorScheme.onSurface)
                     }

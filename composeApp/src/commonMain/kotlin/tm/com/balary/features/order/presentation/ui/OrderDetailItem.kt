@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import cafe.adriel.lyricist.LocalStrings
 import tm.com.balary.ui.ImageLoader
 
 @Composable
@@ -25,6 +26,7 @@ fun OrderDetailItem(
     modifier: Modifier = Modifier
 ) {
     val shape = RoundedCornerShape(10.dp)
+    val strings = LocalStrings.current
     Row(
         modifier = modifier.clip(shape).border(
             width = 1.dp,
@@ -52,13 +54,13 @@ fun OrderDetailItem(
             )
 
             Text(
-                "10.90 manat",
+                "10.90 ${strings.money}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.outline
             )
 
             Text(
-                "10.90 manat",
+                "10.90 ${strings.money}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -66,7 +68,7 @@ fun OrderDetailItem(
 
         Box(Modifier.height(76.dp), contentAlignment = Alignment.BottomEnd) {
             Text(
-                "3 sany",
+                "3 ${strings.count}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
             )

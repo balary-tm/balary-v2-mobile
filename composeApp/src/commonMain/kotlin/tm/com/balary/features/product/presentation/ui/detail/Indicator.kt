@@ -12,11 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun Indicator(
     modifier: Modifier = Modifier,
+    passiveColor: Color = MaterialTheme.colorScheme.surfaceDim,
     count: Int,
     current: Int
 ) {
@@ -29,7 +31,7 @@ fun Indicator(
         repeat(count) { index ->
             val color = animateColorAsState(if (current == index)
                 MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.surfaceDim)
+            else passiveColor)
             Box(
                 Modifier.size(8.dp).background(
                     color = color.value,

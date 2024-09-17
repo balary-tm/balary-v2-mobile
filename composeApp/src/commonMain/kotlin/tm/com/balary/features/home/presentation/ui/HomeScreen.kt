@@ -1,8 +1,6 @@
 package tm.com.balary.features.home.presentation.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,20 +14,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavHostController
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
 import tm.com.balary.features.ads.presentation.ui.PopupAds
 import tm.com.balary.features.ads.presentation.ui.SheetAds
@@ -43,13 +38,12 @@ import tm.com.balary.features.home.presentation.ui.product.HomeSection
 class HomeScreen : Screen {
     @Composable
     override fun Content() {
-        Home()
     }
 
 }
 
 @Composable
-fun Home() {
+fun Home(navHostController: NavHostController) {
 
     val lazyScroll = rememberLazyListState()
 
@@ -60,6 +54,8 @@ fun Home() {
     val showSheetAds = rememberSaveable {
         mutableStateOf(false)
     }
+
+    val strings = LocalStrings.current
 
     PopupAds(
         show = showPopup.value,
@@ -124,8 +120,9 @@ fun Home() {
             items(20) { index ->
                 HomeSection(
                     Modifier.fillMaxWidth(),
-                    title = "Arzanladyşdaky harytlar",
-                    adsCount = if (index > 0) 1 else 2
+                    title = strings.discountProducts,
+                    adsCount = if (index > 0) 1 else 2,
+                    navHostController = navHostController
                 )
             }
             item {

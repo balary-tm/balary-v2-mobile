@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowRight
-import androidx.compose.material.icons.automirrored.outlined.ArrowRight
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -41,7 +40,7 @@ fun HomeProductSection(
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontWeight = FontWeight.W900
             ),
-            color = MaterialTheme.colorScheme.onSurface,
+            color = Color(0xFF231B00),
             modifier = Modifier.weight(1f)
         )
 
