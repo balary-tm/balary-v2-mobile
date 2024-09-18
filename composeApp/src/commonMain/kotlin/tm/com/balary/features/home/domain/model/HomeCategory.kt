@@ -1,0 +1,11 @@
+package tm.com.balary.features.home.domain.model
+
+import tm.com.balary.features.product.domain.model.ProductModel
+
+data class HomeCategory(
+    val id: Int,
+    val products: List<ProductModel>,
+    val slide: String,
+    val title_ru: String,
+    val title_tm: String
+)

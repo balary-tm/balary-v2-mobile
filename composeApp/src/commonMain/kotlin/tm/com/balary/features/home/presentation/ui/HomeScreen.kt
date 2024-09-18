@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -26,14 +28,18 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
+import org.koin.compose.viewmodel.koinViewModel
 import tm.com.balary.features.ads.presentation.ui.PopupAds
 import tm.com.balary.features.ads.presentation.ui.SheetAds
+import tm.com.balary.features.home.domain.model.SlideModel
 import tm.com.balary.features.home.presentation.ui.banner.Banner
 import tm.com.balary.features.home.presentation.ui.banner.HomeToolbar
 import tm.com.balary.features.home.presentation.ui.banner.SearchInput
 import tm.com.balary.features.home.presentation.ui.brand.Brands
 import tm.com.balary.features.home.presentation.ui.category.HomeCategory
 import tm.com.balary.features.home.presentation.ui.product.HomeSection
+import tm.com.balary.features.home.presentation.ui.version.UpdateAppDialog
+import tm.com.balary.features.home.presentation.viewmodel.HomeViewModel
 
 class HomeScreen : Screen {
     @Composable
@@ -47,12 +53,30 @@ fun Home(navHostController: NavHostController) {
 
     val lazyScroll = rememberLazyListState()
 
+    val homeViewModel: HomeViewModel = koinViewModel()
+
+    val productState = homeViewModel.homeProducts.collectAsState()
+    val categoryState = homeViewModel.categoryState.collectAsState()
+    val brandState = homeViewModel.brandState.collectAsState()
+    val versionState = homeViewModel.versionCheckState.collectAsState()
+
+    LaunchedEffect(true) {
+        homeViewModel.initProducts()
+        homeViewModel.initCategories()
+        homeViewModel.initBrands()
+        homeViewModel.initVersion()
+    }
+
     val showPopup = rememberSaveable {
         mutableStateOf(true)
     }
 
     val showSheetAds = rememberSaveable {
         mutableStateOf(false)
+    }
+
+    val showUpdate = rememberSaveable {
+        mutableStateOf(true)
     }
 
     val strings = LocalStrings.current
@@ -71,6 +95,21 @@ fun Home(navHostController: NavHostController) {
             showSheetAds.value = false
         }
     )
+
+    versionState.value.versions?.let { versions->
+        if(versions.isNotEmpty()) {
+            UpdateAppDialog(
+                show = showUpdate.value,
+                versions = versions,
+                onClose = {
+                    showUpdate.value = false
+                }
+            )
+        }
+    }
+
+
+
 
 
 
@@ -117,16 +156,52 @@ fun Home(navHostController: NavHostController) {
                     Spacer(Modifier.height(8.dp))
                 }
             }
-            items(20) { index ->
-                HomeSection(
-                    Modifier.fillMaxWidth(),
-                    title = strings.discountProducts,
-                    adsCount = if (index > 0) 1 else 2,
-                    navHostController = navHostController
-                )
+            productState.value.productModel?.let { data->
+                item {
+                    HomeSection(
+                        Modifier.fillMaxWidth(),
+                        title = strings.discountProducts,
+                        adsCount = data.discountSlides.count(),
+                        products = data.discountProducts,
+                        slides = data.discountSlides,
+                        navHostController = navHostController
+                    )
+                }
+                item {
+                    HomeSection(
+                        Modifier.fillMaxWidth(),
+                        title = strings.newProducts,
+                        adsCount = 0,
+                        products = data.newProducts,
+                        navHostController = navHostController
+                    )
+                }
             }
-            item {
-                Brands(Modifier.fillMaxWidth())
+            categoryState.value.category?.let { categories->
+                items(categories.count()) { index ->
+                    val category = categories[index]
+                    HomeSection(
+                        Modifier.fillMaxWidth(),
+                        title = category.title_tm,
+                        adsCount = 1,
+                        products = category.products,
+                        slides = listOf(
+                            SlideModel(
+                                name = category.slide,
+                                imageUrl = category.slide
+                            )
+                        ),
+                        navHostController = navHostController
+                    )
+                }
+            }
+
+            brandState.value.brand?.let { brands->
+                if(brands.isNotEmpty()) {
+                    item {
+                        Brands(Modifier.fillMaxWidth(), brands)
+                    }
+                }
             }
             item {
                 Spacer(Modifier.height(12.dp))

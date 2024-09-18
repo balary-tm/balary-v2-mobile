@@ -18,6 +18,8 @@ import androidx.navigation.NavHostController
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import tm.com.balary.features.ads.presentation.ui.AdsComponent
+import tm.com.balary.features.home.domain.model.SlideModel
+import tm.com.balary.features.product.domain.model.ProductModel
 import tm.com.balary.features.product.presentation.ui.ProductCard
 import tm.com.balary.router.SubCategoryScreen
 import tm.com.balary.state.LocalAppNavigator
@@ -27,28 +29,32 @@ import tm.com.balary.state.LocalHomeNavigator
 fun HomeSection(
     modifier: Modifier = Modifier,
     title: String,
-    showBanner: Boolean = false,
     adsCount: Int = 0,
+    slides: List<SlideModel> = emptyList(),
+    products: List<ProductModel> = emptyList(),
     navHostController: NavHostController
 ) {
     Column(
         modifier = modifier.padding(vertical = 16.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(
-                horizontal = 16.dp
-            ),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            repeat(adsCount) {
-                AdsComponent(
-                    modifier = Modifier.weight(1f).height(140.dp),
-                    image = ""
-                )
+        if(slides.isNotEmpty()) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(
+                    horizontal = 16.dp
+                ),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                repeat(adsCount) { index->
+                    val slide = slides[index]
+                    AdsComponent(
+                        modifier = Modifier.weight(1f).height(140.dp),
+                        image = slide.imageUrl
+                    )
+                }
             }
+            Spacer(Modifier.height(12.dp))
         }
-        Spacer(Modifier.height(12.dp))
         HomeProductSection(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), title, onClick = {
                 navHostController.navigate(SubCategoryScreen)
@@ -58,8 +64,9 @@ fun HomeSection(
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(20) {
-                ProductCard(Modifier.width(176.dp), navHostController = navHostController)
+            items(products.count()) { index->
+                val product = products[index]
+                ProductCard(Modifier.width(176.dp), title = product.title_tm, navHostController = navHostController, productModel = product)
             }
         }
 

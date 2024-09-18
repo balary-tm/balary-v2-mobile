@@ -16,10 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.lyricist.LocalStrings
+import tm.com.balary.features.home.domain.model.HomeBrandModel
 import tm.com.balary.features.home.presentation.ui.product.HomeProductSection
 
 @Composable
-fun Brands(modifier: Modifier = Modifier) {
+fun Brands(modifier: Modifier = Modifier, brands: List<HomeBrandModel>) {
     val strings = LocalStrings.current
     Column(
         modifier = modifier.background(
@@ -37,9 +38,10 @@ fun Brands(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(20) {
+            items(brands.count()) { index->
+                val brand = brands[index]
                 BrandItem(
-                    image = ""
+                    image = brand.icon_sm
                 )
             }
         }

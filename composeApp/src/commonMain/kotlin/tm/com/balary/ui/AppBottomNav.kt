@@ -59,6 +59,7 @@ fun AppBottomNav(
                         }
                         launchSingleTop = true
                         restoreState = true
+
                     }
                 },
                 icon = {

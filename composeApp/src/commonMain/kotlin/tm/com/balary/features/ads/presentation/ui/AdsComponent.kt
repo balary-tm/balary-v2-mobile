@@ -1,7 +1,9 @@
 package tm.com.balary.features.ads.presentation.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -9,6 +11,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.banner
+import balary.composeapp.generated.resources.placeholder
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.ui.ImageLoader
 
@@ -19,11 +22,14 @@ fun AdsComponent(
 ) {
     val shape = RoundedCornerShape(10.dp)
     ImageLoader(
-        modifier = modifier.clip(shape).clickable {
+        modifier = modifier.clip(shape).background(
+            color = MaterialTheme.colorScheme.surface,
+            shape = shape
+        ).clickable {
 
         },
         url = image,
-        placeholder = painterResource(Res.drawable.banner),
+        placeholder = painterResource(Res.drawable.placeholder),
         contentScale = ContentScale.FillBounds
     )
 }

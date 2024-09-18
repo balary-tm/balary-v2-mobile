@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -58,8 +59,8 @@ fun HomeToolbar(
     ) {
         ImageLoader(
             url = if(seasonImageState.value.seasonImage!=null) seasonImageState.value.seasonImage!!.path else "",
-            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
-            contentScale = ContentScale.FillWidth,
+            modifier = Modifier.fillMaxSize().align(Alignment.BottomCenter),
+            contentScale = ContentScale.FillBounds,
             placeholder = painterResource(Res.drawable.topbar_bg)
         )
         Column(Modifier.fillMaxWidth().padding(16.dp)) {

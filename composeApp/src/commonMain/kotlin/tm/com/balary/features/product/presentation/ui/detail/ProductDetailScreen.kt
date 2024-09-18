@@ -392,7 +392,6 @@ fun ProductDetail(modifier: Modifier = Modifier, navHostController: NavHostContr
                     modifier = Modifier.fillMaxWidth(),
                     title = strings.similarProducts,
                     adsCount = 0,
-                    showBanner = false,
                     navHostController = navHostController
                 )
                 Spacer(Modifier.height(8.dp))

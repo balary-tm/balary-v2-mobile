@@ -1,6 +1,5 @@
 package tm.com.balary.router
 
-import AppTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,36 +10,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.transitions.SlideTransition
 import org.koin.compose.koinInject
 import tm.com.balary.features.basket.presentation.ui.BasketNavigation
-import tm.com.balary.features.basket.presentation.ui.BasketScreen
-import tm.com.balary.features.basket.presentation.ui.BasketTab
 import tm.com.balary.features.category.presentation.ui.CategoryNavigator
-import tm.com.balary.features.category.presentation.ui.CategoryScreen
-import tm.com.balary.features.category.presentation.ui.CategoryTab
 import tm.com.balary.features.favorite.presentation.ui.FavoriteNavigation
-import tm.com.balary.features.favorite.presentation.ui.FavoriteScreen
-import tm.com.balary.features.favorite.presentation.ui.FavoriteTab
 import tm.com.balary.features.home.presentation.ui.HomeNavigation
-import tm.com.balary.features.home.presentation.ui.HomeScreen
-import tm.com.balary.features.home.presentation.ui.HomeTab
 import tm.com.balary.features.profile.data.setting.AppSettings
 import tm.com.balary.features.profile.presentation.ui.ProfileNavigation
-import tm.com.balary.features.profile.presentation.ui.ProfileScreen
-import tm.com.balary.features.profile.presentation.ui.ProfileTab
-import tm.com.balary.state.LocalAppNavigator
 import tm.com.balary.state.LocalAppState
-import tm.com.balary.state.LocalCategoryNavigator
 import tm.com.balary.state.LocalDarkMode
-import tm.com.balary.state.LocalHomeNavigator
 import tm.com.balary.state.LocalTABNavigator
 import tm.com.balary.ui.AppBottomNav
 
@@ -65,7 +47,6 @@ fun AppTab(modifier: Modifier = Modifier) {
 
 
     val isDark = LocalDarkMode.current
-
     val tabNavigator = LocalTABNavigator.current
 
     val appSettings: AppSettings = koinInject()

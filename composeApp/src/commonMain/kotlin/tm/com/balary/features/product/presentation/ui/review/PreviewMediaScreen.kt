@@ -383,14 +383,14 @@ fun MediaPreview(
     isVideo: Boolean = true
 ) {
     if (isVideo) {
-//        VideoPlayerView(
-//            modifier = Modifier.fillMaxSize(),
-//            url = "https://www.w3schools.com/tags/mov_bbb.mp4"
-//        )
-        BalaryVideoPlayer(
+        VideoPlayerView(
             modifier = Modifier.fillMaxSize(),
             url = "https://www.w3schools.com/tags/mov_bbb.mp4"
         )
+//        BalaryVideoPlayer(
+//            modifier = Modifier.fillMaxSize(),
+//            url = "https://www.w3schools.com/tags/mov_bbb.mp4"
+//        )
     } else {
         ImageLoader(
             modifier = modifier.fillMaxSize().zoomable(rememberZoomState()),

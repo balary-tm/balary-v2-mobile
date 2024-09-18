@@ -219,6 +219,7 @@ data class Strings(
     val logout: String,
     val yes: String,
     val no: String,
+    val download: String
 )
 
 @LyricistStrings(languageTag = Locales.TURKMEN, default = true)
@@ -415,5 +416,6 @@ val TurkmenStrings = Strings(
     theme = "Tema saýlaň",
     logout = "Ulgamdan çykmak",
     yes = "Hawa",
-    no = "Ýok"
+    no = "Ýok",
+    download = "Ýükläp alyň"
 )

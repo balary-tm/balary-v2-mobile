@@ -35,6 +35,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.core.loremIpsum
+import tm.com.balary.features.product.domain.model.ProductModel
 import tm.com.balary.features.product.presentation.ui.detail.ProductDetailScreen
 import tm.com.balary.ui.ImageLoader
 
@@ -42,7 +43,8 @@ import tm.com.balary.ui.ImageLoader
 fun ProductCard(
     modifier: Modifier = Modifier,
     title: String = "Product Name",
-    navHostController: NavHostController = rememberNavController()
+    navHostController: NavHostController = rememberNavController(),
+    productModel: ProductModel? = null
 ) {
     val shape = RoundedCornerShape(4.dp)
     val strings = LocalStrings.current
@@ -62,7 +64,7 @@ fun ProductCard(
         ) {
             ImageLoader(
                 modifier = Modifier.fillMaxSize(),
-                url = "",
+                url = productModel?.image?:"",
                 contentScale = ContentScale.Inside
             )
 
@@ -114,9 +116,9 @@ fun ProductCard(
             Spacer(Modifier.height(10.dp))
             ProductPrice(
                 modifier = Modifier.fillMaxWidth(),
-                price = 170.0,
-                oldPrice = 190.0,
-                discount = 5.0
+                price = productModel?.discount_price?:0.0,
+                oldPrice = productModel?.price?:0.0,
+                discount = productModel?.discount?:0.0
             )
             Spacer(Modifier.height(10.dp))
 
