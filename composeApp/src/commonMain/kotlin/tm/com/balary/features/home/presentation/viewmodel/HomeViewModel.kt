@@ -14,6 +14,7 @@ import tm.com.balary.common.getCurrentVersion
 import tm.com.balary.common.getDevice
 import tm.com.balary.core.Resource
 import tm.com.balary.features.home.domain.usecase.HomeUseCase
+import tm.com.balary.features.home.presentation.state.AdsState
 import tm.com.balary.features.home.presentation.state.BannerState
 import tm.com.balary.features.home.presentation.state.BrandState
 import tm.com.balary.features.home.presentation.state.CheckVersionState
@@ -43,6 +44,17 @@ class HomeViewModel(
 
     private val _versionCheckState = MutableStateFlow(CheckVersionState())
     val versionCheckState = _versionCheckState.asStateFlow()
+
+    private val _adsState = MutableStateFlow(AdsState())
+    val adsState = _adsState.asStateFlow()
+
+    init {
+        initProducts()
+        initCategories()
+        initBrands()
+        initVersion()
+        initAds()
+    }
 
     fun initBanners() {
         if(_bannerState.value.banners.isNullOrEmpty()) {
@@ -256,6 +268,42 @@ class HomeViewModel(
                             loading = false,
                             error = result.message,
                             versions = result.data
+                        )
+                    }
+                }
+            }.launchIn(this)
+        }
+    }
+
+    fun initAds() {
+        if(_adsState.value.ads==null) {
+            getAds()
+        }
+    }
+
+    fun getAds() {
+        scope.launch {
+            useCase.getAds().onEach { result->
+                when(result) {
+                    is Resource.Error -> {
+                        _adsState.value = _adsState.value.copy(
+                            loading = false,
+                            error = result.message,
+                            ads = result.data
+                        )
+                    }
+                    is Resource.Loading -> {
+                        _adsState.value = _adsState.value.copy(
+                            loading = true,
+                            error = result.message,
+                            ads = result.data
+                        )
+                    }
+                    is Resource.Success -> {
+                        _adsState.value = _adsState.value.copy(
+                            loading = false,
+                            error = result.message,
+                            ads = result.data
                         )
                     }
                 }

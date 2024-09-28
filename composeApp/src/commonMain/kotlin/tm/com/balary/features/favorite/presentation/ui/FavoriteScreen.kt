@@ -17,6 +17,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
@@ -25,6 +27,9 @@ import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import org.koin.compose.viewmodel.koinNavViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
+import tm.com.balary.features.basket.presentation.viewmodel.BasketViewModel
 import tm.com.balary.features.home.presentation.ui.banner.SearchInput
 import tm.com.balary.features.product.presentation.ui.FilterBar
 import tm.com.balary.features.product.presentation.ui.ProductCard
@@ -36,11 +41,16 @@ class FavoriteScreen : Screen {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, KoinExperimentalAPI::class)
 @Composable
 fun Favorite(modifier: Modifier = Modifier, navHostController: NavHostController) {
     val strings = LocalStrings.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val basketViewModel: BasketViewModel = koinNavViewModel()
+    val basketState = basketViewModel.basketState.collectAsState()
+    LaunchedEffect(true) {
+        basketViewModel.getBasket()
+    }
     Column(
         modifier.fillMaxSize().background(
             color = MaterialTheme.colorScheme.background
@@ -107,7 +117,11 @@ fun Favorite(modifier: Modifier = Modifier, navHostController: NavHostController
                 items(100) {
                     ProductCard(
                         modifier = Modifier.fillMaxWidth(),
-                        navHostController = navHostController
+                        navHostController = navHostController,
+                        basketList = basketState.value.products,
+                        onBasketAdd = {item->
+                            basketViewModel.addBasket(item)
+                        }
                     )
                 }
             }

@@ -1,0 +1,91 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "52419fbb4675ffd6a0ebfc435e549bdd",
+    "entities": [
+      {
+        "tableName": "BannerLocalEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `external_url` TEXT, `media_path` TEXT, `media_type` TEXT, `destination_type` TEXT, `destination_id` TEXT, `thumbnail_path` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "external_url",
+            "columnName": "external_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "media_path",
+            "columnName": "media_path",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "media_type",
+            "columnName": "media_type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "destination_type",
+            "columnName": "destination_type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "destination_id",
+            "columnName": "destination_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "thumbnail_path",
+            "columnName": "thumbnail_path",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "SeasonLocalEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `path` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "path",
+            "columnName": "path",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '52419fbb4675ffd6a0ebfc435e549bdd')"
+    ]
+  }
+}

@@ -14,7 +14,12 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.lyricist.LocalStrings
 
 @Composable
-fun ProductDetailPrice(modifier: Modifier = Modifier) {
+fun ProductDetailPrice(
+    modifier: Modifier = Modifier,
+    price: Double? = 0.0,
+    discountPrice: Double? = 0.0,
+    discount: Double? = 0.0
+) {
     val strings = LocalStrings.current
     Row(
         modifier = modifier,
@@ -22,7 +27,7 @@ fun ProductDetailPrice(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Text(
-            "18.00 ${strings.money}",
+            "$discountPrice ${strings.money}",
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontWeight = FontWeight.W900,
                 fontSize = 18.sp
@@ -30,13 +35,17 @@ fun ProductDetailPrice(modifier: Modifier = Modifier) {
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        Text(
-            "22.00 ${strings.money}",
-            style = MaterialTheme.typography.bodyMedium.copy(
-                fontWeight = FontWeight.W700
-            ),
-            color = MaterialTheme.colorScheme.outline,
-            textDecoration = TextDecoration.LineThrough
-        )
+        discount?.let {
+            if(discount>0) {
+                Text(
+                    "$price ${strings.money}",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.W700
+                    ),
+                    color = MaterialTheme.colorScheme.outline,
+                    textDecoration = TextDecoration.LineThrough
+                )
+            }
+        }
     }
 }

@@ -26,8 +26,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
+import com.valentinilk.shimmer.shimmer
 import org.koin.compose.viewmodel.koinViewModel
 import tm.com.balary.features.ads.presentation.ui.PopupAds
 import tm.com.balary.features.ads.presentation.ui.SheetAds
@@ -38,18 +40,21 @@ import tm.com.balary.features.home.presentation.ui.banner.SearchInput
 import tm.com.balary.features.home.presentation.ui.brand.Brands
 import tm.com.balary.features.home.presentation.ui.category.HomeCategory
 import tm.com.balary.features.home.presentation.ui.product.HomeSection
+import tm.com.balary.features.home.presentation.ui.product.HomeSectionSkeleton
 import tm.com.balary.features.home.presentation.ui.version.UpdateAppDialog
 import tm.com.balary.features.home.presentation.viewmodel.HomeViewModel
+import tm.com.balary.locale.translateValue
 
 class HomeScreen : Screen {
     @Composable
     override fun Content() {
+        Home()
     }
 
 }
 
 @Composable
-fun Home(navHostController: NavHostController) {
+fun Home(navHostController: NavHostController = rememberNavController()) {
 
     val lazyScroll = rememberLazyListState()
 
@@ -59,13 +64,9 @@ fun Home(navHostController: NavHostController) {
     val categoryState = homeViewModel.categoryState.collectAsState()
     val brandState = homeViewModel.brandState.collectAsState()
     val versionState = homeViewModel.versionCheckState.collectAsState()
+    val adsState = homeViewModel.adsState.collectAsState()
 
-    LaunchedEffect(true) {
-        homeViewModel.initProducts()
-        homeViewModel.initCategories()
-        homeViewModel.initBrands()
-        homeViewModel.initVersion()
-    }
+
 
     val showPopup = rememberSaveable {
         mutableStateOf(true)
@@ -81,20 +82,38 @@ fun Home(navHostController: NavHostController) {
 
     val strings = LocalStrings.current
 
-    PopupAds(
-        show = showPopup.value,
-        onClose = {
-            showSheetAds.value = true
-            showPopup.value = false
-        }
-    )
+    adsState.value.ads?.second?.let { sheet ->
+        SheetAds(
+            show = showSheetAds.value,
+            ads = sheet,
+            onClose = {
+                showSheetAds.value = false
+            }
+        )
+    }
 
-    SheetAds(
-        show = showSheetAds.value,
-        onClose = {
-            showSheetAds.value = false
+
+    adsState.value.ads?.let { pair->
+        if(pair.first!=null) {
+            pair.first?.let { popup->
+                PopupAds(
+                    show = showPopup.value,
+                    ads = popup,
+                    onClose = {
+                        showSheetAds.value = pair.second!=null
+                        showPopup.value = false
+                    }
+                )
+            }
+        } else {
+            showSheetAds.value = pair.second!=null
         }
-    )
+
+    }
+
+
+
+
 
     versionState.value.versions?.let { versions->
         if(versions.isNotEmpty()) {
@@ -152,54 +171,86 @@ fun Home(navHostController: NavHostController) {
                 ) {
                     Spacer(Modifier.height(8.dp))
                     Banner(Modifier.fillMaxWidth())
-                    HomeCategory(Modifier.fillMaxWidth())
+//                    HomeCategory(Modifier.fillMaxWidth())
                     Spacer(Modifier.height(8.dp))
                 }
             }
-            productState.value.productModel?.let { data->
+            if(productState.value.loading) {
                 item {
-                    HomeSection(
-                        Modifier.fillMaxWidth(),
-                        title = strings.discountProducts,
-                        adsCount = data.discountSlides.count(),
-                        products = data.discountProducts,
-                        slides = data.discountSlides,
-                        navHostController = navHostController
+                    HomeSectionSkeleton(
+                        modifier = Modifier.fillMaxWidth(),
+                        adsCount = 2
                     )
                 }
                 item {
-                    HomeSection(
-                        Modifier.fillMaxWidth(),
-                        title = strings.newProducts,
-                        adsCount = 0,
-                        products = data.newProducts,
-                        navHostController = navHostController
+                    HomeSectionSkeleton(
+                        modifier = Modifier.fillMaxWidth()
                     )
+                }
+            } else {
+                productState.value.productModel?.let { data ->
+                    item {
+                        HomeSection(
+                            Modifier.fillMaxWidth(),
+                            title = strings.discountProducts,
+                            adsCount = data.discountSlides.count(),
+                            products = data.discountProducts,
+                            slides = data.discountSlides,
+                            navHostController = navHostController,
+                            categoryId = null
+                        )
+                    }
+                    item {
+                        HomeSection(
+                            Modifier.fillMaxWidth(),
+                            title = strings.newProducts,
+                            adsCount = 0,
+                            products = data.newProducts,
+                            navHostController = navHostController,
+                            categoryId = null
+                        )
+                    }
                 }
             }
-            categoryState.value.category?.let { categories->
-                items(categories.count()) { index ->
-                    val category = categories[index]
-                    HomeSection(
-                        Modifier.fillMaxWidth(),
-                        title = category.title_tm,
-                        adsCount = 1,
-                        products = category.products,
-                        slides = listOf(
-                            SlideModel(
-                                name = category.slide,
-                                imageUrl = category.slide
-                            )
-                        ),
-                        navHostController = navHostController
+            if(categoryState.value.loading) {
+                items(5) {
+                    HomeSectionSkeleton(
+                        modifier = Modifier.fillMaxWidth()
                     )
+                }
+            } else {
+                categoryState.value.category?.let { categories->
+                    items(categories.count()) { index ->
+                        val category = categories[index]
+                        HomeSection(
+                            Modifier.fillMaxWidth(),
+                            title = translateValue(category,"title"),
+                            adsCount = 1,
+                            products = category.products,
+                            slides = listOf(
+                                SlideModel(
+                                    name = category.slide,
+                                    imageUrl = category.slide,
+                                    slideType = category.slideType
+                                )
+                            ),
+                            navHostController = navHostController,
+                            categoryId = category.id.toString()
+                        )
+                    }
                 }
             }
 
-            brandState.value.brand?.let { brands->
-                if(brands.isNotEmpty()) {
-                    item {
-                        Brands(Modifier.fillMaxWidth(), brands)
+            if(brandState.value.loading) {
+                item {
+                    HomeSectionSkeleton(Modifier.fillMaxWidth(), adsCount = 0, productCount = 0)
+                }
+            } else {
+                brandState.value.brand?.let { brands->
+                    if(brands.isNotEmpty()) {
+                        item {
+                            Brands(Modifier.fillMaxWidth(), brands)
+                        }
                     }
                 }
             }

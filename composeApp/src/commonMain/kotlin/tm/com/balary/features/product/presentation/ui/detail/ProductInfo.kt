@@ -29,6 +29,8 @@ fun ProductInfo(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
+        val end = if(title.endsWith(":")) "" else ":"
+
         val text = buildAnnotatedString {
             withStyle(
                 SpanStyle(
@@ -37,7 +39,7 @@ fun ProductInfo(
                     color = MaterialTheme.colorScheme.onSurface
                 )
             ) {
-                append(title)
+                append(title.plus(end))
             }
             append(" ")
             withStyle(

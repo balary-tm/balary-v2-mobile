@@ -3,6 +3,7 @@ package tm.com.balary.features.home.domain.usecase
 import kotlinx.coroutines.flow.Flow
 import tm.com.balary.core.Resource
 import tm.com.balary.features.home.domain.model.BannerModel
+import tm.com.balary.features.home.domain.model.HomeAdsModel
 import tm.com.balary.features.home.domain.model.HomeBrandModel
 import tm.com.balary.features.home.domain.model.HomeCategory
 import tm.com.balary.features.home.domain.model.HomeProductModel
@@ -30,5 +31,8 @@ class HomeUseCase(
     }
     suspend fun checkVersion(device: String, currentVersion: String): Flow<Resource<List<VersionCheckModel>>> {
         return repository.checkVersion(device, currentVersion)
+    }
+    suspend fun getAds(): Flow<Resource<Pair<HomeAdsModel?, HomeAdsModel?>>> {
+        return repository.getAds()
     }
 }

@@ -11,14 +11,20 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import org.koin.compose.viewmodel.koinNavViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 import tm.com.balary.features.category.presentation.ui.subcategory.SubCategoryScreen
+import tm.com.balary.features.category.presentation.viewmodel.CategoryViewModel
 import tm.com.balary.features.home.presentation.ui.banner.SearchInput
+import tm.com.balary.locale.translateValue
 
 
 class CategoryScreen : Screen {
@@ -28,8 +34,14 @@ class CategoryScreen : Screen {
 
 }
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun Category(navHostController: NavHostController) {
+    val categoryViewModel: CategoryViewModel = koinNavViewModel()
+    val parentCategoryState = categoryViewModel.parentCategoryState.collectAsState()
+    LaunchedEffect(true) {
+        categoryViewModel.initCategories()
+    }
     Scaffold(
         backgroundColor = MaterialTheme.colorScheme.surface,
         modifier = Modifier.fillMaxSize(),
@@ -54,17 +66,27 @@ fun Category(navHostController: NavHostController) {
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            items(30) {
-                CategoryItem(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = "Miweler, gök önümler, işdäaçarlar",
-                    containerColor = MaterialTheme.colorScheme.surfaceBright,
-                    image = "",
-                    onClick = {
-                        navHostController.navigate(tm.com.balary.router.SubCategoryScreen)
+            if(parentCategoryState.value.loading) {
+                items(30) {
+                    CategoryItemSkeleton(Modifier.fillMaxWidth())
+                }
+            } else {
+                parentCategoryState.value.categories?.let { list->
+                    items(list.count()) { index->
+                        val item = list[index]
+                        CategoryItem(
+                            modifier = Modifier.fillMaxWidth(),
+                            title = translateValue(item,"title"),
+                            containerColor = MaterialTheme.colorScheme.surfaceBright,
+                            image = item.icon_sm?:"",
+                            onClick = {
+                                navHostController.navigate(tm.com.balary.router.SubCategoryScreen(item.id.toString()))
+                            }
+                        )
                     }
-                )
+                }
             }
+
         }
     }
 }

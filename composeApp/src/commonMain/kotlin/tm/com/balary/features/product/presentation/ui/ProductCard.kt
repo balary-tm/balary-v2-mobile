@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,25 +35,46 @@ import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinNavViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 import tm.com.balary.core.loremIpsum
+import tm.com.balary.features.basket.data.local.BasketLocalEntity
+import tm.com.balary.features.basket.presentation.viewmodel.BasketViewModel
 import tm.com.balary.features.product.domain.model.ProductModel
 import tm.com.balary.features.product.presentation.ui.detail.ProductDetailScreen
+import tm.com.balary.locale.translateValue
 import tm.com.balary.ui.ImageLoader
+import tm.com.balary.ui.skeleton.SkeletonRounded
 
+@Composable
+fun ProductCardSkeleton(modifier: Modifier = Modifier) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        SkeletonRounded(Modifier.fillMaxWidth().height(172.dp), borderRadius = 4.dp)
+        SkeletonRounded(Modifier.fillMaxWidth(0.3f).height(15.dp), borderRadius = 4.dp)
+        SkeletonRounded(Modifier.fillMaxWidth(0.4f).height(15.dp), borderRadius = 4.dp)
+        SkeletonRounded(Modifier.fillMaxWidth(0.7f).height(40.dp), borderRadius = 4.dp)
+        SkeletonRounded(Modifier.fillMaxWidth().height(32.dp), borderRadius = 4.dp)
+    }
+}
+
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun ProductCard(
     modifier: Modifier = Modifier,
     title: String = "Product Name",
     navHostController: NavHostController = rememberNavController(),
+    basketList: List<BasketLocalEntity>,
+    onBasketAdd: (BasketLocalEntity)-> Unit,
     productModel: ProductModel? = null
 ) {
     val shape = RoundedCornerShape(4.dp)
     val strings = LocalStrings.current
+
     Column(modifier = modifier.clip(RoundedCornerShape(4.dp)).background(
         color = MaterialTheme.colorScheme.surface,
         RoundedCornerShape(4.dp)
     ).clickable {
-        navHostController.navigate(tm.com.balary.router.ProductDetailScreen)
+        navHostController.navigate(tm.com.balary.router.ProductDetailScreen(productId = productModel?.id.toString()))
     }) {
         Box(
             Modifier
@@ -64,17 +86,21 @@ fun ProductCard(
         ) {
             ImageLoader(
                 modifier = Modifier.fillMaxSize(),
-                url = productModel?.image?:"",
+                url = productModel?.image ?: "",
                 contentScale = ContentScale.Inside
             )
 
-            Row(Modifier.align(Alignment.BottomEnd).background(
-                color = Color(0xFF614FE0),
-                shape = RoundedCornerShape(
-                    topStart = 20.dp,
-                    bottomStart = 20.dp
-                )
-            ).padding(horizontal = 7.dp, vertical = 2.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+            Row(
+                Modifier.align(Alignment.BottomEnd).background(
+                    color = Color(0xFF614FE0),
+                    shape = RoundedCornerShape(
+                        topStart = 20.dp,
+                        bottomStart = 20.dp
+                    )
+                ).padding(horizontal = 7.dp, vertical = 2.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
                 Icon(
                     painter = painterResource(Res.drawable.timer),
                     contentDescription = "timer",
@@ -83,13 +109,17 @@ fun ProductCard(
                 )
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("3 ${strings.day}", style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.W700
-                    ), color = Color.White)
+                    Text(
+                        "3 ${strings.day}", style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.W700
+                        ), color = Color.White
+                    )
                     Spacer(Modifier.height(2.dp))
-                    Text("09:55:59", style = MaterialTheme.typography.bodySmall.copy(
-                        fontSize = 10.sp
-                    ), color = Color.White)
+                    Text(
+                        "09:55:59", style = MaterialTheme.typography.bodySmall.copy(
+                            fontSize = 10.sp
+                        ), color = Color.White
+                    )
                 }
             }
 
@@ -116,9 +146,9 @@ fun ProductCard(
             Spacer(Modifier.height(10.dp))
             ProductPrice(
                 modifier = Modifier.fillMaxWidth(),
-                price = productModel?.discount_price?:0.0,
-                oldPrice = productModel?.price?:0.0,
-                discount = productModel?.discount?:0.0
+                price = productModel?.discount_price ?: 0.0,
+                oldPrice = productModel?.price ?: 0.0,
+                discount = productModel?.discount ?: 0.0
             )
             Spacer(Modifier.height(10.dp))
 
@@ -135,13 +165,14 @@ fun ProductCard(
             Spacer(Modifier.height(8.dp))
 
             Text(
-                loremIpsum,
+                translateValue(productModel, "description"),
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.W700,
                     fontSize = 10.sp
                 ),
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 3,
+                minLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
             Spacer(Modifier.height(6.dp))
@@ -151,7 +182,13 @@ fun ProductCard(
                 commentCount = 123
             )
             Spacer(Modifier.height(6.dp))
-            ProductBasketButton(modifier = Modifier.fillMaxWidth())
+            ProductBasketButton(
+                modifier = Modifier.fillMaxWidth(),
+                initialCount = basketList.find { it.id == productModel?.id }?.count?:0,
+                onCountChange = { newCount->
+                    productModel?.toBasketEntity(newCount)?.let { onBasketAdd(it) }
+                }
+            )
         }
     }
 }

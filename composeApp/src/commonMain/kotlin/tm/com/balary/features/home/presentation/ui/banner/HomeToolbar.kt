@@ -28,12 +28,25 @@ import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.koin.koinNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.valentinilk.shimmer.shimmer
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinNavViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import tm.com.balary.features.auth.presentation.ui.AuthScreen
 import tm.com.balary.features.home.presentation.viewmodel.HomeViewModel
 import tm.com.balary.ui.ImageLoader
+import tm.com.balary.ui.skeleton.SkeletonRounded
+
+@Composable
+fun HomeToolbarSkeleton(modifier: Modifier = Modifier) {
+    val shape = RoundedCornerShape(0.dp, 0.dp, 20.dp, 20.dp)
+    Box(
+        modifier = modifier.clip(shape).height(260.dp).shimmer().background(
+            color = MaterialTheme.colorScheme.surfaceContainerLowest,
+            shape = shape
+        )
+    )
+}
 
 @Composable
 fun HomeToolbar(
@@ -51,47 +64,53 @@ fun HomeToolbar(
         homeViewModel.initSeasonImage()
     }
 
-    Box(
-        modifier = modifier.background(Color.Transparent).background(
-            color = MaterialTheme.colorScheme.tertiary,
-            shape = shape
-        ).clip(shape).height(260.dp)
-    ) {
-        ImageLoader(
-            url = if(seasonImageState.value.seasonImage!=null) seasonImageState.value.seasonImage!!.path else "",
-            modifier = Modifier.fillMaxSize().align(Alignment.BottomCenter),
-            contentScale = ContentScale.FillBounds,
-            placeholder = painterResource(Res.drawable.topbar_bg)
-        )
-        Column(Modifier.fillMaxWidth().padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                SelectLocation(
-                    modifier = Modifier
-                )
-                LogoText(modifier = Modifier.weight(1f))
-                BlackButton(
-                    text = strings.signIn,
-                    onClick = {
-                        navigator.push(AuthScreen())
-                        // navigation changed
+    if(seasonImageState.value.loading) {
+        HomeToolbarSkeleton(Modifier.fillMaxWidth())
+    } else {
+        Box(
+            modifier = modifier.background(Color.Transparent).background(
+                color = MaterialTheme.colorScheme.tertiary,
+                shape = shape
+            ).clip(shape).height(260.dp)
+        ) {
+            ImageLoader(
+                url = if (seasonImageState.value.seasonImage != null) seasonImageState.value.seasonImage!!.path else "",
+                modifier = Modifier.fillMaxSize().align(Alignment.BottomCenter),
+                contentScale = ContentScale.FillBounds,
+                placeholder = painterResource(Res.drawable.topbar_bg)
+            )
+            Column(Modifier.fillMaxWidth().padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    SelectLocation(
+                        modifier = Modifier
+                    )
+                    LogoText(modifier = Modifier.weight(1f))
+                    BlackButton(
+                        text = strings.signIn,
+                        onClick = {
+                            navigator.push(AuthScreen())
+                            // navigation changed
+                        }
+                    )
+                }
+                Spacer(Modifier.height(6.dp))
+                SearchInput(
+                    modifier = Modifier.fillMaxWidth(),
+                    onSearch = { query ->
+
                     }
                 )
             }
-            Spacer(Modifier.height(6.dp))
-            SearchInput(
-                modifier = Modifier.fillMaxWidth(),
-                onSearch = { query ->
 
-                }
-            )
+
         }
-
-
     }
+
+
 
 
 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.address
 import balary.composeapp.generated.resources.contact
@@ -96,12 +97,13 @@ object ProfileTab : Tab {
 class ProfileScreen : Screen {
     @Composable
     override fun Content() {
+        Profile(Modifier.fillMaxSize())
     }
 
 }
 
 @Composable
-fun Profile(modifier: Modifier = Modifier, navHostController: NavHostController) {
+fun Profile(modifier: Modifier = Modifier, navHostController: NavHostController = rememberNavController()) {
     val strings = LocalStrings.current
     val authState = LocalAuth.current
 

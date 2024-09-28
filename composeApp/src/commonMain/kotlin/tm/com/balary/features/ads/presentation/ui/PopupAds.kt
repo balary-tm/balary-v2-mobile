@@ -21,13 +21,16 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.close_filled
+import balary.composeapp.generated.resources.placeholder
 import balary.composeapp.generated.resources.popup
 import org.jetbrains.compose.resources.painterResource
+import tm.com.balary.features.home.domain.model.HomeAdsModel
 import tm.com.balary.ui.ImageLoader
 
 @Composable
 fun PopupAds(
     show: Boolean = false,
+    ads: HomeAdsModel? = null,
     onClose: () -> Unit
 ) {
     if(show) {
@@ -61,8 +64,8 @@ fun PopupAds(
                         .clickable {
 
                         },
-                    url = "",
-                    placeholder = painterResource(Res.drawable.popup),
+                    url = ads?.media_path?:"",
+                    placeholder = painterResource(Res.drawable.placeholder),
                     contentScale = ContentScale.FillBounds
                 )
             }

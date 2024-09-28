@@ -29,12 +29,15 @@ import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.add_basket
 import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinNavViewModel
+import tm.com.balary.features.basket.presentation.viewmodel.BasketViewModel
 
 @Composable
 fun ProductBasketButton(
     modifier: Modifier = Modifier,
     initialCount: Int = 0,
-    bigButton: Boolean = false
+    bigButton: Boolean = false,
+    onCountChange: (Int) -> Unit
 ) {
     val count = rememberSaveable {
         mutableStateOf(initialCount)
@@ -48,6 +51,7 @@ fun ProductBasketButton(
         onClick = {
             if (count.value == 0) {
                 count.value = 1
+                onCountChange(1)
             }
         }
     ) {
@@ -62,6 +66,7 @@ fun ProductBasketButton(
                         Icons.Filled.IndeterminateCheckBox,
                         contentDescription = "minus",
                         modifier = Modifier.size(20.dp).clickable {
+                            onCountChange(count.value.minus(1))
                             count.value = count.value.minus(1)
                         }
                     )
@@ -78,6 +83,7 @@ fun ProductBasketButton(
                         Icons.Filled.AddBox,
                         contentDescription = "add",
                         modifier = Modifier.size(20.dp).clickable {
+                            onCountChange(count.value.plus(1))
                             count.value = count.value.plus(1)
                         }
                     )

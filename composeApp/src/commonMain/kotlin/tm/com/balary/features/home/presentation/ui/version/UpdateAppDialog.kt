@@ -29,6 +29,7 @@ import balary.composeapp.generated.resources.banner
 import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.features.home.domain.model.VersionCheckModel
+import tm.com.balary.locale.translateValue
 import tm.com.balary.ui.ImageLoader
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,7 +69,7 @@ fun UpdateAppDialog(
             ) {
                 item {
                     Text(
-                        version.title_tm,
+                        translateValue(version,"title"),
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.W700
@@ -78,7 +79,7 @@ fun UpdateAppDialog(
                 }
                 item {
                     Text(
-                        version.description_tm,
+                        translateValue(version, "description"),
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700
                         ),

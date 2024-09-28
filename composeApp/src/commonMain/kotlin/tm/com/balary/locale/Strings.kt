@@ -154,6 +154,8 @@ data class Strings(
 
 
     val newProduct: String,
+    val recommended: String,
+    val bestSeller: String,
     val barcode: String,
     val productNumber: String,
     val productBenefit: String,
@@ -219,7 +221,11 @@ data class Strings(
     val logout: String,
     val yes: String,
     val no: String,
-    val download: String
+    val download: String,
+
+    val somethingWentWrong: String,
+    val noData: String,
+
 )
 
 @LyricistStrings(languageTag = Locales.TURKMEN, default = true)
@@ -417,5 +423,9 @@ val TurkmenStrings = Strings(
     logout = "Ulgamdan çykmak",
     yes = "Hawa",
     no = "Ýok",
-    download = "Ýükläp alyň"
+    download = "Ýükläp alyň",
+    somethingWentWrong = "Something went wrong",
+    noData = "Maglumat ýok",
+    recommended = "Maslahat beryaris",
+    bestSeller = "In kop satylan"
 )

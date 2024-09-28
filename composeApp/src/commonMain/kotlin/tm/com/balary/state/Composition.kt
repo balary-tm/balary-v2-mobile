@@ -29,27 +29,29 @@ fun Composition(
         AppTheme.LIGHT -> false
     }
     CompositionLocalProvider(
-        LocalAppNavigator provides remember {
-            mutableStateOf(appNavHostController)
-        },
-        LocalHomeNavigator provides remember {
-            mutableStateOf(homeNavHostController)
-        },
-        LocalCategoryNavigator provides remember {
-          mutableStateOf(categoryNavHostController)
-        },
-        LocalDarkMode provides rememberSaveable {
-            mutableStateOf(isDark)
-        },
-        LocalAuth provides remember {
-            mutableStateOf(AuthState())
-        },
-        LocalTABNavigator provides remember {
-            mutableStateOf(HomeTab)
-        },
-        LocalAppState provides remember {
-            mutableStateOf(appSettings.getAppSettings())
-        }
+        values = arrayOf(
+            LocalAppNavigator provides remember {
+                mutableStateOf(appNavHostController)
+            },
+            LocalHomeNavigator provides remember {
+                mutableStateOf(homeNavHostController)
+            },
+            LocalCategoryNavigator provides remember {
+                mutableStateOf(categoryNavHostController)
+            },
+            LocalDarkMode provides rememberSaveable {
+                mutableStateOf(isDark)
+            },
+            LocalAuth provides remember {
+                mutableStateOf(AuthState())
+            },
+            LocalTABNavigator provides remember {
+                mutableStateOf(HomeTab)
+            },
+            LocalAppState provides remember {
+                mutableStateOf(appSettings.getAppSettings())
+            }
+        )
     ) {
         content()
     }

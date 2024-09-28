@@ -3,6 +3,7 @@ package tm.com.balary.features.home.domain.repository
 import kotlinx.coroutines.flow.Flow
 import tm.com.balary.core.Resource
 import tm.com.balary.features.home.domain.model.BannerModel
+import tm.com.balary.features.home.domain.model.HomeAdsModel
 import tm.com.balary.features.home.domain.model.HomeBrandModel
 import tm.com.balary.features.home.domain.model.HomeCategory
 import tm.com.balary.features.home.domain.model.HomeProductModel
@@ -16,4 +17,5 @@ interface HomeRepository {
     suspend fun getCategories(): Flow<Resource<List<HomeCategory>>>
     suspend fun getBrands(): Flow<Resource<List<HomeBrandModel>>>
     suspend fun checkVersion(device: String, currentVersion: String): Flow<Resource<List<VersionCheckModel>>>
+    suspend fun getAds(): Flow<Resource<Pair<HomeAdsModel?, HomeAdsModel?>>>
 }

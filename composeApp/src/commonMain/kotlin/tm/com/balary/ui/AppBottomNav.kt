@@ -54,8 +54,10 @@ fun AppBottomNav(
                 selected = selected,
                 onClick = {
                     navHostController.navigate(tab) {
-                        popUpTo(navHostController.graph.findStartDestination().id) {
-                            saveState = true
+                        navHostController.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route) {
+                                saveState = true
+                            }
                         }
                         launchSingleTop = true
                         restoreState = true

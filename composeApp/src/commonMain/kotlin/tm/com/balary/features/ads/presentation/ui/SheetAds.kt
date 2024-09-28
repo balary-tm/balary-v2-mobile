@@ -26,14 +26,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.banner
+import balary.composeapp.generated.resources.placeholder
 import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
+import tm.com.balary.features.home.domain.model.HomeAdsModel
+import tm.com.balary.locale.translateValue
 import tm.com.balary.ui.ImageLoader
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SheetAds(
     show: Boolean = false,
+    ads: HomeAdsModel? = null,
     onClose: () -> Unit
 ) {
     val strings = LocalStrings.current
@@ -63,13 +67,13 @@ fun SheetAds(
                 item {
                     ImageLoader(
                         Modifier.fillMaxWidth().height(140.dp).clip(RoundedCornerShape(10.dp)),
-                        url = "",
-                        placeholder = painterResource(Res.drawable.banner)
+                        url = ads?.media_path?:"",
+                        placeholder = painterResource(Res.drawable.placeholder)
                     )
                 }
                 item {
                     Text(
-                        "Harytlara 70 % arzanlasdyş!",
+                        translateValue(ads,"title"),
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.W700
@@ -79,7 +83,7 @@ fun SheetAds(
                 }
                 item {
                     Text(
-                        "07.08-15.09 seneler aralygynda mekdep okuwçy egin-eşiklere we esbaplara 70%-e çenli arzanlaşyk bar howlugyň!",
+                        translateValue(ads,"description"),
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W700
                         ),

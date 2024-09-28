@@ -23,8 +23,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.fruit
+import balary.composeapp.generated.resources.placeholder
 import org.jetbrains.compose.resources.painterResource
 import tm.com.balary.ui.ImageLoader
+import tm.com.balary.ui.skeleton.SkeletonCircle
+import tm.com.balary.ui.skeleton.SkeletonRounded
+
+@Composable
+fun CategoryItemSkeleton(modifier: Modifier = Modifier) {
+    Box(modifier = modifier.height(185.dp), contentAlignment = Alignment.Center) {
+        SkeletonRounded(Modifier.align(Alignment.BottomCenter).fillMaxWidth().fillMaxHeight(0.8f), borderRadius = 30.dp)
+    }
+}
 
 @Composable
 fun CategoryItem(
@@ -46,7 +56,7 @@ fun CategoryItem(
             ImageLoader(
                 modifier = Modifier.size(115.dp),
                 url = image,
-                placeholder = painterResource(Res.drawable.fruit)
+                placeholder = painterResource(Res.drawable.placeholder)
             )
             Text(
                 title,

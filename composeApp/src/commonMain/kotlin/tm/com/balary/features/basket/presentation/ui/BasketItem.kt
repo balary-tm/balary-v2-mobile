@@ -14,6 +14,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,13 +31,24 @@ import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.close_filled
 import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinNavViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
+import tm.com.balary.features.basket.data.local.BasketLocalEntity
+import tm.com.balary.features.basket.presentation.viewmodel.BasketViewModel
 import tm.com.balary.features.product.presentation.ui.ProductBasketButton
+import tm.com.balary.locale.translateValue
 import tm.com.balary.ui.AppAlert
 import tm.com.balary.ui.AppAlertType
 import tm.com.balary.ui.ImageLoader
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
-fun BasketItem(modifier: Modifier = Modifier, navHostController: NavHostController) {
+fun BasketItem(
+    modifier: Modifier = Modifier,
+    navHostController: NavHostController,
+    product: BasketLocalEntity
+) {
+    val basketViewModel: BasketViewModel = koinNavViewModel()
     val show = remember {
         mutableStateOf(false)
     }
@@ -66,7 +78,7 @@ fun BasketItem(modifier: Modifier = Modifier, navHostController: NavHostControll
                 color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(10.dp)
             ),
-            url = "",
+            url = product.thumbnail,
             contentScale = ContentScale.Inside
         )
 
@@ -77,7 +89,7 @@ fun BasketItem(modifier: Modifier = Modifier, navHostController: NavHostControll
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    "Product name",
+                    translateValue(product,"title"),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.W900
                     ),
@@ -101,7 +113,7 @@ fun BasketItem(modifier: Modifier = Modifier, navHostController: NavHostControll
             }
 
             Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna",
+                translateValue(product, "description"),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 overflow = TextOverflow.Ellipsis,
@@ -116,11 +128,17 @@ fun BasketItem(modifier: Modifier = Modifier, navHostController: NavHostControll
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 ProductBasketButton(
-                    modifier = Modifier.width(120.dp).height(40.dp)
+                    modifier = Modifier.width(120.dp).height(40.dp),
+                    initialCount = product.count,
+                    onCountChange = { newCount->
+                        basketViewModel.addBasket(product.copy(
+                            count = newCount
+                        ))
+                    }
                 )
 
                 Text(
-                    "175,00 m.",
+                    "${product.total()} m.",
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.W900
                     ),

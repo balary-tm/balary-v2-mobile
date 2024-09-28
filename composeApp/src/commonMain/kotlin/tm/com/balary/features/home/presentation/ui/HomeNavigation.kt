@@ -8,10 +8,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import tm.com.balary.features.about.presentation.ui.About
 import tm.com.balary.features.address.presentation.ui.AddAddress
 import tm.com.balary.features.address.presentation.ui.Address
 import tm.com.balary.features.address.presentation.ui.AddressFields
+import tm.com.balary.features.category.domain.model.CategoryModel
 import tm.com.balary.features.category.presentation.ui.subcategory.SubCategory
 import tm.com.balary.features.contact.presentation.ui.Chats
 import tm.com.balary.features.order.presentation.ui.OrderDetails
@@ -58,18 +60,22 @@ fun HomeNavigation() {
 }
 
 fun NavGraphBuilder.commonRoutes(navHostController: NavHostController) {
-    composable<SubCategoryScreen> {
-        SubCategory(navHostController = navHostController)
+    composable<SubCategoryScreen> { backStack->
+        val args = backStack.toRoute<SubCategoryScreen>()
+        SubCategory(navHostController = navHostController, parentId = args.parentId)
     }
-    composable<ProductsScreen> {
-        ProductList(Modifier.fillMaxSize(), navHostController)
+    composable<ProductsScreen> { back->
+        val args = back.toRoute<ProductsScreen>()
+        ProductList(Modifier.fillMaxSize(), navHostController, args)
     }
-    composable<ProductDetailScreen> {
-        ProductDetail(Modifier.fillMaxSize(), navHostController)
+    composable<ProductDetailScreen> { back->
+        val args = back.toRoute<ProductDetailScreen>()
+        ProductDetail(Modifier.fillMaxSize(), navHostController, args.productId)
     }
     composable<ProductReviewScreen> {
         ProductReview(navHostController = navHostController)
     }
+
 
     composable<FilterScreen> {
         Filter(

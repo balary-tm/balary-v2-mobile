@@ -3,10 +3,16 @@ package tm.com.balary.router
 import kotlinx.serialization.Serializable
 
 @Serializable
-object ProductDetailScreen
+data class ProductDetailScreen(
+    val productId: String
+)
 
 @Serializable
-object ProductsScreen
+data class ProductsScreen(
+    val categoryId: String? = null,
+    val title_tm: String,
+    val title_ru: String
+)
 
 @Serializable
 object FilterScreen
@@ -15,7 +21,9 @@ object FilterScreen
 object HomeScreen
 
 @Serializable
-object SubCategoryScreen
+data class SubCategoryScreen(
+    val parentId: String
+)
 
 @Serializable
 object CategoryScreen

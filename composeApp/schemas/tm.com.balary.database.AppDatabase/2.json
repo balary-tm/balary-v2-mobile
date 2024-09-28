@@ -1,0 +1,61 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "12b58a22cc095f067a925ec8b822fa09",
+    "entities": [
+      {
+        "tableName": "BannerLocalEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `external_url` TEXT, `media_path` TEXT, `media_type` TEXT, `destination_type` TEXT, `destination_id` TEXT, `thumbnail_path` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "external_url",
+            "columnName": "external_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "media_path",
+            "columnName": "media_path",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "media_type",
+            "columnName": "media_type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "destination_type",
+            "columnName": "destination_type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "destination_id",
+            "columnName": "destination_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "thumbnail_path",
+            "columnName": "thumbnail_path",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '12b58a22cc095f067a925ec8b822fa09')"
+    ]
+  }
+}

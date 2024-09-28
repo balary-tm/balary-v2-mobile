@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     kotlin("plugin.serialization") version "1.9.10"
     alias(libs.plugins.com.google.devtools.ksp)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -29,6 +30,8 @@ kotlin {
         framework {
             baseName = "composeApp"
             isStatic = false
+            // Required when using NativeSQLiteDriver
+            linkerOpts.add("-lsqlite3")
         }
         pod("MapLibre") {
             version = "6.4.2"
@@ -93,6 +96,27 @@ kotlin {
             // markdown
             implementation(libs.markdown)
             implementation(libs.markdown.m3)
+
+            // shimmer
+            implementation(libs.shimmer)
+
+            // room database
+            implementation(libs.androidx.paging.common)
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
+            implementation(libs.sqlite)
+
+            // reflect
+            implementation(kotlin("reflect"))
+
+            // toast
+            implementation(libs.toast)
+
+            // lottie
+            implementation(libs.compottie)
+//            implementation(libs.compottie.network)
+            implementation(libs.compottie.resources)
+            implementation(libs.compottie.dot)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -122,6 +146,9 @@ kotlin {
 
             // maplibre
             implementation(libs.maplibre)
+
+            implementation(libs.androidx.room.paging)
+
         }
     }
 }
@@ -160,4 +187,15 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+}
+
+dependencies {
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    add("kspIosX64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }

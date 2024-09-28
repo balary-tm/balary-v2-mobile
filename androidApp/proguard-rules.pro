@@ -22,5 +22,8 @@
 -dontwarn com.ryanharter.auto.value.gson.GsonTypeAdapterFactory
 -dontwarn org.slf4j.impl.StaticLoggerBinder
 
+-keep class tm.com.balary.features.home.data.entity.** { *; }
+
+
 -keep class com.sun.jna.** { *; }
 -keep class * implements com.sun.jna.** { *; }

@@ -10,7 +10,7 @@ import tm.com.balary.features.home.presentation.viewmodel.HomeViewModel
 
 val homeModule = module {
     viewModel { HomeToolbarViewModel() }
-    single<HomeRepository> { HomeRepositoryImpl(get()) }
+    single<HomeRepository> { HomeRepositoryImpl(get(), get()) }
     single { HomeUseCase(get()) }
     viewModel { HomeViewModel(get()) }
 }

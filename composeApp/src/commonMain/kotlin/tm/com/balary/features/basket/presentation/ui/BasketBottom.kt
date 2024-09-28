@@ -99,7 +99,7 @@ fun BasketBottom(
             )
 
             Text(
-                "90,00 m.",
+                "$total m.",
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.W900,
                     fontSize = 18.sp

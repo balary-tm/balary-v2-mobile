@@ -5,6 +5,11 @@
     "sourceSetName": "iosMain"
   },
   {
+    "moduleId": "androidx.sqlite:sqlite-bundled:2.5.0-alpha07",
+    "file": "/Users/sanlyozgerish/AndroidStudioProjects/Balary/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/androidx.sqlite-sqlite-bundled-2.5.0-alpha07-nativeMain-cinterop/androidx.sqlite_sqlite-bundled-cinterop-androidXBundledSqlite-FU0lbw.klib",
+    "sourceSetName": "nativeMain"
+  },
+  {
     "moduleId": "org.jetbrains.kotlinx:atomicfu:0.23.2",
     "file": "/Users/sanlyozgerish/AndroidStudioProjects/Balary/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/org.jetbrains.kotlinx-atomicfu-0.23.2-nativeMain-cinterop/org.jetbrains.kotlinx_atomicfu-cinterop-interop-yBS35w.klib",
     "sourceSetName": "nativeMain"
@@ -13,6 +18,11 @@
     "moduleId": "org.jetbrains.compose.ui:ui-uikit:1.7.0-beta02",
     "file": "/Users/sanlyozgerish/AndroidStudioProjects/Balary/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/org.jetbrains.compose.ui-ui-uikit-1.7.0-beta02-uikitMain-cinterop/org.jetbrains.compose.ui_ui-uikit-cinterop-utils-aNVDjg.klib",
     "sourceSetName": "uikitMain"
+  },
+  {
+    "moduleId": "androidx.sqlite:sqlite-framework:2.5.0-alpha07",
+    "file": "/Users/sanlyozgerish/AndroidStudioProjects/Balary/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/androidx.sqlite-sqlite-framework-2.5.0-alpha07-nativeMain-cinterop/androidx.sqlite_sqlite-framework-cinterop-sqlite3-1qnQzw.klib",
+    "sourceSetName": "nativeMain"
   },
   {
     "moduleId": "io.ktor:ktor-utils:2.3.12",

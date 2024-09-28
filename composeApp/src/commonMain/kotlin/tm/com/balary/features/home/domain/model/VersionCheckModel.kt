@@ -1,6 +1,8 @@
 package tm.com.balary.features.home.domain.model
 
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class VersionCheckModel(
     val description_ru: String,
     val description_tm: String,
