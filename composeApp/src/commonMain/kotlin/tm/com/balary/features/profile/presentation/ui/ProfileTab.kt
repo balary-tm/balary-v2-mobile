@@ -46,6 +46,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import tm.com.balary.features.about.presentation.ui.AboutScreen
 import tm.com.balary.features.address.presentation.ui.AddressScreen
+import tm.com.balary.features.auth.data.settings.AuthSettings
 import tm.com.balary.features.contact.presentation.ui.ChatScreen
 import tm.com.balary.features.order.presentation.ui.OrderHistoryScreen
 import tm.com.balary.features.payment.presentation.ui.PaymentScreen
@@ -107,6 +108,7 @@ fun Profile(modifier: Modifier = Modifier, navHostController: NavHostController 
     val strings = LocalStrings.current
     val authState = LocalAuth.current
 
+
     val openLanguage = remember {
         mutableStateOf(false)
     }
@@ -122,9 +124,18 @@ fun Profile(modifier: Modifier = Modifier, navHostController: NavHostController 
     val darkTheme = LocalDarkMode.current
     val isSystemInDark = isSystemInDarkTheme()
 
+    val authSettings: AuthSettings = koinInject()
+
     AppAlert(
         show = logout.value,
         onDismiss = {
+            logout.value = false
+        },
+        onConfirm = {
+            authSettings.saveToken("")
+            authState.value = authState.value.copy(
+                logged = false
+            )
             logout.value = false
         },
         title = strings.attention,
@@ -281,9 +292,7 @@ fun Profile(modifier: Modifier = Modifier, navHostController: NavHostController 
             text = strings.logout,
             onClick = {
                 logout.value = true
-                authState.value = authState.value.copy(
-                    logged = false
-                )
+
             }
         )
     )

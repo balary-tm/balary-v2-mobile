@@ -13,13 +13,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -38,25 +42,42 @@ import balary.composeapp.generated.resources.eye
 import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.dokar.sonner.Toast
+import com.dokar.sonner.ToastType
+import com.dokar.sonner.Toaster
+import com.dokar.sonner.rememberToasterState
 import org.jetbrains.compose.resources.painterResource
+import tm.com.balary.features.auth.presentation.viewmodel.AuthViewModel
 import tm.com.balary.router.AppTabScreen
 import tm.com.balary.state.LocalAppState
+import tm.com.balary.state.LocalAuth
+import tm.com.balary.state.LocalDarkMode
 
 @Composable
 fun SignIn(
     modifier: Modifier = Modifier,
     isStart: Boolean = false,
     onSignUp: () -> Unit,
+    authViewModel: AuthViewModel,
     onForgotPassword: () -> Unit,
 ) {
-    val fullName = rememberSaveable {
-        mutableStateOf("")
-    }
+    val navigator = LocalNavigator.currentOrThrow
     val show = rememberSaveable {
         mutableStateOf(false)
     }
     val appState = LocalAppState.current
     val strings = LocalStrings.current
+    val signInState = authViewModel.loginFormState
+    val loginState = authViewModel.signInState.collectAsState()
+    val isDark = LocalDarkMode.current
+    val toaster = rememberToasterState()
+    val authState = LocalAuth.current
+    Toaster(
+        state = toaster,
+        darkTheme = isDark.value,
+        richColors = true,
+        alignment = Alignment.TopCenter
+    )
     Column(
         modifier.fillMaxWidth().background(
             color = MaterialTheme.colorScheme.surface,
@@ -77,37 +98,27 @@ fun SignIn(
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = fullName.value,
+            value = signInState.value.phone,
             onValueChange = {
-                fullName.value = it
+                authViewModel.onLoginPhoneNumberChange(it)
             },
-            maxLines = 1,
-            singleLine = true,
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                unfocusedLabelColor = MaterialTheme.colorScheme.outline,
-                focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                errorTextColor = MaterialTheme.colorScheme.onSurface,
-                disabledTextColor = MaterialTheme.colorScheme.onSurface
-            ),
-            textStyle = MaterialTheme.typography.bodyLarge.copy(
-                fontWeight = FontWeight.W700
-            ),
-            label = {
-                Text(strings.fullName)
+            isError = signInState.value.phoneError,
+            supportingText = {
+                if (signInState.value.phoneError) {
+                    Text(
+                        strings.phoneNumberError,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
             },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            )
-        )
-
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = fullName.value,
-            onValueChange = {
-                fullName.value = it
+            trailingIcon = {
+                if (signInState.value.phoneError) {
+                    Icon(
+                        Icons.Default.Info,
+                        contentDescription = "error",
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
             },
             prefix = {
                 Text(
@@ -141,9 +152,18 @@ fun SignIn(
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = fullName.value,
+            value = signInState.value.password,
             onValueChange = {
-                fullName.value = it
+                authViewModel.onLoginPasswordChange(it)
+            },
+            isError = signInState.value.passwordError,
+            supportingText = {
+                if (signInState.value.passwordError) {
+                    Text(
+                        strings.passwordError,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
             },
             maxLines = 1,
             singleLine = true,
@@ -202,20 +222,48 @@ fun SignIn(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
             onClick = {
-                if(isStart) {
-                    appState.value = appState.value.copy(
-                        isFirst = false
+                val isValid = authViewModel.validateLoginForm()
+                if (isValid) {
+                    authViewModel.login(
+                        onError = { message ->
+                            message?.let {
+                                toaster.show(
+                                    message,
+                                    type = ToastType.Error
+                                )
+                            }
+                        },
+                        onSuccess = {
+                            if(isStart) {
+                                appState.value = appState.value.copy(
+                                    isFirst = false
+                                )
+                            }
+                            authState.value = authState.value.copy(
+                                logged = true
+                            )
+                            navigator.replaceAll(AppTabScreen())
+                        }
                     )
+
                 }
+
             }
         ) {
-            Text(
-                strings.signIn,
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.W700
+            if (loginState.value.loading) {
+                CircularProgressIndicator(
+                    Modifier.size(30.dp),
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
-            )
+            } else {
+                Text(
+                    strings.signIn,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.W700
+                    )
+                )
+            }
         }
 
         Row(

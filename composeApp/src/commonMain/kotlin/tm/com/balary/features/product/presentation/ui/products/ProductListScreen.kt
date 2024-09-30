@@ -49,6 +49,7 @@ import tm.com.balary.features.basket.presentation.viewmodel.BasketViewModel
 import tm.com.balary.features.category.presentation.ui.subcategory.ProductMiniCategory
 import tm.com.balary.features.category.presentation.ui.subcategory.ProductMiniCategorySkeleton
 import tm.com.balary.features.category.presentation.viewmodel.CategoryViewModel
+import tm.com.balary.features.favorite.presentation.viewmodel.FavoriteViewModel
 import tm.com.balary.features.home.presentation.ui.banner.SearchInput
 import tm.com.balary.features.product.presentation.ui.FilterBar
 import tm.com.balary.features.product.presentation.ui.ProductCard
@@ -84,6 +85,7 @@ fun ProductList(
     val categoryScrollController = rememberLazyListState()
     val basketViewModel: BasketViewModel = koinNavViewModel()
     val basketState = basketViewModel.basketState.collectAsState()
+    val favoriteViewModel: FavoriteViewModel = koinNavViewModel()
     LaunchedEffect(true) {
         basketViewModel.getBasket()
     }
@@ -206,7 +208,8 @@ fun ProductList(
                             basketList = basketState.value.products,
                             onBasketAdd = {item->
                                 basketViewModel.addBasket(item)
-                            }
+                            },
+                            favoriteViewModel = favoriteViewModel
                         )
                     }
                     item(

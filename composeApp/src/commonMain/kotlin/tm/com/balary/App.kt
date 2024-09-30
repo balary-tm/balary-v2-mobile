@@ -14,6 +14,7 @@ import tm.com.balary.features.auth.di.authModule
 import tm.com.balary.features.basket.di.basketModule
 import tm.com.balary.features.category.di.categoryModule
 import tm.com.balary.features.contact.di.chatModule
+import tm.com.balary.features.favorite.di.favoriteModule
 import tm.com.balary.features.home.di.homeModule
 import tm.com.balary.features.onboarding.presentation.ui.OnBoardingScreen
 import tm.com.balary.features.product.di.productModule
@@ -36,7 +37,8 @@ fun koinConfiguration(context: Any?) = koinApplication {
         categoryModule,
         productModule,
         authModule,
-        basketModule
+        basketModule,
+        favoriteModule
     )
 }
 

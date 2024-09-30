@@ -60,6 +60,9 @@ fun BasketItem(
         onDismiss = {
             show.value = false
         },
+        onConfirm = {
+            basketViewModel.deleteById(product.id)
+        },
         title = strings.confirmation,
         message = buildAnnotatedString {
             append(strings.removeFromBasket)

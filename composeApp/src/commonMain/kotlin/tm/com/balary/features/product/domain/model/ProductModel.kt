@@ -17,6 +17,7 @@ data class ProductModel(
     val description_tm: String,
     val description_ru: String,
     val category_id: Int? = null,
+    val isFavorite: Boolean = false
 ) {
     fun toBasketEntity(count: Int): BasketLocalEntity {
         return BasketLocalEntity(

@@ -2,8 +2,10 @@ package tm.com.balary.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -33,7 +35,9 @@ import org.jetbrains.compose.resources.painterResource
 fun AppError(
     modifier: Modifier = Modifier,
     text: String = LocalStrings.current.somethingWentWrong,
-    imageModifier: Modifier = Modifier.width(150.dp).height(130.dp)
+    imageModifier: Modifier = Modifier.width(150.dp).height(130.dp),
+    showAction: Boolean = false,
+    action: @Composable () -> Unit = {}
 ) {
     val composition by rememberLottieComposition {
         LottieCompositionSpec.JsonString(
@@ -63,7 +67,12 @@ fun AppError(
             color = MaterialTheme.colorScheme.onSurface,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(0.6f)
         )
+        if(showAction) {
+            Spacer(Modifier.height(20.dp))
+            action()
+        }
     }
 }

@@ -198,7 +198,6 @@ data class Strings(
     val discount: String,
 
 
-
     val profileInfo: String,
     val email2: String,
     val dateOfBirth: String,
@@ -225,8 +224,17 @@ data class Strings(
 
     val somethingWentWrong: String,
     val noData: String,
+    val color: String,
 
-)
+    // auth
+    val fullNameError: String,
+    val passwordError: String,
+    val phoneNumberError: String,
+    val confirmPasswordError: String,
+    val passwordNotMatch: String,
+    val pleaseAuth: String
+
+    )
 
 @LyricistStrings(languageTag = Locales.TURKMEN, default = true)
 val TurkmenStrings = Strings(
@@ -427,5 +435,12 @@ val TurkmenStrings = Strings(
     somethingWentWrong = "Something went wrong",
     noData = "Maglumat ýok",
     recommended = "Maslahat beryaris",
-    bestSeller = "In kop satylan"
+    bestSeller = "In kop satylan",
+    color = "Renki",
+    fullNameError = "Doly adynyzy girizmediniz",
+    passwordError = "Acar sozinizi girizmediniz",
+    phoneNumberError = "Telefon belginizi girizmediniz",
+    confirmPasswordError = "Acar sozuniz gaytalan!",
+    passwordNotMatch = "Acar sozleri menzesh dal!",
+    pleaseAuth = "Bu sahypadan peydalanmak ucin ulgama girin"
 )

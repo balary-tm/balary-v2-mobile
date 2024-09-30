@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupPositionProvider
+import cafe.adriel.lyricist.LocalStrings
 import kotlinx.coroutines.launch
 import tm.com.balary.features.product.data.entity.single.OtherVariantItem
 import tm.com.balary.locale.translateValue
@@ -110,8 +111,8 @@ fun ProductVariant(
                                     positionProvider = TooltipDefaults.rememberRichTooltipPositionProvider(),
                                     tooltip = {
                                         RichTooltip(
-                                            title = { Text("Smart Cycle") },
-                                            text = { Text("If enabled, the cycle will automatically be detected, starting with the highest paycheck") }
+                                            title = { Text(LocalStrings.current.color.plus(":")) },
+                                            text = { Text(translateValue(value,"value")) }
                                         )
                                     },
                                 ) {

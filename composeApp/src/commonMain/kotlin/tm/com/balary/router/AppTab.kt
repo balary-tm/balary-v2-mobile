@@ -25,6 +25,7 @@ import tm.com.balary.state.LocalAppState
 import tm.com.balary.state.LocalDarkMode
 import tm.com.balary.state.LocalTABNavigator
 import tm.com.balary.ui.AppBottomNav
+import tm.com.balary.ui.CheckAuthContainer
 
 
 class AppTabScreen : Screen {
@@ -84,7 +85,9 @@ fun AppTab(modifier: Modifier = Modifier) {
                 }
 
                 composable(Router.FAVORITE_ROUTE) {
-                    FavoriteNavigation()
+                    CheckAuthContainer(Modifier.fillMaxSize()) {
+                        FavoriteNavigation()
+                    }
                 }
 
                 composable(Router.PROFILE_ROUTE) {

@@ -25,18 +25,14 @@ data class BasketLocalEntity(
     }
 
     fun priceWithoutDiscount(): Double {
-        val realPrice =
-            if (discount > 0) priceWithDiscount + ((priceWithDiscount * 100) % discount)
-            else priceWithDiscount
-
-        return realPrice * count
+        return price * count
     }
 
     fun discountPrice(): Double {
-        val realPrice =
-            if (discount > 0) (priceWithDiscount * 100) % discount
+        val discountAmount =
+            if (discount > 0) (price * (discount / 100))
             else 0.0
 
-        return realPrice * count
+        return discountAmount * count
     }
 }

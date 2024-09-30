@@ -33,6 +33,7 @@ enum class AppAlertType {
 fun AppAlert(
     show: Boolean = false,
     onDismiss: () -> Unit,
+    onConfirm: () -> Unit = {},
     title: String,
     message: AnnotatedString,
     type: AppAlertType = AppAlertType.INFO
@@ -100,6 +101,7 @@ fun AppAlert(
                         shape = RoundedCornerShape(5.dp),
                         onClick = {
                             onDismiss()
+                            onConfirm()
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = if (type == AppAlertType.DANGER)

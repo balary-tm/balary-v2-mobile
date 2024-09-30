@@ -40,6 +40,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 import tm.com.balary.core.loremIpsum
 import tm.com.balary.features.basket.data.local.BasketLocalEntity
 import tm.com.balary.features.basket.presentation.viewmodel.BasketViewModel
+import tm.com.balary.features.favorite.presentation.viewmodel.FavoriteViewModel
 import tm.com.balary.features.product.domain.model.ProductModel
 import tm.com.balary.features.product.presentation.ui.detail.ProductDetailScreen
 import tm.com.balary.locale.translateValue
@@ -65,7 +66,8 @@ fun ProductCard(
     navHostController: NavHostController = rememberNavController(),
     basketList: List<BasketLocalEntity>,
     onBasketAdd: (BasketLocalEntity)-> Unit,
-    productModel: ProductModel? = null
+    productModel: ProductModel? = null,
+    favoriteViewModel: FavoriteViewModel
 ) {
     val shape = RoundedCornerShape(4.dp)
     val strings = LocalStrings.current
@@ -124,13 +126,18 @@ fun ProductCard(
             }
 
             Row(
-                Modifier.fillMaxWidth(),
+                Modifier.fillMaxWidth().height(40.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 FavoriteButton(
                     modifier = Modifier,
-                    isLiked = false
+                    isLiked = productModel!!.isFavorite,
+                    productId = productModel?.id.toString(),
+                    onFavoriteChanged = { newValue->
+
+                    },
+                    favoriteViewModel = favoriteViewModel
                 )
 
                 ProductTag(

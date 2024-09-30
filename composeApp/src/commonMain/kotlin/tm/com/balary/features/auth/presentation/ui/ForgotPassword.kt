@@ -6,14 +6,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -27,12 +33,31 @@ import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.dokar.sonner.ToastType
+import com.dokar.sonner.Toaster
+import com.dokar.sonner.rememberToasterState
+import tm.com.balary.features.auth.data.entity.request.prettyPhone
+import tm.com.balary.features.auth.presentation.viewmodel.AuthViewModel
+import tm.com.balary.state.LocalDarkMode
 
-class ForgotPassword : Screen {
+class ForgotPassword(
+    private val authViewModel: AuthViewModel,
+    private val isStart: Boolean = false
+) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val strings = LocalStrings.current
+        val formState = authViewModel.changePasswordFormState
+        val isDark = LocalDarkMode.current
+        val toaster = rememberToasterState()
+        val sentCodeState = authViewModel.sendOtpState.collectAsState()
+        Toaster(
+            state = toaster,
+            darkTheme = isDark.value,
+            richColors = true,
+            alignment = Alignment.TopCenter
+        )
         BackScreen(Modifier.fillMaxSize(), strings.editPassword, navHostController = rememberNavController(), onBack = {
             navigator.pop()
         }) {
@@ -55,9 +80,27 @@ class ForgotPassword : Screen {
                 )
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = "",
+                    value = formState.value.phone,
                     onValueChange = {
-
+                        authViewModel.onPasswordChangePhone(it)
+                    },
+                    isError = formState.value.phoneError,
+                    supportingText = {
+                        if(formState.value.phoneError) {
+                            Text(
+                                strings.phoneNumberError,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    },
+                    trailingIcon = {
+                        if (formState.value.phoneError) {
+                            Icon(
+                                Icons.Default.Info,
+                                contentDescription = "error",
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                        }
                     },
                     prefix = {
                         Text(
@@ -92,16 +135,41 @@ class ForgotPassword : Screen {
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(10.dp),
                     onClick = {
-                        navigator.push(ConfirmationScreen())
+                        val isValid = authViewModel.validateChangePasswordPhone()
+                        if (isValid) {
+                            authViewModel.sentOtp(
+                                formState.value.phone,
+                                onError = { message->
+                                    message?.let {
+                                        toaster.show(
+                                            message,
+                                            type = ToastType.Error
+                                        )
+                                    }
+                                },
+                                onSuccess = {
+                                    navigator.push(ConfirmationScreen(
+                                        formState.value.phone,
+                                        authViewModel,
+                                        isChangePassword = true,
+                                        isFirst = isStart
+                                    ))
+                                }
+                            )
+                        }
                     }
                 ) {
-                    Text(
-                        strings.sendCode,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.W700
+                    if(sentCodeState.value.loading) {
+                        CircularProgressIndicator(Modifier.size(30.dp), color = MaterialTheme.colorScheme.onPrimary)
+                    } else {
+                        Text(
+                            strings.sendCode,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontWeight = FontWeight.W700
+                            )
                         )
-                    )
+                    }
                 }
             }
         }

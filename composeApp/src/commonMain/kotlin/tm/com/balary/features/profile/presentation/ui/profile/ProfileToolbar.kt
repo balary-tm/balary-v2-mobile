@@ -37,6 +37,7 @@ import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
+import tm.com.balary.features.auth.presentation.ui.AuthScreen
 import tm.com.balary.features.home.presentation.ui.banner.LogoText
 import tm.com.balary.features.profile.presentation.ui.edit.EditProfileScreen
 import tm.com.balary.state.LocalAuth
@@ -49,6 +50,7 @@ fun ProfileToolbar(
     val authState = LocalAuth.current
     val shape = RoundedCornerShape(0.dp, 0.dp, 20.dp, 20.dp)
     val strings = LocalStrings.current
+    val navigator = LocalNavigator.currentOrThrow
     Column(
         modifier = modifier.background(Color.Transparent).background(
             color = MaterialTheme.colorScheme.tertiary,
@@ -154,7 +156,7 @@ fun ProfileToolbar(
                     containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
                 ),
                 onClick = {
-
+                    navigator.push(AuthScreen())
                 }
             ) {
                 Text(

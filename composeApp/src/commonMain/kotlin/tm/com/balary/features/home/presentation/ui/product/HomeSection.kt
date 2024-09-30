@@ -24,6 +24,7 @@ import org.koin.compose.viewmodel.koinNavViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import tm.com.balary.features.ads.presentation.ui.AdsComponent
 import tm.com.balary.features.basket.presentation.viewmodel.BasketViewModel
+import tm.com.balary.features.favorite.presentation.viewmodel.FavoriteViewModel
 import tm.com.balary.features.home.domain.model.SlideModel
 import tm.com.balary.features.product.domain.model.ProductModel
 import tm.com.balary.features.product.presentation.ui.ProductCard
@@ -84,6 +85,7 @@ fun HomeSection(
     LaunchedEffect(true) {
         basketViewModel.getBasket()
     }
+    val favoriteViewModel: FavoriteViewModel = koinNavViewModel()
     Column(
         modifier = modifier.padding(vertical = 16.dp)
     ) {
@@ -125,7 +127,8 @@ fun HomeSection(
                     basketList = basketState.value.products,
                     onBasketAdd = { item->
                         basketViewModel.addBasket(item)
-                    }
+                    },
+                    favoriteViewModel = favoriteViewModel
                 )
             }
         }

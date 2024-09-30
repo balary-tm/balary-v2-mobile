@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -29,7 +30,9 @@ fun BlackButton(
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.bodySmall.copy(
                 fontWeight = FontWeight.Black
-            )
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }

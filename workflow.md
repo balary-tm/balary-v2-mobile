@@ -6,3 +6,11 @@
  - [ ] ! Android video player sound not working on emulator
  - [ ] iOS navigation state save and restore
  - [ ] Home page local cache does not work after first time write
+ - [X] Add auth token save state
+ - [X] First time visit login check
+ - [X] Favorites GET/ADD/REMOVE
+ - [X] Reload data after sign in/sign up
+ - [ ] Image upload for profile avatar
+ - [ ] Sign up user terms dialog
+ - [ ] Coil not loading images
+ - [ ] after replaceAll back native button not working

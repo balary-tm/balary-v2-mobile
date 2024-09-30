@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +24,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -43,18 +46,29 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.internal.BackHandler
+import com.dokar.sonner.ToastType
+import com.dokar.sonner.Toaster
+import com.dokar.sonner.rememberToasterState
 import org.jetbrains.compose.resources.painterResource
+import tm.com.balary.features.auth.presentation.viewmodel.AuthViewModel
+import tm.com.balary.router.AppTabScreen
+import tm.com.balary.state.LocalAppState
+import tm.com.balary.state.LocalAuth
+import tm.com.balary.state.LocalDarkMode
 
-class ChangePasswordScreen : Screen {
+class ChangePasswordScreen(
+    private val authViewModel: AuthViewModel,
+    private val isFirst: Boolean = false
+) : Screen {
     @Composable
     override fun Content() {
-        ChangePassword(Modifier.fillMaxSize())
+        ChangePassword(Modifier.fillMaxSize(), authViewModel, isFirst)
     }
 }
 
 @OptIn(InternalVoyagerApi::class)
 @Composable
-fun ChangePassword(modifier: Modifier = Modifier) {
+fun ChangePassword(modifier: Modifier = Modifier, authViewModel: AuthViewModel, isFirst: Boolean) {
     val navigator = LocalNavigator.currentOrThrow
     val index = rememberSaveable {
         mutableStateOf(0)
@@ -62,9 +76,23 @@ fun ChangePassword(modifier: Modifier = Modifier) {
 
     val strings = LocalStrings.current
 
+    val formState = authViewModel.changePasswordFormState
+
+    val changePasswordState = authViewModel.changePasswordState.collectAsState()
+
     BackHandler(index.value != 0) {
         index.value = 0
     }
+    val isDark = LocalDarkMode.current
+    val toaster = rememberToasterState()
+    val authState = LocalAuth.current
+    val appState = LocalAppState.current
+    Toaster(
+        state = toaster,
+        darkTheme = isDark.value,
+        richColors = true,
+        alignment = Alignment.TopCenter
+    )
     Column(
         modifier.fillMaxSize().background(
             color = MaterialTheme.colorScheme.background
@@ -98,8 +126,18 @@ fun ChangePassword(modifier: Modifier = Modifier) {
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = "",
+                value = formState.value.password,
                 onValueChange = {
+                    authViewModel.onPasswordChangePassword(it)
+                },
+                isError = formState.value.passwordError,
+                supportingText = {
+                    if(formState.value.passwordError) {
+                        Text(
+                            strings.passwordError,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
                 },
                 maxLines = 1,
                 singleLine = true,
@@ -126,7 +164,7 @@ fun ChangePassword(modifier: Modifier = Modifier) {
                 },
                 visualTransformation = if (show.value) VisualTransformation.None else PasswordVisualTransformation(),
                 label = {
-                    Text(strings.enterNewPassword)
+                    Text(strings.password)
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = if (show.value) KeyboardType.Text else KeyboardType.Password,
@@ -134,10 +172,30 @@ fun ChangePassword(modifier: Modifier = Modifier) {
                 )
             )
 
+
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = "",
+                value = formState.value.confirmPassword,
                 onValueChange = {
+                    authViewModel.onPasswordChangeConfirmPassword(it)
+                },
+                isError = formState.value.confirmPasswordError || formState.value.isPasswordMatch.not(),
+                supportingText = {
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        if(formState.value.confirmPasswordError) {
+                            Text(
+                                strings.confirmPasswordError,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+
+                        if(formState.value.isPasswordMatch.not()) {
+                            Text(
+                                strings.passwordNotMatch,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
                 },
                 maxLines = 1,
                 singleLine = true,
@@ -164,7 +222,7 @@ fun ChangePassword(modifier: Modifier = Modifier) {
                 },
                 visualTransformation = if (show.value) VisualTransformation.None else PasswordVisualTransformation(),
                 label = {
-                    Text(strings.reWritePassword)
+                    Text(strings.confirmPassword)
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = if (show.value) KeyboardType.Text else KeyboardType.Password,
@@ -176,16 +234,44 @@ fun ChangePassword(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
                 onClick = {
+                    val isValid = authViewModel.validateChangePassword()
+                    if(isValid) {
+                        authViewModel.changePassword(
+                            onError = { message->
+                                message?.let {
+                                    toaster.show(
+                                        message,
+                                        type = ToastType.Error
+                                    )
+                                }
 
+                            },
+                            onSuccess = {
+                                if(isFirst) {
+                                    appState.value = appState.value.copy(
+                                        isFirst = false
+                                    )
+                                }
+                                authState.value = authState.value.copy(
+                                    logged = true
+                                )
+                                navigator.replaceAll(AppTabScreen())
+                            }
+                        )
+                    }
                 }
             ) {
-                Text(
-                    strings.accept,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.W700
+                if(changePasswordState.value.loading) {
+                    CircularProgressIndicator(Modifier.size(30.dp), color = MaterialTheme.colorScheme.onPrimary)
+                } else {
+                    Text(
+                        strings.accept,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.W700
+                        )
                     )
-                )
+                }
             }
 
 

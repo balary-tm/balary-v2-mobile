@@ -17,9 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.internal.BackHandler
+import org.koin.compose.viewmodel.koinNavViewModel
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
+import tm.com.balary.features.auth.presentation.viewmodel.AuthViewModel
 
 class AuthScreen(
     private val isStart: Boolean = false
@@ -30,13 +35,15 @@ class AuthScreen(
     }
 }
 
-@OptIn(InternalVoyagerApi::class)
+@OptIn(InternalVoyagerApi::class, KoinExperimentalAPI::class)
 @Composable
 fun Auth(modifier: Modifier = Modifier, isStart: Boolean = false) {
     val navigator = LocalNavigator.currentOrThrow
     val index = rememberSaveable {
         mutableStateOf(0)
     }
+
+    val authViewModel: AuthViewModel = koinViewModel()
 
     BackHandler(index.value != 0) {
         index.value = 0
@@ -50,14 +57,15 @@ fun Auth(modifier: Modifier = Modifier, isStart: Boolean = false) {
         Spacer(Modifier.height(8.dp))
         AnimatedContent(index.value) {
             if (it == 0) {
-                SignUp(Modifier.fillMaxWidth(), isStart = isStart, onSignIn = {
-                    index.value = 1
-                })
-            } else {
                 SignIn(Modifier.fillMaxWidth(), isStart = isStart, onSignUp = {
+                    index.value = 1
+                }, authViewModel = authViewModel, onForgotPassword = {
+                    navigator.push(ForgotPassword(authViewModel, isStart))
+                })
+
+            } else {
+                SignUp(Modifier.fillMaxWidth(), isStart = isStart, authViewModel, onSignIn = {
                     index.value = 0
-                }, onForgotPassword = {
-                    navigator.push(ForgotPassword())
                 })
             }
         }

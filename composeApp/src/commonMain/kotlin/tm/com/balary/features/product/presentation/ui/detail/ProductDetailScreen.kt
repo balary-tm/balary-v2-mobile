@@ -60,7 +60,11 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import chaintech.videoplayer.model.PlayerConfig
 import chaintech.videoplayer.ui.video.VideoPlayerView
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinNavViewModel
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
+import tm.com.balary.features.basket.presentation.viewmodel.BasketViewModel
+import tm.com.balary.features.favorite.presentation.viewmodel.FavoriteViewModel
 import tm.com.balary.features.home.presentation.ui.banner.SearchInput
 import tm.com.balary.features.home.presentation.ui.product.HomeSection
 import tm.com.balary.features.product.presentation.ui.FavoriteButton
@@ -81,7 +85,9 @@ class ProductDetailScreen : Screen {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
+    KoinExperimentalAPI::class
+)
 @Composable
 fun ProductDetail(
     modifier: Modifier = Modifier,
@@ -97,6 +103,8 @@ fun ProductDetail(
     }
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+    val favoriteViewModel: FavoriteViewModel = koinNavViewModel()
 
 
 
@@ -259,7 +267,13 @@ fun ProductDetail(
                                 )
                             ) {
                                 FavoriteButton(
-                                    modifier = Modifier.size(30.dp)
+                                    modifier = Modifier.size(30.dp),
+                                    isLiked = true,
+                                    productId = product.id.toString(),
+                                    onFavoriteChanged = { newValue->
+
+                                    },
+                                    favoriteViewModel = favoriteViewModel
                                 )
 
                                 product.label?.let { label->
@@ -494,8 +508,15 @@ fun ProductDetail(
         }
 
 
-        productState.value.product?.let {
+        productState.value.product?.let { prod->
             Spacer(Modifier.height(8.dp))
+
+            val basketViewModel: BasketViewModel = koinNavViewModel()
+            val basketState = basketViewModel.basketState.collectAsState()
+            val basketList = basketState.value.products
+            LaunchedEffect(true) {
+                basketViewModel.getBasket()
+            }
 
             Column(
                 Modifier.fillMaxWidth().background(
@@ -505,10 +526,10 @@ fun ProductDetail(
             ) {
                 ProductBasketButton(
                     modifier = Modifier.fillMaxWidth().height(44.dp),
-                    initialCount = 0,
                     bigButton = true,
-                    onCountChange = {
-
+                    initialCount = basketList.find { it.id == prod.id }?.count?:0,
+                    onCountChange = { newCount->
+                        basketViewModel.addBasket(prod.toBasketEntity(newCount))
                     }
                 )
             }

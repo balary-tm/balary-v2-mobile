@@ -9,6 +9,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.compose.rememberNavController
 import cafe.adriel.voyager.navigator.tab.Tab
 import org.koin.compose.koinInject
+import tm.com.balary.features.auth.data.settings.AuthSettings
 import tm.com.balary.features.home.presentation.ui.HomeTab
 import tm.com.balary.features.profile.data.setting.AppSettings
 import tm.com.balary.features.profile.domain.model.AppState
@@ -22,6 +23,7 @@ fun Composition(
     val homeNavHostController = rememberNavController()
     val categoryNavHostController = rememberNavController()
     val appSettings: AppSettings = koinInject()
+    val authSettings: AuthSettings = koinInject()
     val isSystemDark = isSystemInDarkTheme()
     val isDark = when(appSettings.getTheme()) {
         AppTheme.SYSTEM -> isSystemDark
@@ -43,7 +45,7 @@ fun Composition(
                 mutableStateOf(isDark)
             },
             LocalAuth provides remember {
-                mutableStateOf(AuthState())
+                mutableStateOf(AuthState(logged = authSettings.getToken().isNullOrEmpty().not()))
             },
             LocalTABNavigator provides remember {
                 mutableStateOf(HomeTab)

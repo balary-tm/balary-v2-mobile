@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,9 +24,12 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -44,8 +48,26 @@ import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.dokar.sonner.Toast
+import com.dokar.sonner.ToastType
+import com.dokar.sonner.Toaster
+import com.dokar.sonner.rememberToasterState
+import kotlinx.coroutines.delay
+import org.koin.compose.viewmodel.koinNavViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
+import tm.com.balary.features.auth.data.entity.request.prettyPhone
+import tm.com.balary.features.auth.presentation.viewmodel.AuthViewModel
+import tm.com.balary.router.AppTabScreen
+import tm.com.balary.state.LocalAppState
+import tm.com.balary.state.LocalAuth
+import tm.com.balary.state.LocalDarkMode
 
-class ConfirmationScreen : Screen {
+class ConfirmationScreen(
+    private val phone: String,
+    private val authViewModel: AuthViewModel,
+    private val isChangePassword: Boolean = false,
+    private val isFirst: Boolean = false
+) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -53,6 +75,29 @@ class ConfirmationScreen : Screen {
             mutableStateOf("")
         }
         val strings = LocalStrings.current
+        val countdown = rememberSaveable {
+            mutableStateOf(60)
+        }
+        val verifyOtpState = authViewModel.verifyOtpState.collectAsState()
+        val verifyPasswordOtpState = authViewModel.verifyPasswordOtpState.collectAsState()
+        val sendOtpState = authViewModel.sendOtpState.collectAsState()
+        LaunchedEffect(verifyOtpState.value.sentKey) {
+            countdown.value = 60
+            while (countdown.value>=0) {
+                countdown.value = countdown.value.minus(1)
+                delay(500L)
+            }
+        }
+        val isDark = LocalDarkMode.current
+        val toaster = rememberToasterState()
+        val authState = LocalAuth.current
+        val appState = LocalAppState.current
+        Toaster(
+            state = toaster,
+            darkTheme = isDark.value,
+            richColors = true,
+            alignment = Alignment.TopCenter
+        )
         BackScreen(Modifier.fillMaxSize(), strings.confirmation, navHostController = rememberNavController(), onBack = {
             navigator.pop()
         }) {
@@ -65,7 +110,7 @@ class ConfirmationScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        strings.sentCode.replace("{phone_number}","+99362737222"),
+                        strings.sentCode.replace("{phone_number}",phone.prettyPhone()),
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.W700,
                         ),
@@ -76,7 +121,7 @@ class ConfirmationScreen : Screen {
 
                     OtpTextField(modifier = Modifier.fillMaxWidth(),
                         otpText = otp.value,
-                        otpCount = 6,
+                        otpCount = 5,
                         onOtpTextChange = { value, _ ->
                             otp.value = value
                         })
@@ -88,16 +133,32 @@ class ConfirmationScreen : Screen {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-
-                        Text(
-                            strings.sentAgain,
-                            color = MaterialTheme.colorScheme.primary,
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                fontWeight = FontWeight.W700
-                            ),
-                            modifier = Modifier.clickable {
-                            }
-                        )
+                        if(sendOtpState.value.loading) {
+                            CircularProgressIndicator(Modifier.size(30.dp))
+                        } else {
+                            Text(
+                                if(countdown.value>0) "00:${countdown.value}" else strings.sentAgain,
+                                color = MaterialTheme.colorScheme.primary,
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontWeight = FontWeight.W700
+                                ),
+                                modifier = Modifier.clickable {
+                                    if(countdown.value<=0) {
+                                        authViewModel.sentOtp(
+                                            phone = phone,
+                                            onError = {message->
+                                                message?.let {
+                                                    toaster.show(message, type = ToastType.Error)
+                                                }
+                                            },
+                                            onSuccess = {
+                                                authViewModel.changeVerifyKey()
+                                            }
+                                        )
+                                    }
+                                }
+                            )
+                        }
                     }
                 }
                 Spacer(
@@ -115,16 +176,59 @@ class ConfirmationScreen : Screen {
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
                         onClick = {
-                            navigator.push(ChangePasswordScreen())
-                        }
+                            if(isChangePassword.not()) {
+                                authViewModel.verifyOtp(
+                                    otp.value,
+                                    onError = {message->
+                                        message?.let {
+                                            toaster.show(
+                                                message,
+                                                type = ToastType.Error
+                                            )
+                                        }
+                                    },
+                                    onSuccess = {
+                                        if(isFirst) {
+                                            appState.value = appState.value.copy(
+                                                isFirst = false
+                                            )
+                                        }
+                                        authState.value = authState.value.copy(
+                                            logged = true
+                                        )
+                                        navigator.replaceAll(AppTabScreen())
+                                    }
+                                )
+                            } else {
+                                authViewModel.verifyPasswordOtp(
+                                    otp.value,
+                                    onError = {message->
+                                        message?.let {
+                                            toaster.show(
+                                                message,
+                                                type = ToastType.Error
+                                            )
+                                        }
+                                    },
+                                    onSuccess = {
+                                        navigator.push(ChangePasswordScreen(authViewModel, isFirst))
+                                    }
+                                )
+                            }
+                        },
+                        enabled = otp.value.length == 5
                     ) {
-                        Text(
-                            strings.accept,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                fontWeight = FontWeight.W700
+                        if(verifyOtpState.value.loading || verifyPasswordOtpState.value.loading) {
+                            CircularProgressIndicator(Modifier.size(30.dp), color = MaterialTheme.colorScheme.onPrimary)
+                        } else {
+                            Text(
+                                strings.accept,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    fontWeight = FontWeight.W700
+                                )
                             )
-                        )
+                        }
                     }
 
                     Spacer(Modifier.imePadding().padding(WindowInsets.ime.asPaddingValues()))

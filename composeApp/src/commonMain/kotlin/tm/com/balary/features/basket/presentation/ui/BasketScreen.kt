@@ -73,6 +73,9 @@ fun Basket(modifier: Modifier = Modifier, navHostController: NavHostController) 
         onDismiss = {
             show.value = false
         },
+        onConfirm = {
+            basketViewModel.deleteAll()
+        },
         title = strings.confirmation,
         message = buildAnnotatedString {
             append(strings.wantClearBasket)
@@ -93,7 +96,7 @@ fun Basket(modifier: Modifier = Modifier, navHostController: NavHostController) 
                             show.value = true
                         },
                         onBack = {
-
+                            navHostController.navigateUp()
                         }
                     )
                 },
@@ -124,6 +127,7 @@ fun Basket(modifier: Modifier = Modifier, navHostController: NavHostController) 
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
             ) {
+
                 items(basketState.value.products.count()) { index->
                     val item = basketState.value.products[index]
                     BasketItem(
@@ -132,6 +136,7 @@ fun Basket(modifier: Modifier = Modifier, navHostController: NavHostController) 
                         product = item
                     )
                 }
+
                 item {
                     Column(Modifier.fillMaxWidth().padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         PriceInfo(
