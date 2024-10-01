@@ -117,6 +117,8 @@ kotlin {
 //            implementation(libs.compottie.network)
             implementation(libs.compottie.resources)
             implementation(libs.compottie.dot)
+
+            implementation(project(":store"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

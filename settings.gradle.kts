@@ -20,3 +20,4 @@ rootProject.name = "Balary"
 include(":androidApp")
 include(":composeApp")
 include(":models")
+include(":store")
