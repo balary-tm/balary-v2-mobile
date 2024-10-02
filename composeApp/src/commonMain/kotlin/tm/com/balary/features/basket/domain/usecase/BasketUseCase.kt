@@ -1,5 +1,9 @@
 package tm.com.balary.features.basket.domain.usecase
 
+import kotlinx.coroutines.flow.Flow
+import tm.com.balary.core.Resource
+import tm.com.balary.features.basket.data.entity.OrderExtraEntity
+import tm.com.balary.features.basket.data.entity.OrderRequestBody
 import tm.com.balary.features.basket.data.local.BasketLocalEntity
 import tm.com.balary.features.basket.domain.repository.BasketRepository
 
@@ -20,5 +24,12 @@ class BasketUseCase(
     }
     suspend fun deleteAll() {
         repository.deleteAll()
+    }
+    suspend fun getOrderExtra(): Flow<Resource<OrderExtraEntity>> {
+        return repository.getOrderExtra()
+    }
+
+    suspend fun sendOrder(data: OrderRequestBody): Flow<Resource<Boolean>> {
+        return repository.sendOrder(data)
     }
 }

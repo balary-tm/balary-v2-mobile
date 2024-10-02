@@ -42,6 +42,8 @@ import tm.com.balary.features.basket.presentation.viewmodel.BasketViewModel
 import tm.com.balary.features.product.presentation.ui.FilterBar
 import tm.com.balary.ui.AppAlert
 import tm.com.balary.ui.AppAlertType
+import tm.com.balary.ui.AppError
+import tm.com.balary.ui.AppLoading
 import tm.com.balary.ui.Empty
 
 class BasketScreen : Screen {
@@ -56,6 +58,12 @@ fun Basket(modifier: Modifier = Modifier, navHostController: NavHostController) 
 
     val basketViewModel: BasketViewModel = koinNavViewModel()
     val basketState = basketViewModel.basketState.collectAsState()
+    val extraState = basketViewModel.orderExtraState.collectAsState()
+
+    LaunchedEffect(true) {
+        basketViewModel.initOrderExtra()
+    }
+
 
     val show = remember {
         mutableStateOf(false)
@@ -109,57 +117,69 @@ fun Basket(modifier: Modifier = Modifier, navHostController: NavHostController) 
         },
         bottomBar = {
             if(basketState.value.products.isNotEmpty()) {
-                BasketBottom(
-                    Modifier.fillMaxWidth(),
-                    navHostController = navHostController,
-                    total = basketState.value.calculation.total
-                )
+                extraState.value.extra?.let { extra ->
+                    BasketBottom(
+                        Modifier.fillMaxWidth(),
+                        navHostController = navHostController,
+                        total = basketState.value.calculation.total.plus(extra.delivery_price?:0.0),
+                        minPrice = extra.min_total_price?:Double.MAX_VALUE
+                    )
+                }
+
             }
         },
         backgroundColor = MaterialTheme.colorScheme.background
     ) {
         if(basketState.value.products.isNotEmpty()) {
-            LazyColumn(
-                Modifier.fillMaxSize().padding(vertical = 8.dp).background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(20.dp)
-                ),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
-            ) {
+            if(extraState.value.loading) {
+                AppLoading(Modifier.fillMaxSize())
+            } else if(extraState.value.error.isNullOrEmpty().not()) {
+                AppError(Modifier.fillMaxSize())
+            } else {
+                extraState.value.extra?.let { extra->
+                    LazyColumn(
+                        Modifier.fillMaxSize().padding(vertical = 8.dp).background(
+                            color = MaterialTheme.colorScheme.surface,
+                            shape = RoundedCornerShape(20.dp)
+                        ),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
+                    ) {
 
-                items(basketState.value.products.count()) { index->
-                    val item = basketState.value.products[index]
-                    BasketItem(
-                        modifier = Modifier.fillMaxWidth(),
-                        navHostController = navHostController,
-                        product = item
-                    )
-                }
+                        items(basketState.value.products.count()) { index->
+                            val item = basketState.value.products[index]
+                            BasketItem(
+                                modifier = Modifier.fillMaxWidth(),
+                                navHostController = navHostController,
+                                product = item
+                            )
+                        }
 
-                item {
-                    Column(Modifier.fillMaxWidth().padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        PriceInfo(
-                            modifier = Modifier.fillMaxWidth(),
-                            title = strings.price,
-                            value = "${basketState.value.calculation.totalWithoutDiscount} m."
-                        )
-                        PriceInfo(
-                            modifier = Modifier.fillMaxWidth(),
-                            title = strings.deliveryPrice,
-                            value = "0,00 m."
-                        )
-                        PriceInfo(
-                            modifier = Modifier.fillMaxWidth(),
-                            title = strings.discounts,
-                            value = "-${basketState.value.calculation.discount} m.",
-                            color = MaterialTheme.colorScheme.error
-                        )
+                        item {
+                            Column(Modifier.fillMaxWidth().padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                PriceInfo(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    title = strings.price,
+                                    value = "${basketState.value.calculation.totalWithoutDiscount} m."
+                                )
+                                PriceInfo(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    title = strings.deliveryPrice,
+                                    value = extra.delivery_price.toString().plus(" m.")
+                                )
+                                PriceInfo(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    title = strings.discounts,
+                                    value = "-${basketState.value.calculation.discount} m.",
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
+                        }
+
+                        item {
+                            Spacer(Modifier.height(150.dp))
+                        }
                     }
-                }
-
-                item {
-                    Spacer(Modifier.height(150.dp))
                 }
             }
         } else {

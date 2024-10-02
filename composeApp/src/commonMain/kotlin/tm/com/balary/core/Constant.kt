@@ -2,7 +2,7 @@ package tm.com.balary.core
 
 class Constant {
     companion object {
-        const val BASE_URL = "http://192.168.198.93:3000"
+        const val BASE_URL = "http://192.168.2.93:3000"
         val VIDEO_EXTENSIONS = listOf("mp4","avi","3gp")
     }
 }

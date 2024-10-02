@@ -35,6 +35,7 @@ import tm.com.balary.router.BasketDetailScreen
 fun BasketBottom(
     modifier: Modifier = Modifier,
     total: Double = 0.0,
+    minPrice: Double = Double.MAX_VALUE,
     navHostController: NavHostController
 ) {
     val show = remember {
@@ -59,7 +60,8 @@ fun BasketBottom(
                 topStart = 20.dp,
                 topEnd = 20.dp
             )
-        ).padding(vertical = 8.dp, horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
+        ).padding(vertical = 8.dp, horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -73,7 +75,9 @@ fun BasketBottom(
                 contentDescription = "delivery status"
             )
             Text(
-                strings.minimumPriceMessage,
+                strings.minimumPriceMessage
+                    .replace("{min_price}", minPrice.toString())
+                    .replace("{free_delivery_price}", "200"),
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.W700
                 ),

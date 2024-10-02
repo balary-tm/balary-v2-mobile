@@ -14,3 +14,8 @@
  - [ ] Sign up user terms dialog
  - [ ] Coil not loading images
  - [ ] after replaceAll back native button not working
+ - [ ] error screens for all api fetching
+ - [ ] order success fix
+ - [ ] validate delivery time
+ - [ ] pop back when success
+ - [ ] if field validation failed make it focus
