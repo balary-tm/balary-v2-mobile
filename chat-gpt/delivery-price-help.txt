@@ -336,3 +336,74 @@ class BasketViewModel(
         }
     }
 }
+
+
+
+///////////////////////////////////////////
+//////////////////////////////////////////
+ANSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER
+///////////////////////////////////////////
+
+class BasketViewModel(
+    private val useCase: BasketUseCase,
+) : ViewModel() {
+    private val _basketState = MutableStateFlow(BasketState())
+    val basketState = _basketState.asStateFlow()
+
+    private val _orderExtraState = MutableStateFlow(OrderExtraState())
+    val orderExtraState = _orderExtraState.asStateFlow()
+
+    val deliveryPrice = mutableStateOf(0.0)
+    val freeDeliveryPrice = mutableStateOf(Double.MAX_VALUE)
+    val selectedDeliveryType = mutableStateOf("standard") // express, self
+    private val _checkOrderState = MutableStateFlow(CheckOrderState())
+    val checkOrderState = _checkOrderState.asStateFlow()
+
+    init {
+        observeBasketAndExtras()
+    }
+
+    private fun observeBasketAndExtras() {
+        viewModelScope.launch {
+            _basketState.collectLatest { checkDeliveryPrice() }
+            _orderExtraState.collectLatest { updateFreeDeliveryPrice() }
+        }
+    }
+
+    private fun updateFreeDeliveryPrice() {
+        freeDeliveryPrice.value = _orderExtraState.value.extra?.free_delivery_minimum ?: Double.MAX_VALUE
+        checkDeliveryPrice()
+    }
+
+    fun setDeliveryPrice(price: Double, deliveryType: String = "standard") {
+        selectedDeliveryType.value = deliveryType
+        deliveryPrice.value = price
+        checkDeliveryPrice()
+    }
+
+    fun checkDeliveryPrice() {
+        val totalAmount = _basketState.value.calculation.total
+        val extra = _orderExtraState.value.extra
+        deliveryPrice.value = when (selectedDeliveryType.value) {
+            "express" -> extra?.express_order_price ?: 0.0
+            "self" -> 0.0
+            else -> if (totalAmount >= freeDeliveryPrice.value) 0.0 else extra?.delivery_price ?: 0.0
+        }
+    }
+
+    fun getBasket(onSuccess: (Boolean) -> Unit = {}) {
+        viewModelScope.launch {
+            val products = useCase.getBasket()
+            val calculation = BasketCount(
+                totalWithoutDiscount = products.sumOf { it.priceWithoutDiscount() },
+                total = products.sumOf { it.total() },
+                discount = products.sumOf { it.discountPrice() },
+            )
+            _basketState.value = _basketState.value.copy(products = products, calculation = calculation)
+            checkDeliveryPrice()
+            onSuccess(calculation.total.plus(deliveryPrice.value) > freeDeliveryPrice.value)
+        }
+    }
+
+    // Other existing functions unchanged
+}
