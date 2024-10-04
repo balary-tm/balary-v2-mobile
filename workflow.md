@@ -1,9 +1,9 @@
 # To do
- - [ ] ! Fix video player width with horizontal pager
- - [X] ! Convert variant color hex string to Long
- - [X] ! Add tooltip for colors
- - [ ] ! iOS player not playing with LazyColumn check with https video url
- - [ ] ! Android video player sound not working on emulator
+ - [ ] Fix video player width with horizontal pager
+ - [X] Convert variant color hex string to Long
+ - [X] Add tooltip for colors
+ - [ ] iOS player not playing with LazyColumn check with https video url
+ - [ ] Android video player sound not working on emulator
  - [ ] iOS navigation state save and restore
  - [ ] Home page local cache does not work after first time write
  - [X] Add auth token save state
@@ -15,7 +15,12 @@
  - [ ] Coil not loading images
  - [ ] after replaceAll back native button not working
  - [ ] error screens for all api fetching
- - [ ] order success fix
- - [ ] validate delivery time
- - [ ] pop back when success
+ - [X] order success fix
+ - [X] validate delivery time
+ - [X] pop back when success
  - [ ] if field validation failed make it focus
+ - [ ] !connect to maplibre and add functionality
+ - [ ] !check order min_total_price and free_delivery_minimum with GPT
+ - [ ] !isFavorite
+ - [X] !order success date with GPT
+ - [ ] fix order screen markdown

@@ -9,6 +9,9 @@ import tm.com.balary.state.LocalAppState
 
 @Composable
 inline fun <reified T> translateValue(instance: T, property: String, prefix: String = "_"): String {
+    if(instance==null) {
+        return ""
+    }
     val appSettingsState = LocalAppState.current
     val element = Json.encodeToJsonElement(instance)
     val find = element.jsonObject.entries.find {

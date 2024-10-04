@@ -22,10 +22,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.lyricist.LocalStrings
+import tm.com.balary.features.basket.data.entity.CheckOrderResponse
+import tm.com.balary.features.basket.data.local.BasketLocalEntity
+import tm.com.balary.locale.translateValue
 import tm.com.balary.ui.ImageLoader
 
 @Composable
-fun ChangeItem(modifier: Modifier = Modifier) {
+fun ChangeItem(
+    modifier: Modifier = Modifier,
+    item: CheckOrderResponse,
+    order: BasketLocalEntity?
+) {
     val strings = LocalStrings.current
     Row(
         modifier = modifier.border(
@@ -43,25 +50,24 @@ fun ChangeItem(modifier: Modifier = Modifier) {
                 color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(10.dp)
             ),
-            url = "",
+            url = order?.thumbnail?:"",
             contentScale = ContentScale.Inside
         )
 
         Column(Modifier.weight(1f)) {
             Text(
-                "Product name",
+                translateValue(order, "title"),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.W900
                 ),
                 color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.weight(1f),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 textAlign = TextAlign.Center
             )
 
             Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna",
+                translateValue(order,"description"),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 overflow = TextOverflow.Ellipsis,
@@ -70,52 +76,110 @@ fun ChangeItem(modifier: Modifier = Modifier) {
 
             Spacer(Modifier.height(8.dp))
 
-            Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
+            if(item.out_of_stock) {
                 Text(
-                    strings.oldPrice,
+                    strings.out_of_stock,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
+            } else if(item.cart_quantity!=item.new_quantity) {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    Text(
+                        strings.oldCount,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
 
-                Text(
-                    "22,15 m.",
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.W900
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
-            }
+                    Text(
+                        "${item.cart_quantity}",
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.W900
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                }
 
-            Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                Text(
-                    strings.newPrice,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
+                Row(
+                    Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    Text(
+                        strings.newCount,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
 
-                Text(
-                    "175,00 m.",
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.W900
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
+                    Text(
+                        "${item.new_quantity}",
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.W900
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                }
+            } else if(item.cart_discount_price!=item.new_discount_price) {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    Text(
+                        strings.oldPrice,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+
+                    Text(
+                        "${item.cart_discount_price} m.",
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.W900
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                }
+
+                Row(
+                    Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    Text(
+                        strings.newPrice,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+
+                    Text(
+                        "${item.new_discount_price} m.",
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.W900
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                }
             }
         }
     }

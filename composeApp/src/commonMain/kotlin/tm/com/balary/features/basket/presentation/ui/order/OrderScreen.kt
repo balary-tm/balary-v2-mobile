@@ -52,6 +52,7 @@ import balary.composeapp.generated.resources.archive
 import balary.composeapp.generated.resources.calendar
 import balary.composeapp.generated.resources.delivery_truck
 import balary.composeapp.generated.resources.info_fill
+import balary.composeapp.generated.resources.location_bee
 import balary.composeapp.generated.resources.location_filled
 import balary.composeapp.generated.resources.save_fill
 import balary.composeapp.generated.resources.wallet
@@ -62,15 +63,23 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.dokar.sonner.ToastType
 import com.dokar.sonner.Toaster
 import com.dokar.sonner.rememberToasterState
+import com.mikepenz.markdown.m3.Markdown
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.plus
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinNavViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import tm.com.balary.common.BalaryMarker
+import tm.com.balary.core.prettyMarkdown
+import tm.com.balary.core.utils.getFormattedDate
 import tm.com.balary.features.address.presentation.ui.SelectAddressDialog
 import tm.com.balary.features.basket.presentation.ui.PriceInfo
 import tm.com.balary.features.basket.presentation.viewmodel.BasketViewModel
 import tm.com.balary.features.basket.presentation.viewmodel.OrderDayType
 import tm.com.balary.features.basket.presentation.viewmodel.OrderFormViewModel
 import tm.com.balary.features.map.presentation.ui.MapDialog
+import tm.com.balary.locale.translateValue
 import tm.com.balary.state.LocalAuth
 import tm.com.balary.state.LocalDarkMode
 import tm.com.balary.ui.AlsFontFamily
@@ -91,6 +100,11 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
     val basketViewModel: BasketViewModel = koinNavViewModel()
     val extraState = basketViewModel.orderExtraState.collectAsState()
     val basketState = basketViewModel.basketState.collectAsState()
+    val deliveryPrice = basketViewModel.deliveryPrice
+    val paymentType = basketViewModel.selectedPaymentType
+    val selectedDay = basketViewModel.selectedDay
+    val selectedTimes = basketViewModel.selectedTimes
+    val intervalId = basketViewModel.selectedInterval
 
     LaunchedEffect(true) {
         basketViewModel.getBasket()
@@ -125,14 +139,31 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
         alignment = Alignment.TopCenter
     )
 
+    val todayDate = getFormattedDate()
+    val tomorrowDate = getFormattedDate(1)
+
     OrderSuccess(
         open = openSuccess.value,
+        date = if(selectedDay.value==OrderDayType.TODAY) todayDate else tomorrowDate,
+        orderId = "123",
+        time = selectedTimes.value.find { it.id == intervalId.value }?.start_time+"-"+selectedTimes.value.find { it.id == intervalId.value }?.end_time,
+        paymentType = paymentType.value,
+        deliveryPrice = deliveryPrice.value,
+        total = basketState.value.calculation.total.plus(deliveryPrice.value),
+        orderFormState = formState.value,
         onClose = {
             openSuccess.value = false
+            basketViewModel.deleteAll()
+            basketViewModel.clearBasket()
+            navHostController.navigateUp()
         }
     )
+    val markers = remember {
+        mutableStateOf<List<BalaryMarker>>(emptyList())
+    }
     MapDialog(
         open = openMap.value,
+        markers = markers.value,
         onClose = {
             openMap.value = false
         }
@@ -175,17 +206,15 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
             )
         }
 
-        val paymentType = basketViewModel.selectedPaymentType
 
 
 
-        if(extraState.value.loading) {
+        if (extraState.value.loading) {
             AppLoading(Modifier.fillMaxSize())
-        } else if(extraState.value.error.isNullOrEmpty().not()) {
+        } else if (extraState.value.error.isNullOrEmpty().not()) {
             AppError(Modifier.fillMaxSize())
         } else {
-            extraState.value.extra?.let { extra->
-                val deliveryPrice = basketViewModel.deliveryPrice
+            extraState.value.extra?.let { extra ->
                 Column(Modifier.fillMaxSize().imePadding().verticalScroll(rememberScrollState())) {
                     Spacer(
                         Modifier.height(8.dp)
@@ -503,7 +532,7 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
                         )
                         TimeCheck(
                             modifier = Modifier.fillMaxWidth().clickable {
-                                basketViewModel.setDeliveryPrice(extra.delivery_price?:0.0)
+                                basketViewModel.setDeliveryPrice(extra.delivery_price ?: 0.0)
                                 basketViewModel.setSelectedDeliveryType("standard")
                             },
                             text = strings.standardDelivery,
@@ -511,22 +540,27 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
                         )
                         TimeCheck(
                             modifier = Modifier.fillMaxWidth().clickable {
-                                basketViewModel.setDeliveryPrice(extra.express_order_price?:0.0)
+                                basketViewModel.setDeliveryPrice(
+                                    extra.express_order_price ?: 0.0,
+                                    "express"
+                                )
                                 basketViewModel.setSelectedDeliveryType("express")
                             },
-                            text = strings.expressDelivery.replace("{price}", extra.express_order_price.toString()),
+                            text = strings.expressDelivery.replace(
+                                "{price}",
+                                extra.express_order_price.toString()
+                            ),
                             checked = deliveryType.value == "express",
-                            subTitle = strings.expressDeliveryDesc
+                            subTitle = translateValue(extra, "express_delivery_desc")
                         )
                         TimeCheck(
                             modifier = Modifier.fillMaxWidth().clickable {
-                                basketViewModel.setDeliveryPrice(0.0)
+                                basketViewModel.setDeliveryPrice(0.0, "self")
                                 basketViewModel.setSelectedDeliveryType("self")
                             },
                             text = strings.manualDelivery,
                             checked = deliveryType.value == "self",
-                            subTitle = "Туркменистан, г. Ашхабад. , ул. 2028 (Ата Говшудова), \n" +
-                                    "дом 47 «A» 1-ый этаж"
+                            subTitle = translateValue(extra, "office_address")
                         )
                         Row(
                             Modifier.fillMaxWidth(),
@@ -557,7 +591,7 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
                                         color = Color(0xFF614FE0)
                                     )
                                 ) {
-                                    append("09:00")
+                                    append(extra.work_start_time)
                                 }
                                 withStyle(
                                     SpanStyle(
@@ -577,7 +611,7 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
                                         color = Color(0xFF614FE0)
                                     )
                                 ) {
-                                    append("21:00")
+                                    append(extra.work_end_time)
                                 }
                                 withStyle(
                                     SpanStyle(
@@ -597,18 +631,36 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
 
                         }
 
-                        if(deliveryType.value == "self") {
+
+                        if (deliveryType.value == "self") {
+                            val address = translateValue(extra, "office_address")
                             Button(
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(10.dp),
                                 onClick = {
+                                    markers.value = listOf(
+                                        BalaryMarker(
+                                            latitude = extra.office_address_lat?:0.0,
+                                            longitude = extra.office_address_lon?:0.0,
+                                            image = Res.drawable.location_bee,
+                                            title = address,
+                                            onClick = {
+
+                                            }
+                                        )
+                                    )
+
+                                    openMap.value = true
+
 
                                 }
                             ) {
                                 Text(
-                                    strings.showOurAddressFromMap, style = MaterialTheme.typography.bodyLarge.copy(
+                                    strings.showOurAddressFromMap,
+                                    style = MaterialTheme.typography.bodyLarge.copy(
                                         fontWeight = FontWeight.W700
-                                    ), color = MaterialTheme.colorScheme.onPrimary
+                                    ),
+                                    color = MaterialTheme.colorScheme.onPrimary
                                 )
                             }
                         }
@@ -623,33 +675,42 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
                             shape = RoundedCornerShape(20.dp)
                         ).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        val selectedDay = basketViewModel.selectedDay
-                        val selectedTimes = basketViewModel.selectedTimes
-                        val intervalId = basketViewModel.selectedInterval
+
                         IconTitle(
                             icon = painterResource(Res.drawable.calendar),
                             title = strings.deliveryTime
                         )
 
-                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                            extra.intervals?.today?.let { today->
-                                if(today.isNotEmpty()) {
-                                    OrderTime(Modifier.weight(1f).clickable {
-                                        basketViewModel.setSelectedDay(OrderDayType.TODAY)
-                                        basketViewModel.setSelectedTimes(today)
-                                    }, title = strings.today, selected = selectedDay.value == OrderDayType.TODAY)
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            extra.intervals?.today?.let { today ->
+                                if (today.isNotEmpty()) {
+                                    OrderTime(
+                                        Modifier.weight(1f).clickable {
+                                            basketViewModel.setSelectedDay(OrderDayType.TODAY)
+                                            basketViewModel.setSelectedTimes(today)
+                                        },
+                                        title = strings.today,
+                                        selected = selectedDay.value == OrderDayType.TODAY
+                                    )
                                 }
                             }
-                            extra.intervals?.tomorrow?.let { tomorrow->
-                                if(tomorrow.isNotEmpty()) {
-                                    OrderTime(Modifier.weight(1f).clickable {
-                                        basketViewModel.setSelectedDay(OrderDayType.TOMORROW)
-                                        basketViewModel.setSelectedTimes(tomorrow)
-                                    }, title = strings.tomorrow, selected = selectedDay.value == OrderDayType.TOMORROW)
+                            extra.intervals?.tomorrow?.let { tomorrow ->
+                                if (tomorrow.isNotEmpty()) {
+                                    OrderTime(
+                                        Modifier.weight(1f).clickable {
+                                            basketViewModel.setSelectedDay(OrderDayType.TOMORROW)
+                                            basketViewModel.setSelectedTimes(tomorrow)
+                                        },
+                                        title = strings.tomorrow,
+                                        selected = selectedDay.value == OrderDayType.TOMORROW
+                                    )
                                 }
                             }
                         }
-                        repeat(ceil(selectedTimes.value.count()/2f).toInt()) { index->
+                        repeat(ceil(selectedTimes.value.count() / 2f).toInt()) { index ->
                             Row(
                                 Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
@@ -664,7 +725,7 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
                                     checked = intervalId.value == selectedTimes.value[firstIndex].id
                                 )
                                 val secondIndex = index.times(2).plus(1)
-                                if(secondIndex<selectedTimes.value.count()) {
+                                if (secondIndex < selectedTimes.value.count()) {
                                     OrderTimeCheckText(
                                         modifier = Modifier.weight(1f).clickable {
                                             basketViewModel.setSelectedInterval(selectedTimes.value[secondIndex].id)
@@ -676,7 +737,10 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
                             }
 
                         }
-                        Column(Modifier.fillMaxWidth().padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Column(
+                            Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
                             PriceInfo(
                                 modifier = Modifier.fillMaxWidth(),
                                 title = strings.price,
@@ -751,13 +815,8 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
                             color = MaterialTheme.colorScheme.onSurface
                         )
 
-                        Text(
-                            "«Balary» — Aşgabatdaky onlaýn-supermarket, harytlary öýüňize ýa-da ofisiňize eltip bermek hyzmaty. Biziň internet-magazinimiz azyk harytlaryň we beýleki harytlaryň görnüşlerini uly saýlawyny hödürleýär. Her bir atlandrylan haryt pugta hil barlagyndan geçirilýär.\n" +
-                                    "«Balary» harytlary sargamak üçin amatly wagt araçäkleri, şol sanda sargyt edilen güni eltip bermegi bilen ýokary derejeli hyzmaty kepillendirýär.\n" +
-                                    "Satyn alynan harytlary internet-magazinimiziň web-sahypasynda, telefon programmasyda ýa-da telefon arkalyy öýüňize eltip bermek hyzmaty bilen sargyt edip bilersiňiz: +993 (12) 92 40 71.\n" +
-                                    "Balary – bu diňe bir ter önümler bolman, hemişe gyzykly aksiýalar we haýyrly hödürlenmeler, möwsümleýin saýlanan harytlar bolup durýar!",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
+                        Markdown(
+                            content = translateValue(extra.delivery_info_page,"content").prettyMarkdown()
                         )
                     }
 
@@ -802,11 +861,18 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(10.dp),
                             onClick = {
+                                if(intervalId.value == 0) {
+                                    toaster.show(
+                                        strings.selectOrderTime,
+                                        type = ToastType.Warning
+                                    )
+                                    return@Button
+                                }
                                 val isValid = formViewModel.validateForm()
-                                if(isValid) {
+                                if (isValid) {
                                     basketViewModel.makeOrder(
                                         orderFormState = formState.value,
-                                        onError = { message->
+                                        onError = { message ->
                                             message?.let {
                                                 toaster.show(
                                                     message,
@@ -821,8 +887,11 @@ fun Order(modifier: Modifier = Modifier, navHostController: NavHostController) {
                                 }
                             }
                         ) {
-                            if(sendOrderState.value.loading) {
-                                CircularProgressIndicator(Modifier.size(30.dp), color = MaterialTheme.colorScheme.onPrimary)
+                            if (sendOrderState.value.loading) {
+                                CircularProgressIndicator(
+                                    Modifier.size(30.dp),
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
                             } else {
                                 Text(
                                     strings.confirmOrder,

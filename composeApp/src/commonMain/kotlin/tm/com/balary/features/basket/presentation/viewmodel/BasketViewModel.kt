@@ -3,8 +3,10 @@ package tm.com.balary.features.basket.presentation.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -19,6 +21,7 @@ import tm.com.balary.features.basket.data.local.BasketLocalEntity
 import tm.com.balary.features.basket.domain.model.BasketCount
 import tm.com.balary.features.basket.domain.usecase.BasketUseCase
 import tm.com.balary.features.basket.presentation.state.BasketState
+import tm.com.balary.features.basket.presentation.state.CheckOrderState
 import tm.com.balary.features.basket.presentation.state.OrderExtraState
 import tm.com.balary.features.basket.presentation.state.OrderFormState
 import tm.com.balary.features.basket.presentation.state.SendOrderState
@@ -42,6 +45,8 @@ class BasketViewModel(
     val selectedInterval = mutableStateOf(0)
 
     val deliveryPrice = mutableStateOf(0.0)
+    val freeDeliveryPrice = mutableStateOf(Double.MAX_VALUE)
+    val isFreeDelivery = mutableStateOf(false)
 
     val selectedPaymentType = mutableStateOf("cash")
     val selectedDeliveryType = mutableStateOf("standard") // express, self
@@ -49,12 +54,111 @@ class BasketViewModel(
     private val _sendOrderState = MutableStateFlow(SendOrderState())
     val sendOrderState = _sendOrderState.asStateFlow()
 
-    fun setDeliveryPrice(price: Double) {
+    private val _checkOrderState = MutableStateFlow(CheckOrderState())
+    val checkOrderState = _checkOrderState.asStateFlow()
+
+    init {
+        checkDeliveryPrice()
+        viewModelScope.launch {
+            _basketState.collectLatest {
+                isFreeDelivery.value = checkDeliveryPrice()
+            }
+
+            _orderExtraState.collectLatest {
+                freeDeliveryPrice.value = it.extra?.free_delivery_minimum?:Double.MAX_VALUE
+                checkDeliveryPrice()
+            }
+        }
+    }
+
+
+    fun setDeliveryPrice(price: Double, deliveryType: String = "standard") {
         deliveryPrice.value = price
+        if(deliveryType=="express") {
+            return
+        }
+        isFreeDelivery.value = checkDeliveryPrice()
+    }
+
+    fun clearBasket() {
+        deliveryPrice.value = 0.0
+        selectedPaymentType.value = "cash"
+        selectedDeliveryType.value = "standard"
+        selectedDay.value = OrderDayType.TODAY
+        selectedInterval.value = 0
+    }
+
+    fun checkOrder(
+        onError: (String?) -> Unit,
+        onSuccess: (Int) -> Unit
+    ) {
+        viewModelScope.launch {
+            useCase.checkOrder().onEach { result->
+                when(result) {
+                    is Resource.Error -> {
+                        onError(result.message)
+                        _checkOrderState.value = _checkOrderState.value.copy(
+                            loading = false,
+                            error = result.message,
+                            result = result.data
+                        )
+                    }
+                    is Resource.Loading ->  {
+                        _checkOrderState.value = _checkOrderState.value.copy(
+                            loading = true,
+                            error = result.message,
+                            result = result.data
+                        )
+                    }
+                    is Resource.Success ->  {
+                        onSuccess(result.data?.count()?:0)
+                        _checkOrderState.value = _checkOrderState.value.copy(
+                            loading = false,
+                            error = result.message,
+                            result = result.data
+                        )
+                    }
+                }
+            }.launchIn(this)
+        }
+    }
+
+    fun getRealDeliveryPrice(): Double {
+        return when(selectedDeliveryType.value) {
+            "express" -> _orderExtraState.value.extra?.express_order_price?: 0.0
+            "self" -> 0.0
+            else -> _orderExtraState.value.extra?.delivery_price?:0.0
+        }
+    }
+
+    fun checkDeliveryPrice(): Boolean {
+        if(selectedDeliveryType.value=="express") {
+            deliveryPrice.value = getRealDeliveryPrice()
+            return false
+        }
+        if(selectedDeliveryType.value=="self") {
+            deliveryPrice.value = 0.0
+            return true
+        }
+        println("FREE: checking")
+        _orderExtraState.value.extra?.let { extra ->
+            println("FREE: extra-1")
+            extra.free_delivery_minimum?.let { free ->
+                println("FREE: extra-2 [ ${_basketState.value.calculation.total}, ${free} ]")
+                if (_basketState.value.calculation.total >= free) {
+                    println("FREE: ${_basketState.value.calculation.total}, ${free}")
+                    deliveryPrice.value = 0.0
+                    return true
+                }
+            }
+        }
+        deliveryPrice.value = getRealDeliveryPrice()
+        return false
     }
 
     fun setSelectedDeliveryType(type: String) {
         selectedDeliveryType.value = type
+        checkDeliveryPrice()
     }
 
     fun setSelectedPaymentType(type: String) {
@@ -74,25 +178,29 @@ class BasketViewModel(
     }
 
     fun initOrderExtra() {
-        if(_orderExtraState.value.extra==null) {
+        if (_orderExtraState.value.extra == null) {
             getOrderExtra()
         }
     }
 
-    fun makeOrder(orderFormState: OrderFormState, onError: (String?) -> Unit, onSuccess: ()-> Unit) {
+    fun makeOrder(
+        orderFormState: OrderFormState,
+        onError: (String?) -> Unit,
+        onSuccess: () -> Unit
+    ) {
         viewModelScope.launch {
             useCase.sendOrder(
                 data = OrderRequestBody(
                     note = orderFormState.note,
                     phone = orderFormState.phoneNumber.prettyPhone(),
                     delivery_interval_id = selectedInterval.value,
-                    delivery_day = when(selectedDay.value) {
+                    delivery_day = when (selectedDay.value) {
                         OrderDayType.TODAY -> "today"
                         OrderDayType.TOMORROW -> "tomorrow"
                     },
                     payment_type = selectedPaymentType.value,
                     delivery_type = selectedDeliveryType.value,
-                    order_lines = _basketState.value.products.map { p->
+                    order_lines = _basketState.value.products.map { p ->
                         OrderLine(
                             quantity = p.count,
                             variant_id = p.id
@@ -102,7 +210,9 @@ class BasketViewModel(
                         room = orderFormState.room,
                         floor = try {
                             orderFormState.floor.toFloat()
-                        } catch (_: Exception) {0f},
+                        } catch (_: Exception) {
+                            0f
+                        },
                         street = orderFormState.street,
                         house = orderFormState.house,
                         district = orderFormState.district,
@@ -110,8 +220,8 @@ class BasketViewModel(
                         longitude = 56.043
                     )
                 )
-            ).onEach { result->
-                when(result) {
+            ).onEach { result ->
+                when (result) {
                     is Resource.Error -> {
                         onError(result.message)
                         _sendOrderState.value = _sendOrderState.value.copy(
@@ -119,14 +229,15 @@ class BasketViewModel(
                             error = result.message
                         )
                     }
+
                     is Resource.Loading -> {
                         _sendOrderState.value = _sendOrderState.value.copy(
                             loading = true,
                             error = result.message
                         )
                     }
+
                     is Resource.Success -> {
-                        deleteAll()
                         onSuccess()
                         _sendOrderState.value = _sendOrderState.value.copy(
                             loading = false,
@@ -140,8 +251,8 @@ class BasketViewModel(
 
     fun getOrderExtra() {
         viewModelScope.launch {
-            useCase.getOrderExtra().onEach { result->
-                when(result) {
+            useCase.getOrderExtra().onEach { result ->
+                when (result) {
                     is Resource.Error -> {
                         _orderExtraState.value = _orderExtraState.value.copy(
                             loading = false,
@@ -149,6 +260,7 @@ class BasketViewModel(
                             extra = result.data
                         )
                     }
+
                     is Resource.Loading -> {
                         _orderExtraState.value = _orderExtraState.value.copy(
                             loading = true,
@@ -156,13 +268,14 @@ class BasketViewModel(
                             extra = result.data
                         )
                     }
+
                     is Resource.Success -> {
-                        result.data?.let { extra->
-                            deliveryPrice.value = extra.delivery_price?:0.0
+                        result.data?.let { extra ->
+                            setDeliveryPrice(extra.delivery_price ?: 0.0,"standard")
                             extra.intervals?.let { intervals ->
-                                if(intervals.today.isNullOrEmpty().not()) {
+                                if (intervals.today.isNullOrEmpty().not()) {
                                     selectedTimes.value = intervals.today!!
-                                } else if(intervals.tomorrow.isNullOrEmpty().not()) {
+                                } else if (intervals.tomorrow.isNullOrEmpty().not()) {
                                     selectedDay.value = OrderDayType.TOMORROW
                                     selectedTimes.value = intervals.tomorrow!!
                                 }
@@ -173,13 +286,14 @@ class BasketViewModel(
                             error = result.message,
                             extra = result.data
                         )
+
                     }
                 }
             }.launchIn(this)
         }
     }
 
-    fun getBasket() {
+    fun getBasket(onSuccess: (Boolean) -> Unit = {}) {
         viewModelScope.launch {
             val products = useCase.getBasket()
             val calculation = BasketCount(
@@ -190,6 +304,11 @@ class BasketViewModel(
             _basketState.value = _basketState.value.copy(
                 products = products,
                 calculation = calculation
+            )
+            checkDeliveryPrice()
+            onSuccess(
+                calculation.total.plus(deliveryPrice.value) > (_orderExtraState.value.extra?.free_delivery_minimum
+                    ?: 0.0)
             )
         }
     }
@@ -207,6 +326,8 @@ class BasketViewModel(
             getBasket()
         }
     }
+
+
 
     fun deleteAll() {
         viewModelScope.launch {

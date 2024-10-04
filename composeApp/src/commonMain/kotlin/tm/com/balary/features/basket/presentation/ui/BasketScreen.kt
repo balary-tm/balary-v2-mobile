@@ -59,9 +59,13 @@ fun Basket(modifier: Modifier = Modifier, navHostController: NavHostController) 
     val basketViewModel: BasketViewModel = koinNavViewModel()
     val basketState = basketViewModel.basketState.collectAsState()
     val extraState = basketViewModel.orderExtraState.collectAsState()
+    val checkOrderState = basketViewModel.checkOrderState.collectAsState()
+
+    val deliveryPrice = basketViewModel.deliveryPrice
 
     LaunchedEffect(true) {
         basketViewModel.initOrderExtra()
+        basketViewModel.checkDeliveryPrice()
     }
 
 
@@ -72,6 +76,7 @@ fun Basket(modifier: Modifier = Modifier, navHostController: NavHostController) 
     LaunchedEffect(true) {
         basketViewModel.getBasket()
     }
+
 
 
     val strings = LocalStrings.current
@@ -121,8 +126,9 @@ fun Basket(modifier: Modifier = Modifier, navHostController: NavHostController) 
                     BasketBottom(
                         Modifier.fillMaxWidth(),
                         navHostController = navHostController,
-                        total = basketState.value.calculation.total.plus(extra.delivery_price?:0.0),
-                        minPrice = extra.min_total_price?:Double.MAX_VALUE
+                        total = basketState.value.calculation.total.plus(deliveryPrice.value),
+                        minPrice = extra.min_total_price?:Double.MAX_VALUE,
+                        freeDeliveryPrice = extra.free_delivery_minimum?:Double.MAX_VALUE
                     )
                 }
 
@@ -165,7 +171,7 @@ fun Basket(modifier: Modifier = Modifier, navHostController: NavHostController) 
                                 PriceInfo(
                                     modifier = Modifier.fillMaxWidth(),
                                     title = strings.deliveryPrice,
-                                    value = extra.delivery_price.toString().plus(" m.")
+                                    value = deliveryPrice.value.toString().plus(" m.")
                                 )
                                 PriceInfo(
                                     modifier = Modifier.fillMaxWidth(),

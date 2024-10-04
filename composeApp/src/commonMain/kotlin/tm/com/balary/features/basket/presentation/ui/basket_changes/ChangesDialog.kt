@@ -14,34 +14,45 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import cafe.adriel.lyricist.LocalStrings
+import org.koin.compose.viewmodel.koinNavViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
+import tm.com.balary.features.basket.data.entity.CheckOrderResponse
+import tm.com.balary.features.basket.presentation.viewmodel.BasketViewModel
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun ChangesDialog(
     show: Boolean,
+    changes: List<CheckOrderResponse>,
     onDismiss: () -> Unit
 ) {
     val strings = LocalStrings.current
-    if(show) {
+    val basketViewModel: BasketViewModel = koinNavViewModel()
+    val orders = basketViewModel.basketState.collectAsState()
+    if (show) {
         Dialog(
             onDismissRequest = {
                 onDismiss()
             }
         ) {
-            LazyColumn(Modifier.fillMaxWidth().padding(
-                vertical = 22.dp
-            ).background(
-                color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(20.dp)
-            ), contentPadding = PaddingValues(
-                horizontal = 16.dp,
-                vertical = 12.dp
-            ), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            LazyColumn(
+                Modifier.fillMaxWidth().padding(
+                    vertical = 22.dp
+                ).background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(20.dp)
+                ), contentPadding = PaddingValues(
+                    horizontal = 16.dp,
+                    vertical = 12.dp
+                ), verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 item {
                     Text(
                         strings.basketChangedMessage,
@@ -53,8 +64,14 @@ fun ChangesDialog(
                     )
                 }
 
-                items(10) {
-                    ChangeItem(Modifier.fillMaxWidth())
+                items(changes.count()) { index ->
+                    ChangeItem(
+                        Modifier.fillMaxWidth(),
+                        changes[index],
+                        order = try {
+                            orders.value.products.find { it.id == changes[index].product_id }
+                        } catch (_: Exception) {null}
+                    )
                 }
                 item {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {

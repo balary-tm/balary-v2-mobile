@@ -232,7 +232,11 @@ data class Strings(
     val phoneNumberError: String,
     val confirmPasswordError: String,
     val passwordNotMatch: String,
-    val pleaseAuth: String
+    val pleaseAuth: String,
+    val selectOrderTime: String,
+    val out_of_stock: String,
+    val oldCount: String,
+    val newCount: String,
 
     )
 
@@ -442,5 +446,9 @@ val TurkmenStrings = Strings(
     phoneNumberError = "Telefon belginizi girizmediniz",
     confirmPasswordError = "Acar sozuniz gaytalan!",
     passwordNotMatch = "Acar sozleri menzesh dal!",
-    pleaseAuth = "Bu sahypadan peydalanmak ucin ulgama girin"
+    pleaseAuth = "Bu sahypadan peydalanmak ucin ulgama girin",
+    selectOrderTime = "Sargydyn eltip berilmeli wagtyny saylan!",
+    out_of_stock = "Haryt gutardy",
+    oldCount = "Onki sany",
+    newCount = "Taze sany"
 )

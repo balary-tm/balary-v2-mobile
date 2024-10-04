@@ -5,6 +5,7 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
         maven("https://jogamp.org/deployment/maven")
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
 }
 
@@ -13,6 +14,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://jogamp.org/deployment/maven")
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
 }
 

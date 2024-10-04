@@ -17,6 +17,7 @@ data class ProductEntity(
     val title: Title?,
     val description: Title?,
     val category_id: Int? = null,
+    val is_favorite: Boolean = false
 ) {
     fun toCacheEntity(type: String, categoryId: Int = -1): ProductLocalEntity {
         return ProductLocalEntity(
@@ -48,7 +49,8 @@ data class ProductEntity(
             title_tm = title?.tm?:"",
             description_ru = description?.ru?:"",
             description_tm = description?.tm?:"",
-            category_id = category_id
+            category_id = category_id,
+            isFavorite = is_favorite
         )
     }
 }

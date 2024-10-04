@@ -30,10 +30,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import balary.composeapp.generated.resources.Res
+import balary.composeapp.generated.resources.location_bee
 import balary.composeapp.generated.resources.location_fill
 import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.vectorResource
 import tm.com.balary.common.BalaryMaps
+import tm.com.balary.common.BalaryMarker
 import tm.com.balary.common.LatLng
 import tm.com.balary.features.home.presentation.ui.banner.SearchInput
 
@@ -41,6 +44,7 @@ import tm.com.balary.features.home.presentation.ui.banner.SearchInput
 @Composable
 fun MapDialog(
     open: Boolean = false,
+    markers: List<BalaryMarker> = emptyList(),
     onClose: () -> Unit
 ) {
     val strings = LocalStrings.current
@@ -75,7 +79,11 @@ fun MapDialog(
                         shape = RoundedCornerShape(20.dp)
                     ).clip(RoundedCornerShape(20.dp))
                 ) {
-                    BalaryMaps(Modifier.fillMaxSize(), initialPoint = LatLng())
+                    BalaryMaps(
+                        Modifier.fillMaxSize(),
+                        markers = markers,
+                        initialPoint = LatLng()
+                    )
 
                     FloatingActionButton(
                         shape = CircleShape,

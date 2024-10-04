@@ -43,6 +43,7 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
+            implementation(libs.material.navigation)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
             implementation(compose.ui)
@@ -148,6 +149,7 @@ kotlin {
 
             // maplibre
             implementation(libs.maplibre)
+            implementation(libs.maplibre.anotation)
 
             implementation(libs.androidx.room.paging)
 

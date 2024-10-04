@@ -32,13 +32,26 @@ import balary.composeapp.generated.resources.Res
 import balary.composeapp.generated.resources.order_bee
 import cafe.adriel.lyricist.LocalStrings
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinNavViewModel
+import tm.com.balary.core.utils.getFormattedDate
+import tm.com.balary.features.auth.data.entity.request.prettyPhone
+import tm.com.balary.features.basket.presentation.state.OrderFormState
+import tm.com.balary.features.basket.presentation.viewmodel.BasketViewModel
 
 @Composable
 fun OrderSuccess(
     open: Boolean = false,
+    date: String,
+    orderId: String,
+    time: String,
+    paymentType: String,
+    deliveryPrice: Double,
+    total: Double,
+    orderFormState: OrderFormState,
     onClose: () -> Unit
 ) {
     val strings = LocalStrings.current
+
     if(open) {
         Dialog(
             onDismissRequest = onClose,
@@ -86,7 +99,7 @@ fun OrderSuccess(
                     )
 
                     Text(
-                        "${strings.orderNumber}: #26491",
+                        "${strings.orderNumber}: #${orderId}",
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
@@ -107,12 +120,12 @@ fun OrderSuccess(
                         SuccessText(
                             modifier = Modifier.weight(1f),
                             text = strings.day,
-                            value = "15.08.2024"
+                            value = date
                         )
                         SuccessText(
                             modifier = Modifier.weight(1f),
                             text = strings.courierTime,
-                            value = "10:00-12:00",
+                            value = time,
                             alignment = Alignment.End
                         )
                     }
@@ -122,28 +135,38 @@ fun OrderSuccess(
                     SuccessText(
                         modifier = Modifier.fillMaxWidth(),
                         text = strings.paymentType,
-                        value = strings.cash
+                        value = if (paymentType=="cash") strings.cash else strings.bank
                     )
                     Spacer(Modifier.height(16.dp))
 
                     SuccessText(
                         modifier = Modifier.fillMaxWidth(),
                         text = strings.address,
-                        value = "Mir 7/4 13 nji ýaşaýyş jaý 2 nji kw"
+                        value = buildString {
+                            append(orderFormState.district)
+                            append(" ")
+                            append(orderFormState.street)
+                            append(" ")
+                            append(orderFormState.house)
+                            append(" ")
+                            append(orderFormState.room)
+                            append(" ")
+                            append(orderFormState.floor)
+                        }
                     )
                     Spacer(Modifier.height(16.dp))
 
                     SuccessText(
                         modifier = Modifier.fillMaxWidth(),
                         text = strings.phone,
-                        value = "+993 62 566987"
+                        value = orderFormState.phoneNumber.prettyPhone()
                     )
                     Spacer(Modifier.height(16.dp))
 
                     SuccessText(
                         modifier = Modifier.fillMaxWidth(),
                         text = strings.deliveryService,
-                        value = "20.00 ${strings.money}"
+                        value = "$deliveryPrice ${strings.money}"
                     )
                     Spacer(Modifier.height(16.dp))
 
@@ -151,7 +174,7 @@ fun OrderSuccess(
                         SuccessText(
                             modifier = Modifier.weight(1f),
                             text = strings.total,
-                            value = "549.00 ${strings.money}"
+                            value = "$total ${strings.money}"
                         )
                         SuccessText(
                             modifier = Modifier.weight(1f),
@@ -165,7 +188,7 @@ fun OrderSuccess(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
                         onClick = {
-
+                            onClose()
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer
